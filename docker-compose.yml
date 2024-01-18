@@ -1,0 +1,30 @@
+version: "3.9"
+
+services: 
+  mysql:
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: FoodOrdering
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/:ro
+
+  react:
+    container_name: react
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: always
