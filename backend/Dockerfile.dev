@@ -1,0 +1,11 @@
+FROM golang:1.21.6
+
+RUN mkdir /app
+
+WORKDIR /app
+
+ADD . /app
+
+RUN go install -mod=mod github.com/githubnemo/CompileDaemon
+
+ENTRYPOINT CompileDaemon --build="go build main.go" --command=./main

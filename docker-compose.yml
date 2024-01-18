@@ -18,13 +18,26 @@ services:
       - ./database:/docker-entrypoint-initdb.d/:ro
 
   react:
-    container_name: react
     build: 
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: react
     ports:
       - "3000:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    restart: always
+
+  api:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: go
+    environment:
+      Port: 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
     restart: always
