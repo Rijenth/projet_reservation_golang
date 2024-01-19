@@ -8,32 +8,35 @@ services:
       MYSQL_DATABASE: FoodOrdering
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 5s
-      retries: 10
+      timeout: 2s
+      retries: 20
     image: mysql:latest
     ports:
       - "3306:3306"
     restart: always
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d/:ro
+    #volumes:
+    #  - ./database:/docker-entrypoint-initdb.d/:ro
 
-  react:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: react
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    restart: always
+#  react:
+#    build: 
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#    container_name: react
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./frontend:/app
+#      - /app/node_modules
+#    restart: always
 
   api:
     build: 
       context: ./backend
       dockerfile: Dockerfile.dev
     container_name: go
+    depends_on:
+      mysql:
+        condition: service_healthy
     environment:
       Port: 8000
     ports:
