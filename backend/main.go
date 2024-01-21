@@ -4,7 +4,6 @@ import (
 	"backend/controllers"
 	"backend/models"
 	"backend/services"
-	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -35,6 +34,7 @@ func main() {
 
 	router.Use(middleware.Recoverer)
 
+	// sur toutes les routes de types /users/...
 	router.Route("/users", func(r chi.Router) {
 
 		r.Route("/", func(r chi.Router) {
@@ -52,27 +52,4 @@ func main() {
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))
-
-}
-
-func UserContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		userID := chi.URLParam(r, "userId")
-
-		var user models.User
-
-		database := services.GetConnection()
-
-		database.First(&user, userID)
-
-		if user.ID == 0 {
-			http.Error(w, http.StatusText(404), 404)
-			return
-		}
-
-		ctx := context.WithValue(r.Context(), "user", user)
-
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
 }
