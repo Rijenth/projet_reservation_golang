@@ -42,7 +42,6 @@ func main() {
 			r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
 				users.IndexUsersController(writer, request)
 			})
-
 			r.Post("/", func(writer http.ResponseWriter, request *http.Request) {
 				users.StoreUserController(writer, request)
 			})
@@ -50,9 +49,10 @@ func main() {
 
 		r.Route("/{userId}", func(r chi.Router) {
 			r.Use(contexts.UserContext)
+
 			r.Get("/", users.GetUsersController)
+			r.Patch("/", users.UpdateUsersController)
 			r.Delete("/", users.DeleteUserController)
-			//r.Put("/", updateArticle)
 		})
 	})
 
