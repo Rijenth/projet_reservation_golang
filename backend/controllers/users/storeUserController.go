@@ -52,6 +52,7 @@ func StoreUserController(w http.ResponseWriter, r *http.Request) {
 		LastName:  body.Data.Attributes.LastName,
 		Username:  body.Data.Attributes.Username,
 		Password:  body.Data.Attributes.Password,
+		Role: 	   body.Data.Attributes.Role,	
 	}
 
 	result := database.Create(&user)

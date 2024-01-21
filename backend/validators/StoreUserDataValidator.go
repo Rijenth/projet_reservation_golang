@@ -23,4 +23,5 @@ type StoreUserAttributes struct {
 	LastName  string `validate:"omitempty"`
 	Username  string `validate:"required,min=4"`
 	Password  string `validate:"required,min=4"`
+	Role 	  string `validate:"required,eq=customer|eq=owner|eq=admin"`
 }
