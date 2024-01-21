@@ -9,7 +9,7 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func GetUsersController(w http.ResponseWriter, r *http.Request) {
+func IndexUsersController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
 	database := services.GetConnection()

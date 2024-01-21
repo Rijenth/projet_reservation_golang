@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/contexts"
 	"backend/controllers/users"
 	"backend/models"
 	"backend/services"
@@ -39,7 +40,7 @@ func main() {
 
 		r.Route("/", func(r chi.Router) {
 			r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
-				users.GetUsersController(writer, request)
+				users.IndexUsersController(writer, request)
 			})
 
 			r.Post("/", func(writer http.ResponseWriter, request *http.Request) {
@@ -47,12 +48,12 @@ func main() {
 			})
 		})
 
-		/* 		r.Route("/{userId}", func(r chi.Router) {
-			r.Use(UserContext)
-			r.Get("/", getArticle)
-			r.Put("/", updateArticle)
-			r.Delete("/", deleteArticle)
-		}) */
+		r.Route("/{userId}", func(r chi.Router) {
+			r.Use(contexts.UserContext)
+			r.Get("/", users.GetUsersController)
+			/* 			r.Put("/", updateArticle)
+			   			r.Delete("/", deleteArticle) */
+		})
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))
