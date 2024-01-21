@@ -51,8 +51,8 @@ func main() {
 		r.Route("/{userId}", func(r chi.Router) {
 			r.Use(contexts.UserContext)
 			r.Get("/", users.GetUsersController)
-			/* 			r.Put("/", updateArticle)
-			   			r.Delete("/", deleteArticle) */
+			r.Delete("/", users.DeleteUserController)
+			//r.Put("/", updateArticle)
 		})
 	})
 
