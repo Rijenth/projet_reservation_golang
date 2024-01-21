@@ -19,10 +19,10 @@ func StoreUserController(w http.ResponseWriter, r *http.Request) {
 	// On récupère la connexion à la base de donnée
 	database := services.GetConnection()
 
-	var data validators.StoreUserValidator
+	var body validators.StoreUserDataValidator
 
 	// On décode le corps de la requête et on le stocke dans une variable data
-	err := json.NewDecoder(r.Body).Decode(&data)
+	err := json.NewDecoder(r.Body).Decode(&body)
 
 	// Si une erreur survient lors du décodage du corps de la requête
 	// on retourne une erreur 422 en utilisant la fonction UnprocessableEntityResponse
@@ -37,8 +37,7 @@ func StoreUserController(w http.ResponseWriter, r *http.Request) {
 	// en utilisant la structure StoreUserValidator
 	validate := validator.New()
 
-	err = validate.Struct(data)
-
+	err = validate.Struct(body.Data)
 	// Si une erreur survient lors de la validation des données
 	// on retourne une erreur 422 et on affiche les erreurs
 	if err != nil {
@@ -49,10 +48,10 @@ func StoreUserController(w http.ResponseWriter, r *http.Request) {
 
 	// On transfère le contenu de la variable data dans un objet User
 	user := models.User{
-		FirstName: data.FirstName,
-		LastName:  data.LastName,
-		Username:  data.Username,
-		Password:  data.Password,
+		FirstName: body.Data.Attributes.FirstName,
+		LastName:  body.Data.Attributes.LastName,
+		Username:  body.Data.Attributes.Username,
+		Password:  body.Data.Attributes.Password,
 	}
 
 	result := database.Create(&user)
