@@ -1,7 +1,7 @@
 package main
 
 import (
-	"backend/controllers"
+	"backend/controllers/users"
 	"backend/models"
 	"backend/services"
 	"fmt"
@@ -38,8 +38,12 @@ func main() {
 	router.Route("/users", func(r chi.Router) {
 
 		r.Route("/", func(r chi.Router) {
+			r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
+				users.GetUsersController(writer, request)
+			})
+
 			r.Post("/", func(writer http.ResponseWriter, request *http.Request) {
-				controllers.CreateUser(writer, request)
+				users.StoreUserController(writer, request)
 			})
 		})
 
