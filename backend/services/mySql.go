@@ -53,5 +53,5 @@ func GetConnection() *gorm.DB {
 		return database
 	}
 
-	return nil
+	return InitSqlConnection()
 }
