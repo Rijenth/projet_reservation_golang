@@ -6,5 +6,6 @@ type User struct {
 	LastName  string `jsonapi:"attr,last_name"`
 	Username  string `gorm:"unique" jsonapi:"attr,username"`
 	Password  string `jsonapi:"attr,password"`
+	Role      string `jsonapi:"attr,role"`
 	Model
 }
