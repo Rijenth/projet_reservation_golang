@@ -54,16 +54,12 @@ func main() {
 			r.Get("/", users.GetUsersController)
 			r.Patch("/", users.UpdateUsersController)
 			r.Delete("/", users.DeleteUserController)
-		})
-	})
 
-	router.Route("/places", func(r chi.Router) {
-
-		r.Route("/", func(r chi.Router) {
-			r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
+			r.Get("/places", func(writer http.ResponseWriter, request *http.Request) {
 				places.IndexPlacesController(writer, request)
 			})
-			r.Post("/", func(writer http.ResponseWriter, request *http.Request) {
+
+			r.Post("/places", func(writer http.ResponseWriter, request *http.Request) {
 				places.StorePlacesController(writer, request)
 			})
 		})
