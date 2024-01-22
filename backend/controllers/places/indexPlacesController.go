@@ -7,10 +7,9 @@ import (
 	"net/http"
 
 	"github.com/google/jsonapi"
-
 )
 
-func IndexPlacesController(w http.ResponseWriter, r *http.Request){
+func IndexPlacesController(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
@@ -21,6 +20,4 @@ func IndexPlacesController(w http.ResponseWriter, r *http.Request){
 	database.Model(&models.Places{}).Find(&places)
 
 	responses.OkResponse(w, places)
-
-	
 }

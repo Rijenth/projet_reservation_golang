@@ -19,8 +19,6 @@ func PlacesContext(next http.Handler) http.Handler {
 		placesID := chi.URLParam(r, "placesId")
 
 		var places models.Places
-		
-
 
 		database := services.GetConnection()
 
@@ -40,4 +38,3 @@ func PlacesContext(next http.Handler) http.Handler {
 
 	})
 }
-

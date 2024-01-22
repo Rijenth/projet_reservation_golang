@@ -14,22 +14,20 @@ import (
 
 func StorePlacesController(w http.ResponseWriter, r *http.Request) {
 
-
 	w.Header().Set("Content-Type", jsonapi.MediaType)
-
 
 	database := services.GetConnection()
 
 	var body validators.StorePlacesDataValidator
 
-	err := json.NewDecoder(r.Body).Decode(&body)	
+	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
 		responses.UnprocessableEntityResponse(w, err.Error())
 
 		return
 	}
-	
+
 	validate := validator.New()
 
 	err = validate.Struct(body.Data)
@@ -41,9 +39,8 @@ func StorePlacesController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	places := models.Places{
-		Name: body.Data.Attributes.Name,
+		Name:   body.Data.Attributes.Name,
 		Adress: body.Data.Attributes.Adress,
-	
 	}
 
 	result := database.Create(&places)
