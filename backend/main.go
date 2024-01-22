@@ -2,8 +2,8 @@ package main
 
 import (
 	"backend/contexts"
-	"backend/controllers/users"
 	"backend/controllers/places"
+	"backend/controllers/users"
 	"backend/models"
 	"backend/services"
 	"fmt"
@@ -56,6 +56,7 @@ func main() {
 			r.Delete("/", users.DeleteUserController)
 		})
 	})
+
 	router.Route("/places", func(r chi.Router) {
 
 		r.Route("/", func(r chi.Router) {
@@ -68,6 +69,5 @@ func main() {
 		})
 	})
 
-		
 	log.Fatal(http.ListenAndServe(":8000", router))
 }

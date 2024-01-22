@@ -13,7 +13,6 @@ import (
 )
 
 func StorePlacesController(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
 	database := services.GetConnection()
@@ -46,7 +45,7 @@ func StorePlacesController(w http.ResponseWriter, r *http.Request) {
 	result := database.Create(&places)
 
 	if result.Error != nil {
-		responses.UnprocessableEntityResponse(w, result.Error.Error())
+		responses.InternalServerErrorResponse(w, result.Error.Error())
 
 		return
 	}

@@ -1,5 +1,3 @@
-//Permet de recuperer en base de donnée les places
-
 package contexts
 
 import (
@@ -35,6 +33,5 @@ func PlacesContext(next http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), "places", places)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
-
 	})
 }

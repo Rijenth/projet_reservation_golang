@@ -10,7 +10,6 @@ import (
 )
 
 func IndexPlacesController(w http.ResponseWriter, r *http.Request) {
-
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
 	database := services.GetConnection()
