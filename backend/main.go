@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/contexts"
+	"backend/controllers/places"
 	"backend/controllers/users"
 	"backend/models"
 	"backend/services"
@@ -53,6 +54,14 @@ func main() {
 			r.Get("/", users.GetUsersController)
 			r.Patch("/", users.UpdateUsersController)
 			r.Delete("/", users.DeleteUserController)
+
+			r.Get("/places", func(writer http.ResponseWriter, request *http.Request) {
+				places.IndexPlacesController(writer, request)
+			})
+
+			r.Post("/places", func(writer http.ResponseWriter, request *http.Request) {
+				places.StorePlacesController(writer, request)
+			})
 		})
 	})
 

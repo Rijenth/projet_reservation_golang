@@ -15,5 +15,6 @@ type Model struct {
 func GetModels() []interface{} {
 	return []interface{}{
 		&User{},
+		&Places{},
 	}
 }
