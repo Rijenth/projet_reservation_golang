@@ -12,11 +12,13 @@ import (
 func IndexPlacesController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
+	user := r.Context().Value("user").(models.User)
+
 	database := services.GetConnection()
 
 	var places []*models.Places
 
-	database.Model(&models.Places{}).Find(&places)
+	database.Where("user_id = ?", user.ID).Preload("User").Find(&places)
 
 	responses.OkResponse(w, places)
 }

@@ -15,6 +15,14 @@ import (
 func StorePlacesController(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
+	user := r.Context().Value("user").(models.User)
+
+	if user.Role != "admin" {
+		responses.UnauthorizedResponse(w, "Only admin can create places")
+
+		return
+	}
+
 	database := services.GetConnection()
 
 	var body validators.StorePlacesDataValidator
@@ -40,6 +48,7 @@ func StorePlacesController(w http.ResponseWriter, r *http.Request) {
 	places := models.Places{
 		Name:   body.Data.Attributes.Name,
 		Adress: body.Data.Attributes.Adress,
+		User:   &user,
 	}
 
 	result := database.Create(&places)
