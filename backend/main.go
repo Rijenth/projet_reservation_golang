@@ -3,6 +3,7 @@ package main
 import (
 	"backend/contexts"
 	"backend/controllers/users"
+	"backend/controllers/places"
 	"backend/models"
 	"backend/services"
 	"fmt"
@@ -55,6 +56,18 @@ func main() {
 			r.Delete("/", users.DeleteUserController)
 		})
 	})
+	router.Route("/places", func(r chi.Router) {
 
+		r.Route("/", func(r chi.Router) {
+			r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
+				places.IndexPlacesController(writer, request)
+			})
+			r.Post("/", func(writer http.ResponseWriter, request *http.Request) {
+				places.StorePlacesController(writer, request)
+			})
+		})
+	})
+
+		
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
