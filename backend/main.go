@@ -3,6 +3,7 @@ package main
 import (
 	"backend/contexts"
 	"backend/controllers/places"
+	"backend/controllers/restaurants"
 	"backend/controllers/users"
 	"backend/models"
 	"backend/services"
@@ -63,6 +64,29 @@ func main() {
 				places.StorePlacesController(writer, request)
 			})
 		})
+	})
+
+	// sur toutes les routes de types /places/...
+	router.Route("/places", func(r chi.Router) {
+
+		r.Route("/{placeId}", func(r chi.Router) {
+			r.Use(contexts.PlacesContext)
+
+			r.Get("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
+				restaurants.IndexRestaurantsController(writer, request)
+			})
+			r.Post("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
+				restaurants.StoreRestaurantController(writer, request)
+			})
+		})
+	})
+
+	router.Route("/restaurants/{restaurantId}", func(r chi.Router) {
+		r.Use(contexts.RestaurantContext)
+
+		r.Get("/", restaurants.GetRestaurantController)
+		r.Delete("/", restaurants.DeleteRestaurantController)
+		r.Patch("/", restaurants.UpdateRestaurantController)
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))

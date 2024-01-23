@@ -16,5 +16,6 @@ func GetModels() []interface{} {
 	return []interface{}{
 		&User{},
 		&Places{},
+		&Restaurant{},
 	}
 }

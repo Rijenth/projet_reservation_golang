@@ -9,5 +9,5 @@ import (
 func OkResponse(w http.ResponseWriter, data interface{}) {
 	w.WriteHeader(http.StatusOK)
 
-	jsonapi.MarshalPayload(w, data)
+	jsonapi.MarshalPayloadWithoutIncluded(w, data)
 }
