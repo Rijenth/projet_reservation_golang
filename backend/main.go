@@ -54,6 +54,13 @@ func main() {
 			r.Get("/", users.GetUsersController)
 			r.Patch("/", users.UpdateUsersController)
 			r.Delete("/", users.DeleteUserController)
+		})
+	})
+
+	///////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////////
+	router.Route("/places", func(r chi.Router) {
 
 			r.Get("/places", func(writer http.ResponseWriter, request *http.Request) {
 				places.IndexPlacesController(writer, request)
@@ -62,8 +69,17 @@ func main() {
 			r.Post("/places", func(writer http.ResponseWriter, request *http.Request) {
 				places.StorePlacesController(writer, request)
 			})
+
+
+			r.Route("/{placesId}", func(r chi.Router) {
+				r.Use(contexts.PlacesContext)
+	
+				r.Get("/", places.GetPlacesController)
+				//r.Patch("/", places.UpdatePlacesController)
+				//r.Delete("/", places.DeletePlacesController)
+			})
 		})
-	})
+
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
