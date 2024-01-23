@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/contexts"
+	"backend/controllers/commandes"
 	"backend/models"
 	"backend/routes"
 	"backend/services"
@@ -53,6 +54,25 @@ func main() {
 		r.Mount("/restaurants", routes.RestaurantRoutes())
 		r.Mount("/places", routes.PlaceRoutes())
 		r.Mount("/menus", routes.MenuRoutes())
+	})
+
+	router.Route("/restaurants/{restaurantId}", func(r chi.Router) {
+		r.Use(contexts.RestaurantContext)
+
+		r.Get("/commandes", func(writer http.ResponseWriter, request *http.Request) {
+			commandes.IndexCommandesController(writer, request)
+		})
+		r.Post("/commandes", func(writer http.ResponseWriter, request *http.Request) {
+			commandes.StoreCommandeController(writer, request)
+		})
+	})
+
+	router.Route("/commandes/{commandesId}", func(r chi.Router) {
+		r.Use(contexts.CommandeContext)
+
+		r.Get("/", commandes.GetCommandeController)
+		r.Delete("/", commandes.DeleteCommandeController)
+		r.Patch("/", commandes.UpdateCommandeController)
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))
