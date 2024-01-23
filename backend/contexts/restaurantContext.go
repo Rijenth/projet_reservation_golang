@@ -30,6 +30,8 @@ func RestaurantContext(next http.Handler) http.Handler {
 			return
 		}
 
+		database.Model(&restaurant).Association("Place").Find(&restaurant.Place)
+
 		ctx := context.WithValue(r.Context(), "restaurant", restaurant)
 
 		next.ServeHTTP(w, r.WithContext(ctx))

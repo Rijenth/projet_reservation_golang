@@ -71,7 +71,6 @@ func main() {
 
 		r.Route("/{placeId}", func(r chi.Router) {
 			r.Use(contexts.PlacesContext)
-			r.Use(contexts.RestaurantContext)
 
 			r.Get("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
 				restaurants.IndexRestaurantsController(writer, request)
@@ -79,10 +78,15 @@ func main() {
 			r.Post("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
 				restaurants.StoreRestaurantController(writer, request)
 			})
-			r.Get("/restaurants/{restaurantId}", restaurants.GetRestaurantController)
-			r.Post("/restaurants/{restaurantId}", restaurants.DeleteRestaurantController)
-			r.Patch("/restaurants/{restaurantId}", restaurants.UpdateRestaurantController)
 		})
+	})
+
+	router.Route("/restaurants/{restaurantId}", func(r chi.Router) {
+		r.Use(contexts.RestaurantContext)
+
+		r.Get("/", restaurants.GetRestaurantController)
+		r.Delete("/", restaurants.DeleteRestaurantController)
+		r.Patch("/", restaurants.UpdateRestaurantController)
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))
