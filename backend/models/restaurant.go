@@ -2,7 +2,7 @@ package models
 
 type Restaurant struct {
 	ID      uint    `gorm:"primaryKey" jsonapi:"primary,restaurants"`
-	Name    string  `jsonapi:"attr,name"`
+	Name    string  `gorm:"unique" jsonapi:"attr,name"`
 	PlaceID uint    `gorm:"not null" json:"-"`
 	Place   *Places `jsonapi:"relation,place"`
 	// Menus		[]Menu		`gorm:"foreignKey:RestaurantID" jsonapi:"attr,menus"`

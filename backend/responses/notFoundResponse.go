@@ -11,7 +11,7 @@ func NotFoundResponse(w http.ResponseWriter, message string) {
 
 	jsonapi.MarshalErrors(w, []*jsonapi.ErrorObject{{
 		Title:  "Not found",
-		Detail: "The requested resource was not found",
+		Detail: message,
 		Status: "404",
 	}})
 }
