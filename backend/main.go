@@ -37,6 +37,10 @@ func main() {
 
 	router.Use(middleware.Recoverer)
 
+	router.Route("/login", func(r chi.Router) {
+		r.Post("/", users.UserAuthenticationController)
+	})
+
 	// sur toutes les routes de types /users/...
 	router.Route("/users", func(r chi.Router) {
 
