@@ -40,8 +40,9 @@ func StoreRestaurantController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	restaurant := models.Restaurant{
-		Name:  body.Data.Attributes.Name,
-		Place: &place,
+		Name:    body.Data.Attributes.Name,
+		PlaceID: place.ID,
+		Place:   &place,
 		// Menus:  	body.Data.Attributes.Menus,
 		// Commands:  	body.Data.Attributes.Commands,
 	}

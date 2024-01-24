@@ -78,6 +78,7 @@ func main() {
 			r.Post("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
 				restaurants.StoreRestaurantController(writer, request)
 			})
+			r.Get("/", places.GetPlacesController)
 		})
 	})
 
