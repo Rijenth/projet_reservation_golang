@@ -31,7 +31,20 @@ func main() {
 
 	defer connection.Close()
 
-	database.AutoMigrate(models.GetModels()...)
+	//database.AutoMigrate(models.GetModels()...)
+
+	//cette verification donne en detail le model qui pose probleme
+	modelsToMigrate := models.GetModels()
+	for _, model := range modelsToMigrate {
+		if err := database.AutoMigrate(model); err != nil {
+			log.Fatalf("Error during migration for model %T: %s", model, err)
+		}
+	}
+
+
+
+
+
 
 	router = chi.NewRouter()
 
