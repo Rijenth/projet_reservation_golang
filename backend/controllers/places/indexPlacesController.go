@@ -18,7 +18,7 @@ func IndexPlacesController(w http.ResponseWriter, r *http.Request) {
 
 	var places []*models.Places
 
-	database.Where("user_id = ?", user.ID).Preload("User").Find(&places)
+	database.Where("user_id = ?", user.ID).Preload("User").Preload("Restaurants").Find(&places)
 
 	responses.OkResponse(w, places)
 }

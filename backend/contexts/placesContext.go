@@ -20,7 +20,7 @@ func PlacesContext(next http.Handler) http.Handler {
 
 		database := services.GetConnection()
 
-		database.First(&places, placesID)
+		database.Preload("Restaurants").Preload("User").First(&places, placesID)
 
 		if places.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)
