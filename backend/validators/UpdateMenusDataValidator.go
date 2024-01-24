@@ -1,6 +1,6 @@
 package validators
 
-type UpdateRestaurantDataValidator struct {
+type UpdateMenusDataValidator struct {
 	Data struct {
 		Type       string                     `validate:"required,eq=restaurants"`
 		Id         string                     `validate:"required,number"`
@@ -8,7 +8,6 @@ type UpdateRestaurantDataValidator struct {
 	} `json:"data"`
 }
 
-type UpdateRestaurantAttributes struct {
+type UpdateMenusAttributes struct {
 	Name string `validate:"required"`
-	Price float64 `validate:"required"`
 }
