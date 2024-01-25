@@ -1,4 +1,4 @@
-package places
+package controllers
 
 import (
 	"backend/models"
@@ -12,7 +12,24 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func StorePlacesController(w http.ResponseWriter, r *http.Request) {
+type PlaceController struct {
+}
+
+func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
+	user := r.Context().Value("user").(models.User)
+
+	database := services.GetConnection()
+
+	var places []*models.Places
+
+	database.Where("user_id = ?", user.ID).Preload("User").Preload("Restaurants").Find(&places)
+
+	responses.OkResponse(w, places)
+}
+
+func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
 	user := r.Context().Value("user").(models.User)
