@@ -2,17 +2,22 @@ package main
 
 import (
 	"backend/contexts"
+	"backend/controllers"
 	"backend/controllers/places"
 	"backend/controllers/restaurants"
-	"backend/controllers/users"
 	"backend/models"
+	"backend/responses"
+	"backend/routes"
 	"backend/services"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/google/jsonapi"
 )
 
 var router *chi.Mux
@@ -38,36 +43,42 @@ func main() {
 	router.Use(middleware.Recoverer)
 
 	router.Route("/login", func(r chi.Router) {
-		r.Post("/", users.UserAuthenticationController)
+		r.Post("/", controllers.UserAuthenticationController)
+
+		r.Get("/me", func(writer http.ResponseWriter, request *http.Request) {
+			writer.Header().Set("Content-Type", jsonapi.MediaType)
+
+			token := request.Header.Get("Authorization")
+
+			if !strings.HasPrefix(token, "Bearer ") {
+				responses.UnauthorizedResponse(writer, "Invalid token")
+
+				return
+			}
+
+			bearerToken := token[7:]
+
+			err := services.VerifyToken(&bearerToken)
+
+			if err != nil {
+				responses.UnauthorizedResponse(writer, "Invalid token")
+
+				return
+			}
+
+			writer.WriteHeader(http.StatusOK)
+
+			json.NewEncoder(writer).Encode(map[string]string{
+				"message": "You are authenticated",
+			})
+		})
 	})
 
-	// sur toutes les routes de types /users/...
-	router.Route("/users", func(r chi.Router) {
+	// routes necessitant une authentification
+	router.Group(func(r chi.Router) {
+		r.Use(contexts.AuthContext)
 
-		r.Route("/", func(r chi.Router) {
-			r.Get("/", func(writer http.ResponseWriter, request *http.Request) {
-				users.IndexUsersController(writer, request)
-			})
-			r.Post("/", func(writer http.ResponseWriter, request *http.Request) {
-				users.StoreUserController(writer, request)
-			})
-		})
-
-		r.Route("/{userId}", func(r chi.Router) {
-			r.Use(contexts.UserContext)
-
-			r.Get("/", users.GetUsersController)
-			r.Patch("/", users.UpdateUsersController)
-			r.Delete("/", users.DeleteUserController)
-
-			r.Get("/places", func(writer http.ResponseWriter, request *http.Request) {
-				places.IndexPlacesController(writer, request)
-			})
-
-			r.Post("/places", func(writer http.ResponseWriter, request *http.Request) {
-				places.StorePlacesController(writer, request)
-			})
-		})
+		r.Mount("/users", routes.UserRoutes())
 	})
 
 	// sur toutes les routes de types /places/...

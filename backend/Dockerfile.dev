@@ -8,4 +8,6 @@ ADD . /app
 
 RUN go install -mod=mod github.com/githubnemo/CompileDaemon
 
+RUN go mod download
+
 ENTRYPOINT CompileDaemon --build="go build main.go" --command=./main
