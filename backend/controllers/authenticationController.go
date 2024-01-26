@@ -7,11 +7,16 @@ import (
 	"backend/validators"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/google/jsonapi"
 )
 
-func UserAuthenticationController(w http.ResponseWriter, r *http.Request) {
+type AuthenticationController struct {
+}
+
+func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	database := services.GetConnection()
@@ -56,5 +61,33 @@ func UserAuthenticationController(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{
 		"token": token,
+	})
+}
+
+func (controller *AuthenticationController) CurrentUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
+	token := r.Header.Get("Authorization")
+
+	if !strings.HasPrefix(token, "Bearer ") {
+		responses.UnauthorizedResponse(w, "Invalid token")
+
+		return
+	}
+
+	bearerToken := token[7:]
+
+	err := services.VerifyToken(&bearerToken)
+
+	if err != nil {
+		responses.UnauthorizedResponse(w, "Invalid token")
+
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "You are authenticated",
 	})
 }
