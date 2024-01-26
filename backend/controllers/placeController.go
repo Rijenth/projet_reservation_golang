@@ -15,6 +15,14 @@ import (
 type PlaceController struct {
 }
 
+func (controller *PlaceController) Get(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
+	place := r.Context().Value("place").(models.Place)
+
+	responses.OkResponse(w, &place)
+}
+
 func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
@@ -22,11 +30,11 @@ func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request)
 
 	database := services.GetConnection()
 
-	var places []*models.Places
+	var place []*models.Place
 
-	database.Where("user_id = ?", user.ID).Preload("User").Preload("Restaurants").Find(&places)
+	database.Where("user_id = ?", user.ID).Preload("User").Preload("Restaurants").Find(&place)
 
-	responses.OkResponse(w, places)
+	responses.OkResponse(w, place)
 }
 
 func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request) {
@@ -35,14 +43,14 @@ func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request)
 	user := r.Context().Value("user").(models.User)
 
 	if user.Role != "admin" {
-		responses.UnauthorizedResponse(w, "Only admin can create places")
+		responses.UnauthorizedResponse(w, "Only admin can create place")
 
 		return
 	}
 
 	database := services.GetConnection()
 
-	var body validators.StorePlacesDataValidator
+	var body validators.StorePlaceDataValidator
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 
@@ -62,13 +70,13 @@ func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	places := models.Places{
+	place := models.Place{
 		Name:   body.Data.Attributes.Name,
 		Adress: body.Data.Attributes.Adress,
 		User:   &user,
 	}
 
-	result := database.Create(&places)
+	result := database.Create(&place)
 
 	if result.Error != nil {
 		responses.InternalServerErrorResponse(w, result.Error.Error())
@@ -76,5 +84,5 @@ func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	responses.CreatedResponse(w, &places)
+	responses.CreatedResponse(w, &place)
 }

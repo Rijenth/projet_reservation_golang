@@ -3,8 +3,6 @@ package main
 import (
 	"backend/contexts"
 	"backend/controllers"
-	"backend/controllers/places"
-	"backend/controllers/restaurants"
 	"backend/models"
 	"backend/responses"
 	"backend/routes"
@@ -42,8 +40,12 @@ func main() {
 
 	router.Use(middleware.Recoverer)
 
-	router.Route("/login", func(r chi.Router) {
-		r.Post("/", controllers.UserAuthenticationController)
+	router.Route("/", func(r chi.Router) {
+		userController := controllers.UserController{}
+
+		r.Post("/register", userController.Store)
+
+		r.Post("/login", controllers.UserAuthenticationController)
 
 		r.Get("/me", func(writer http.ResponseWriter, request *http.Request) {
 			writer.Header().Set("Content-Type", jsonapi.MediaType)
@@ -79,31 +81,24 @@ func main() {
 		r.Use(contexts.AuthContext)
 
 		r.Mount("/users", routes.UserRoutes())
+		r.Mount("/restaurants", routes.RestaurantRoutes())
+		r.Mount("/places", routes.PlaceRoutes())
 	})
 
 	// sur toutes les routes de types /places/...
-	router.Route("/places", func(r chi.Router) {
+	/* 	router.Route("/places", func(r chi.Router) { */
 
-		r.Route("/{placeId}", func(r chi.Router) {
-			r.Use(contexts.PlacesContext)
+	/* 		r.Route("/{placeId}", func(r chi.Router) {
+	r.Use(contexts.PlaceContext) */
 
-			r.Get("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
-				restaurants.IndexRestaurantsController(writer, request)
-			})
-			r.Post("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
-				restaurants.StoreRestaurantController(writer, request)
-			})
-			r.Get("/", places.GetPlacesController)
-		})
-	})
-
-	router.Route("/restaurants/{restaurantId}", func(r chi.Router) {
-		r.Use(contexts.RestaurantContext)
-
-		r.Get("/", restaurants.GetRestaurantController)
-		r.Delete("/", restaurants.DeleteRestaurantController)
-		r.Patch("/", restaurants.UpdateRestaurantController)
-	})
+	/* 			r.Get("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
+	   				restaurants.IndexRestaurantsController(writer, request)
+	   			})
+	   			r.Post("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
+	   				restaurants.StoreRestaurantController(writer, request)
+	   			}) */
+	/* 		}) */
+	/* 	}) */
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }

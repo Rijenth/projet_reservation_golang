@@ -11,26 +11,26 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func PlacesContext(next http.Handler) http.Handler {
+func PlaceContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		placesID := chi.URLParam(r, "placesId")
+		placeID := chi.URLParam(r, "placeId")
 
-		var places models.Places
+		var place models.Place
 
 		database := services.GetConnection()
 
-		database.Preload("Restaurants").Preload("User").First(&places, placesID)
+		database.Preload("Restaurants").Preload("User").First(&place, placeID)
 
-		if places.ID == 0 {
+		if place.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)
 
-			responses.NotFoundResponse(w, "Places not found")
+			responses.NotFoundResponse(w, "Place not found")
 
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "places", places)
+		ctx := context.WithValue(r.Context(), "place", place)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

@@ -11,17 +11,16 @@ func UserRoutes() chi.Router {
 	r := chi.NewRouter()
 
 	userController := controllers.UserController{}
-	placesController := controllers.PlaceController{}
+	placeController := controllers.PlaceController{}
 
 	r.Get("/", userController.Index)
-	r.Post("/", userController.Store)
 
 	r.With(contexts.UserContext).Get("/{userId}", userController.Get)
 	r.With(contexts.UserContext).Patch("/{userId}", userController.Update)
 	r.With(contexts.UserContext).Delete("/{userId}", userController.Delete)
 
-	r.With(contexts.UserContext).Get("/{userId}/places", placesController.Index)
-	r.With(contexts.UserContext).Post("/{userId}/places", placesController.Store)
+	r.With(contexts.UserContext).Get("/{userId}/places", placeController.Index)
+	r.With(contexts.UserContext).Post("/{userId}/places", placeController.Store)
 
 	return r
 }
