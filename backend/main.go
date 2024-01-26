@@ -85,20 +85,5 @@ func main() {
 		r.Mount("/places", routes.PlaceRoutes())
 	})
 
-	// sur toutes les routes de types /places/...
-	/* 	router.Route("/places", func(r chi.Router) { */
-
-	/* 		r.Route("/{placeId}", func(r chi.Router) {
-	r.Use(contexts.PlaceContext) */
-
-	/* 			r.Get("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
-	   				restaurants.IndexRestaurantsController(writer, request)
-	   			})
-	   			r.Post("/restaurants", func(writer http.ResponseWriter, request *http.Request) {
-	   				restaurants.StoreRestaurantController(writer, request)
-	   			}) */
-	/* 		}) */
-	/* 	}) */
-
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
