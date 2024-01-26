@@ -1,13 +1,13 @@
 package validators
 
-type StorePlacesDataValidator struct {
+type StorePlaceDataValidator struct {
 	Data struct {
-		Type        string                         `validate:"required,eq=places"`
-		Attributes  StorePlacesAttributes          `json:"attributes"`
+		Type       string               `validate:"required,eq=places"`
+		Attributes StorePlaceAttributes `json:"attributes"`
 	} `json:"data"`
 }
 
-type StorePlacesAttributes struct {
+type StorePlaceAttributes struct {
 	Name   string `validate:"required"`
 	Adress string `validate:"required"`
 }
