@@ -43,7 +43,9 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 
 	var user models.User
 
-	if err := database.Where("username = ? AND password = ?", body.Username, body.Password).First(&user).Error; err != nil {
+	database.Where("username = ?", body.Username).First(&user)
+
+	if user.ID == 0 || !user.ComparePassword(body.Password) {
 		responses.UnauthorizedResponse(w, "Invalid credentials")
 
 		return
