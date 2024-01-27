@@ -53,6 +53,7 @@ func main() {
 		r.Mount("/restaurants", routes.RestaurantRoutes())
 		r.Mount("/places", routes.PlaceRoutes())
 		r.Mount("/menus", routes.MenuRoutes())
+		r.Mount("/commands", routes.CommandRoutes())
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))
