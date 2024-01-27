@@ -52,7 +52,7 @@ func main() {
 		r.Mount("/users", routes.UserRoutes())
 		r.Mount("/restaurants", routes.RestaurantRoutes())
 		r.Mount("/places", routes.PlaceRoutes())
-		r.Mount("/menus", routes.menuRoutes())
+		r.Mount("/menus", routes.MenuRoutes())
 	})
 
 	log.Fatal(http.ListenAndServe(":8000", router))
