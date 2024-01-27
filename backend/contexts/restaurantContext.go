@@ -20,7 +20,7 @@ func RestaurantContext(next http.Handler) http.Handler {
 
 		database := services.GetConnection()
 
-		database.First(&restaurant, restaurantID)
+		database.Preload("Place").Preload("Menus").First(&restaurant, restaurantID)
 
 		if restaurant.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)
@@ -29,8 +29,6 @@ func RestaurantContext(next http.Handler) http.Handler {
 
 			return
 		}
-
-		database.Model(&restaurant).Association("Place").Find(&restaurant.Place)
 
 		ctx := context.WithValue(r.Context(), "restaurant", restaurant)
 
