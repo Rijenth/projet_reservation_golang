@@ -10,5 +10,4 @@ type UpdateRestaurantDataValidator struct {
 
 type UpdateRestaurantAttributes struct {
 	Name string `validate:"required"`
-	Price float64 `validate:"required"`
 }
