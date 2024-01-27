@@ -43,7 +43,9 @@ func UpdateCommandeController(w http.ResponseWriter, r *http.Request) {
 
 	if body.Data.Attributes.Description != "" {
 		commande.Description = body.Data.Attributes.Description
-	} else if body.Data.Attributes.Status != "" {
+	}
+	
+	if body.Data.Attributes.Status != "" {
 		commande.Status = body.Data.Attributes.Status
 	}
 

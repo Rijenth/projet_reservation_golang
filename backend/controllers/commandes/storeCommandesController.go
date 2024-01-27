@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/jsonapi"
+	"github.com/google/uuid"
 )
 
 func StoreCommandeController(w http.ResponseWriter, r *http.Request) {
@@ -40,7 +41,11 @@ func StoreCommandeController(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// TODO: generate identification number for the commande
-	// generateIdentificationNumber()
+	identificationNumber, err := uuid.NewRandom()
+	if err != nil {
+		responses.InternalServerErrorResponse(w, err.Error())
+		return
+	}
 
 	// TODO: set the date of the commande to the current date
 	// setDate()
@@ -49,7 +54,7 @@ func StoreCommandeController(w http.ResponseWriter, r *http.Request) {
 	// calculateTotalPrice()
 
 	commande := models.Commande{
-		IdentificationNumber: "123456789",
+		IdentificationNumber: identificationNumber.String(),
 		Date: 			   "2021-01-01",
 		Description:       body.Data.Attributes.Description,
 		Status:            body.Data.Attributes.Status,
