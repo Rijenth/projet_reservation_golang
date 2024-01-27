@@ -1,6 +1,7 @@
 package services
 
 import (
+	"backend/models"
 	"fmt"
 	"log"
 	"os"
@@ -54,6 +55,16 @@ func VerifyToken(reqToken *string) error {
 	}
 
 	if !token.Valid {
+		return fmt.Errorf("invalid token")
+	}
+
+	database := GetConnection()
+
+	var user models.User
+
+	database.Where("username = ?", token.Claims.(jwt.MapClaims)["username"]).First(&user)
+
+	if user.ID == 0 {
 		return fmt.Errorf("invalid token")
 	}
 
