@@ -79,7 +79,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 	command := models.Command{
 		IdentificationNumber: identificationNumber.String(),
 		Description:          body.Data.Attributes.Description,
-		Status:               body.Data.Attributes.Status,
+		Status:               "not_started",
 		Amount:               0,
 		Restaurant:           &restaurant,
 	}

@@ -9,6 +9,4 @@ type StoreCommandDataValidator struct {
 
 type StoreCommandAttributes struct {
 	Description	string `validate:"required"`
-	Status	string `validate:"required"`
-	//Menus	[]uint `validate:"required"`
 }

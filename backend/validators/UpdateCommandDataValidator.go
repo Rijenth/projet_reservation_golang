@@ -9,7 +9,6 @@ type UpdateCommandDataValidator struct {
 }
 
 type UpdateCommandAttributes struct {
-	Description	string `validate:"required"`
-	Status	string `validate:"required"`
-	//Menus	[]uint `validate:"required"`
+	Description	string `validate:"omitempty"`
+	Status	string `validate:"required,eq=ongoing|eq=ready"`
 }
