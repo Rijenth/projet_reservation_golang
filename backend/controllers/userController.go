@@ -68,6 +68,14 @@ func (controller *UserController) Store(w http.ResponseWriter, r *http.Request) 
 		Role:      body.Data.Attributes.Role,
 	}
 
+	user.Password, err = user.HashPassword()
+
+	if err != nil {
+		responses.InternalServerErrorResponse(w, err.Error())
+
+		return
+	}
+
 	result := database.Create(&user)
 
 	if result.Error != nil {
@@ -124,6 +132,14 @@ func (controller *UserController) Update(w http.ResponseWriter, r *http.Request)
 
 	if body.Data.Attributes.Password != "" {
 		user.Password = body.Data.Attributes.Password
+
+		user.Password, err = user.HashPassword()
+
+		if err != nil {
+			responses.InternalServerErrorResponse(w, err.Error())
+
+			return
+		}
 	}
 
 	result := database.Save(&user)
