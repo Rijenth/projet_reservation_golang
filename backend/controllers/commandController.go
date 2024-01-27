@@ -19,9 +19,9 @@ type CommandController struct {
 func (controller *CommandController) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
-	commande := r.Context().Value("commande").(models.Commande)
+	command := r.Context().Value("command").(models.Command)
 
-	responses.OkResponse(w, &commande)
+	responses.OkResponse(w, &command)
 }
 
 func (controller *CommandController) Index(w http.ResponseWriter, r *http.Request) {
@@ -31,11 +31,11 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 
 	database := services.GetConnection()
 
-	var commandes []*models.Commande
+	var commands []*models.Command
 
-	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Find(&commandes)
+	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Find(&commands)
 
-	responses.OkResponse(w, commandes)
+	responses.OkResponse(w, commands)
 }
 
 func (controller *CommandController) Store(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +45,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 
 	database := services.GetConnection()
 
-	var body validators.StoreCommandeDataValidator
+	var body validators.StoreCommandDataValidator
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 
@@ -65,7 +65,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// TODO: generate identification number for the commande
+	// TODO: generate identification number for the command
 	identificationNumber, err := uuid.NewRandom()
 
 	if err != nil {
@@ -73,10 +73,10 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	// TODO: calculate the total price of the commande
+	// TODO: calculate the total price of the command
 	// calculateTotalPrice()
 
-	commande := models.Commande{
+	command := models.Command{
 		IdentificationNumber: identificationNumber.String(),
 		Description:          body.Data.Attributes.Description,
 		Status:               body.Data.Attributes.Status,
@@ -84,7 +84,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		Restaurant:           &restaurant,
 	}
 
-	result := database.Create(&commande)
+	result := database.Create(&command)
 
 	if result.Error != nil {
 		responses.InternalServerErrorResponse(w, result.Error.Error())
@@ -92,7 +92,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	responses.CreatedResponse(w, &commande)
+	responses.CreatedResponse(w, &command)
 }
 
 func (controller *CommandController) Update(w http.ResponseWriter, r *http.Request) {
@@ -100,7 +100,7 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 
 	database := services.GetConnection()
 
-	var body validators.UpdateCommandeDataValidator
+	var body validators.UpdateCommandDataValidator
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 
@@ -120,23 +120,23 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	commande := r.Context().Value("commande").(models.Commande)
+	command := r.Context().Value("command").(models.Command)
 
-	// TODO: calculate the total price of the commande if amount is changed then update the amount
+	// TODO: calculate the total price of the command if amount is changed then update the amount
 
-	//TODO: update the date of the commande if the date is changed
+	//TODO: update the date of the command if the date is changed
 
 	if body.Data.Attributes.Description != "" {
-		commande.Description = body.Data.Attributes.Description
+		command.Description = body.Data.Attributes.Description
 	}
 
 	if body.Data.Attributes.Status != "" {
-		commande.Status = body.Data.Attributes.Status
+		command.Status = body.Data.Attributes.Status
 	}
 
 	// TODO: see if we change an other field
 
-	result := database.Save(&commande)
+	result := database.Save(&command)
 
 	if result.Error != nil {
 		responses.InternalServerErrorResponse(w, result.Error.Error())
@@ -144,17 +144,17 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	responses.OkResponse(w, &commande)
+	responses.OkResponse(w, &command)
 }
 
 func (controller *CommandController) Delete(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
-	commande := r.Context().Value("commande").(models.Commande)
+	command := r.Context().Value("command").(models.Command)
 
 	database := services.GetConnection()
 
-	database.Delete(&commande)
+	database.Delete(&command)
 
 	w.WriteHeader(http.StatusNoContent)
 }

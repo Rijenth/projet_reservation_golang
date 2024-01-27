@@ -21,8 +21,8 @@ func RestaurantRoutes() chi.Router {
 	r.With(contexts.RestaurantContext).Get("/{restaurantId}/menus", menuController.Index)
 	r.With(contexts.RestaurantContext).Post("/{restaurantId}/menus", menuController.Store)
 
-	r.With(contexts.RestaurantContext).Get("/{restaurantId}/commandes", commandController.Index)
-	r.With(contexts.RestaurantContext).Post("/{restaurantId}/commandes", commandController.Store)
+	r.With(contexts.RestaurantContext).Get("/{restaurantId}/commands", commandController.Index)
+	r.With(contexts.RestaurantContext).Post("/{restaurantId}/commands", commandController.Store)
 
 	return r
 }

@@ -1,13 +1,13 @@
 package validators
 
-type StoreCommandeDataValidator struct {
+type StoreCommandDataValidator struct {
 	Data struct {
-		Type       string              `validate:"required,eq=commandes"`
-		Attributes StoreCommandeAttributes `json:"attributes"`
+		Type       string              `validate:"required,eq=commands"`
+		Attributes StoreCommandAttributes `json:"attributes"`
 	} `json:"data"`
 }
 
-type StoreCommandeAttributes struct {
+type StoreCommandAttributes struct {
 	Description	string `validate:"required"`
 	Status	string `validate:"required"`
 	//Menus	[]uint `validate:"required"`

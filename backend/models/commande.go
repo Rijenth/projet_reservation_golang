@@ -1,7 +1,7 @@
 package models
 
-type Commande struct {
-	ID                   uint        `gorm:"primaryKey" jsonapi:"primary,commandes"`
+type Command struct {
+	ID                   uint        `gorm:"primaryKey" jsonapi:"primary,commands"`
 	IdentificationNumber string      `gorm:"unique" jsonapi:"attr,identificationNumber"`
 	Description          string      `jsonapi:"attr,description"`
 	Status               string      `jsonapi:"attr,status"`

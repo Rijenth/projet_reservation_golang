@@ -11,26 +11,26 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func CommandeContext(next http.Handler) http.Handler {
+func CommandContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		commandeID := chi.URLParam(r, "commandeId")
+		commandID := chi.URLParam(r, "commandId")
 
-		var commande models.Commande
+		var command models.Command
 
 		database := services.GetConnection()
 
-		database.First(&commande, commandeID)
+		database.First(&command, commandID)
 
-		if commande.ID == 0 {
+		if command.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)
 
-			responses.NotFoundResponse(w, "commande not found")
+			responses.NotFoundResponse(w, "command not found")
 
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "commande", commande)
+		ctx := context.WithValue(r.Context(), "command", command)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
