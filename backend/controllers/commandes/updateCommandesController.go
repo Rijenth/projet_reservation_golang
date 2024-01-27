@@ -41,6 +41,8 @@ func UpdateCommandeController(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: calculate the total price of the commande if amount is changed then update the amount
 
+	//TODO: update the date of the commande if the date is changed
+
 	if body.Data.Attributes.Description != "" {
 		commande.Description = body.Data.Attributes.Description
 	}

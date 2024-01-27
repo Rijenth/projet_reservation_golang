@@ -11,6 +11,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/google/jsonapi"
 	"github.com/google/uuid"
+
+    "time"
 )
 
 func StoreCommandeController(w http.ResponseWriter, r *http.Request) {
@@ -47,19 +49,17 @@ func StoreCommandeController(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: set the date of the commande to the current date
-	// setDate()
-
 	// TODO: calculate the total price of the commande
 	// calculateTotalPrice()
 
 	commande := models.Commande{
 		IdentificationNumber: identificationNumber.String(),
-		Date: 			   "2021-01-01",
-		Description:       body.Data.Attributes.Description,
-		Status:            body.Data.Attributes.Status,
-		Amount:            0,
-		Restaurant: &restaurant,
+		CreateDate: 		time.Now(),
+		UpdateDate: 		time.Now(),
+		Description:       	body.Data.Attributes.Description,
+		Status:            	body.Data.Attributes.Status,
+		Amount:            	0,
+		Restaurant: 		&restaurant,
 	}
 
 	result := database.Create(&commande)
