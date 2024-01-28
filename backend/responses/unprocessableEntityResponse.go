@@ -6,12 +6,24 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func UnprocessableEntityResponse(w http.ResponseWriter, err string) {
+func UnprocessableEntityResponse(w http.ResponseWriter, errs []error) {
 	w.WriteHeader(http.StatusUnprocessableEntity)
 
-	jsonapi.MarshalErrors(w, []*jsonapi.ErrorObject{{
-		Title:  "Unprocessable Entity",
-		Detail: err,
-		Status: "422",
-	}})
+	var errorObjects []*jsonapi.ErrorObject
+
+	for _, err := range errs {
+		var errorObject *jsonapi.ErrorObject
+
+		errorObject = &jsonapi.ErrorObject{
+			Title:  "Unprocessable entity",
+			Detail: "",
+			Status: "422",
+		}
+
+		errorObject.Detail = err.Error()
+
+		errorObjects = append(errorObjects, errorObject)
+	}
+
+	jsonapi.MarshalErrors(w, errorObjects)
 }

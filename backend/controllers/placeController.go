@@ -55,7 +55,7 @@ func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request)
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
+		responses.UnprocessableEntityResponse(w, []error{err})
 
 		return
 	}
@@ -65,7 +65,7 @@ func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request)
 	err = validate.Struct(body.Data)
 
 	if err != nil {
-		responses.FailedValidationResponse(w, err)
+		responses.FailedValidationResponse(w, []error{err})
 
 		return
 	}

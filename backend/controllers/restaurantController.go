@@ -49,7 +49,7 @@ func (controller *RestaurantController) Store(w http.ResponseWriter, r *http.Req
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
+		responses.UnprocessableEntityResponse(w, []error{err})
 
 		return
 	}
@@ -59,7 +59,7 @@ func (controller *RestaurantController) Store(w http.ResponseWriter, r *http.Req
 	err = validate.Struct(body.Data)
 
 	if err != nil {
-		responses.FailedValidationResponse(w, err)
+		responses.FailedValidationResponse(w, []error{err})
 
 		return
 	}
@@ -93,7 +93,7 @@ func (controller *RestaurantController) Update(w http.ResponseWriter, r *http.Re
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
+		responses.UnprocessableEntityResponse(w, []error{err})
 
 		return
 	}
@@ -103,7 +103,7 @@ func (controller *RestaurantController) Update(w http.ResponseWriter, r *http.Re
 	err = validate.Struct(body.Data)
 
 	if err != nil {
-		responses.FailedValidationResponse(w, err)
+		responses.FailedValidationResponse(w, []error{err})
 
 		return
 	}
