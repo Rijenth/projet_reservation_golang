@@ -26,7 +26,7 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
+		responses.UnprocessableEntityResponse(w, []error{err})
 
 		return
 	}
@@ -36,7 +36,7 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 	err = validate.Struct(body)
 
 	if err != nil {
-		responses.FailedValidationResponse(w, err)
+		responses.FailedValidationResponse(w, []error{err})
 
 		return
 	}

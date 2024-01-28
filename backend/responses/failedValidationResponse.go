@@ -3,22 +3,35 @@ package responses
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
 
-func FailedValidationResponse(w http.ResponseWriter, err error) {
-	var message string
+func FailedValidationResponse(w http.ResponseWriter, errs []error) {
+	var errors []error
 
-	for index, e := range err.(validator.ValidationErrors) {
-		message += fmt.Sprintf("Field %s is invalid", e.Field())
+	for _, err := range errs {
+		if validationErr, ok := err.(validator.ValidationErrors); ok {
+			for index, e := range validationErr {
+				message := fmt.Errorf("Field %s is invalid at index %x", e.Field(), index)
 
-		if index < len(err.(validator.ValidationErrors))-1 {
-			message += ", "
+				errorMessage := e.Error()
+
+				errorMessageIndex := strings.Index(errorMessage, "Error:")
+
+				if errorMessageIndex != -1 {
+					message = fmt.Errorf("%s because %s", message, strings.ToLower(errorMessage[errorMessageIndex+len("Error:"):]))
+				}
+
+				fieldError := fmt.Errorf("%s", message)
+
+				errors = append(errors, fieldError)
+			}
 		} else {
-			message += "."
+			errors = append(errors, err)
 		}
 	}
 
-	UnprocessableEntityResponse(w, message)
+	UnprocessableEntityResponse(w, errors)
 }

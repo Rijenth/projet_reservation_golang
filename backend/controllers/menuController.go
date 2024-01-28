@@ -37,7 +37,7 @@ func (controller *MenuController) Index(w http.ResponseWriter, r *http.Request) 
 
 	var menu []*models.Menu
 
-	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Find(&menu)
+	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Preload("Command").Find(&menu)
 
 	responses.OkResponse(w, menu)
 }
@@ -54,7 +54,7 @@ func (controller *MenuController) Store(w http.ResponseWriter, r *http.Request) 
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
+		responses.UnprocessableEntityResponse(w, []error{err})
 
 		return
 	}
@@ -64,7 +64,7 @@ func (controller *MenuController) Store(w http.ResponseWriter, r *http.Request) 
 	err = validate.Struct(body.Data)
 
 	if err != nil {
-		responses.FailedValidationResponse(w, err)
+		responses.FailedValidationResponse(w, []error{err})
 
 		return
 	}
@@ -99,7 +99,7 @@ func (controller *MenuController) Update(w http.ResponseWriter, r *http.Request)
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
+		responses.UnprocessableEntityResponse(w, []error{err})
 
 		return
 	}
@@ -109,7 +109,7 @@ func (controller *MenuController) Update(w http.ResponseWriter, r *http.Request)
 	err = validate.Struct(body.Data)
 
 	if err != nil {
-		responses.FailedValidationResponse(w, err)
+		responses.FailedValidationResponse(w, []error{err})
 
 		return
 	}
