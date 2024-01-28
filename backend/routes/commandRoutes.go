@@ -12,9 +12,11 @@ func CommandRoutes() chi.Router {
 
 	commandController := controllers.CommandController{}
 
-	r.With(contexts.CommandContext).Get("/{commandId}", commandController.Get)
-	r.With(contexts.CommandContext).Patch("/{commandId}", commandController.Update)
-	r.With(contexts.CommandContext).Delete("/{commandId}", commandController.Delete)
+	r.With(contexts.CommandContext).Group(func(r chi.Router) {
+		r.Get("/{commandId}", commandController.Get)
+		r.Patch("/{commandId}", commandController.Update)
+		r.Delete("/{commandId}", commandController.Delete)
+	})
 
 	return r
 }
