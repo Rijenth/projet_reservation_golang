@@ -13,10 +13,12 @@ func PlaceRoutes() chi.Router {
 	placeController := controllers.PlaceController{}
 	restaurantController := controllers.RestaurantController{}
 
-	r.With(contexts.PlaceContext).Get("/{placeId}", placeController.Get)
+	r.With(contexts.PlaceContext).Group(func(r chi.Router) {
+		r.Get("/{placeId}", placeController.Get)
 
-	r.With(contexts.PlaceContext).Get("/{placeId}/restaurants", restaurantController.Index)
-	r.With(contexts.PlaceContext).Post("/{placeId}/restaurants", restaurantController.Store)
+		r.Get("/{placeId}/restaurants", restaurantController.Index)
+		r.Post("/{placeId}/restaurants", restaurantController.Store)
+	})
 
 	return r
 }

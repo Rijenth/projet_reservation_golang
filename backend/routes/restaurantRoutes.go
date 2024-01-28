@@ -14,15 +14,17 @@ func RestaurantRoutes() chi.Router {
 	menuController := controllers.MenuController{}
 	commandController := controllers.CommandController{}
 
-	r.With(contexts.RestaurantContext).Get("/{restaurantId}", restaurantController.Get)
-	r.With(contexts.RestaurantContext).Delete("/{restaurantId}", restaurantController.Delete)
-	r.With(contexts.RestaurantContext).Patch("/{restaurantId}", restaurantController.Update)
+	r.With(contexts.RestaurantContext).Group(func(r chi.Router) {
+		r.Get("/{restaurantId}", restaurantController.Get)
+		r.Delete("/{restaurantId}", restaurantController.Delete)
+		r.Patch("/{restaurantId}", restaurantController.Update)
 
-	r.With(contexts.RestaurantContext).Get("/{restaurantId}/menus", menuController.Index)
-	r.With(contexts.RestaurantContext).Post("/{restaurantId}/menus", menuController.Store)
+		r.Get("/{restaurantId}/menus", menuController.Index)
+		r.Post("/{restaurantId}/menus", menuController.Store)
 
-	r.With(contexts.RestaurantContext).Get("/{restaurantId}/commands", commandController.Index)
-	r.With(contexts.RestaurantContext).Post("/{restaurantId}/commands", commandController.Store)
+		r.Get("/{restaurantId}/commands", commandController.Index)
+		r.Post("/{restaurantId}/commands", commandController.Store)
+	})
 
 	return r
 }

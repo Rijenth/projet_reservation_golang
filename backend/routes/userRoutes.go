@@ -15,12 +15,14 @@ func UserRoutes() chi.Router {
 
 	r.Get("/", userController.Index)
 
-	r.With(contexts.UserContext).Get("/{userId}", userController.Get)
-	r.With(contexts.UserContext).Patch("/{userId}", userController.Update)
-	r.With(contexts.UserContext).Delete("/{userId}", userController.Delete)
+	r.With(contexts.UserContext).Group(func(r chi.Router) {
+		r.Get("/{userId}", userController.Get)
+		r.Patch("/{userId}", userController.Update)
+		r.Delete("/{userId}", userController.Delete)
 
-	r.With(contexts.UserContext).Get("/{userId}/places", placeController.Index)
-	r.With(contexts.UserContext).Post("/{userId}/places", placeController.Store)
+		r.Get("/{userId}/places", placeController.Index)
+		r.Post("/{userId}/places", placeController.Store)
+	})
 
 	return r
 }
