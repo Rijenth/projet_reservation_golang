@@ -8,6 +8,6 @@ type Command struct {
 	Amount               float64     `jsonapi:"attr,amount"`
 	RestaurantID         uint        `gorm:"not null" json:"-"`
 	Restaurant           *Restaurant `jsonapi:"relation,restaurant"`
-	//Menus                 []*Menu   `jsonapi:"relation,menus"`
+	Menus                []*Menu     `jsonapi:"relation,menus"`
 	Model
 }

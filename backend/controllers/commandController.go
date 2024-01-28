@@ -33,7 +33,7 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 
 	var commands []*models.Command
 
-	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Find(&commands)
+	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Preload("Menus").Find(&commands)
 
 	responses.OkResponse(w, commands)
 }
@@ -47,41 +47,40 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 
 	var body validators.StoreCommandDataValidator
 
-	err := json.NewDecoder(r.Body).Decode(&body)
-
-	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
-
+	if err := body.Validate(&r.Body, &w); err != nil {
 		return
 	}
 
-	validate := validator.New()
+	var menuIds []string
 
-	err = validate.Struct(body.Data)
-
-	if err != nil {
-		responses.FailedValidationResponse(w, err)
-
-		return
+	for _, menu := range body.Data.Relationships.Menus {
+		menuIds = append(menuIds, menu.ID)
 	}
 
-	// TODO: generate identification number for the command
-	identificationNumber, err := uuid.NewRandom()
+	var menusFromDatabase []*models.Menu
+	var commandAmount float64 = 0.0
 
-	if err != nil {
-		responses.InternalServerErrorResponse(w, err.Error())
-		return
+	if (len(menuIds)) != 0 {
+		result := database.Find(&menusFromDatabase, menuIds)
+
+		if result.Error != nil {
+			responses.InternalServerErrorResponse(w, result.Error.Error())
+		}
+
+		for _, menu := range menusFromDatabase {
+			commandAmount += menu.Price
+		}
 	}
 
-	// TODO: calculate the total price of the command
-	// calculateTotalPrice()
+	identificationNumber, _ := uuid.NewRandom()
 
 	command := models.Command{
 		IdentificationNumber: identificationNumber.String(),
 		Description:          body.Data.Attributes.Description,
 		Status:               "not_started",
-		Amount:               0,
+		Amount:               commandAmount,
 		Restaurant:           &restaurant,
+		Menus:                menusFromDatabase,
 	}
 
 	result := database.Create(&command)
@@ -105,7 +104,7 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		responses.UnprocessableEntityResponse(w, err.Error())
+		responses.UnprocessableEntityResponse(w, []error{err})
 
 		return
 	}
@@ -115,7 +114,7 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 	err = validate.Struct(body.Data)
 
 	if err != nil {
-		responses.FailedValidationResponse(w, err)
+		responses.FailedValidationResponse(w, []error{err})
 
 		return
 	}
