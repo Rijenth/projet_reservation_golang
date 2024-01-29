@@ -25,9 +25,11 @@ func (controller *CommandController) Get(w http.ResponseWriter, r *http.Request)
 }
 
 func (controller *CommandController) Index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	identificationNumberFilter := r.URL.Query().Get("filter['identification_number']")
+	identificationNumberFilter := r.URL.Query().Get("filter['identificationNumber']")
 	descriptionFilter := r.URL.Query().Get("filter['description']")
 	statusFilter := r.URL.Query().Get("filter['status']")
 	amountFilter := r.URL.Query().Get("filter['amount']")
@@ -36,13 +38,15 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 
 	database := services.GetConnection()
 
-	services.Filter(w, database, &models.Command{}, map[string]interface{}{
+	results := services.Filter(database, &models.Command{}, map[string]interface{}{
 		"restaurant_id":         restaurant.ID,
 		"identification_number": identificationNumberFilter,
 		"description":           descriptionFilter,
 		"status":                statusFilter,
 		"amount":                amountFilter,
 	}, preloadRelations)
+
+	responses.OkResponse(w, results)
 }
 
 func (controller *CommandController) Store(w http.ResponseWriter, r *http.Request) {

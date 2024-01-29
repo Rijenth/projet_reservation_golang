@@ -1,18 +1,13 @@
 package services
 
 import (
-	"backend/responses"
 	"fmt"
-	"net/http"
 	"reflect"
 
-	"github.com/google/jsonapi"
 	"gorm.io/gorm"
 )
 
-func Filter(w http.ResponseWriter, database *gorm.DB, model interface{}, filters map[string]interface{}, preloadRelations []string) {
-	w.Header().Set("Content-Type", jsonapi.MediaType)
-
+func Filter(database *gorm.DB, model interface{}, filters map[string]interface{}, preloadRelations []string) interface{} {
 	results := reflect.New(reflect.SliceOf(reflect.TypeOf(model))).Elem().Interface()
 
 	query := database
@@ -29,5 +24,5 @@ func Filter(w http.ResponseWriter, database *gorm.DB, model interface{}, filters
 
 	query.Find(&results)
 
-	responses.OkResponse(w, results)
+	return results
 }
