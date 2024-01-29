@@ -24,17 +24,20 @@ func (controller *PlaceController) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", jsonapi.MediaType)
-
 	user := r.Context().Value("user").(models.User)
+
+	nameFilter := r.URL.Query().Get("filter['name']")
+	adressFilter := r.URL.Query().Get("filter['adress']")
+
+	preloadRelations := []string{"User", "Restaurants"}
 
 	database := services.GetConnection()
 
-	var place []*models.Place
-
-	database.Where("user_id = ?", user.ID).Preload("User").Preload("Restaurants").Find(&place)
-
-	responses.OkResponse(w, place)
+	services.Filter(w, database, &models.Place{}, map[string]interface{}{
+		"user_id": user.ID,
+		"name":    nameFilter,
+		"adress":  adressFilter,
+	}, preloadRelations)
 }
 
 func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request) {

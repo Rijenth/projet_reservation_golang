@@ -29,17 +29,20 @@ func (controller *MenuController) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (controller *MenuController) Index(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", jsonapi.MediaType)
-
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
+
+	nameFilter := r.URL.Query().Get("filter['name']")
+	priceFilter := r.URL.Query().Get("filter['price']")
+
+	preloadRelations := []string{"Restaurant", "Command"}
 
 	database := services.GetConnection()
 
-	var menu []*models.Menu
-
-	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Preload("Command").Find(&menu)
-
-	responses.OkResponse(w, menu)
+	services.Filter(w, database, &models.Menu{}, map[string]interface{}{
+		"restaurant_id": restaurant.ID,
+		"name":          nameFilter,
+		"price":         priceFilter,
+	}, preloadRelations)
 }
 
 func (controller *MenuController) Store(w http.ResponseWriter, r *http.Request) {
