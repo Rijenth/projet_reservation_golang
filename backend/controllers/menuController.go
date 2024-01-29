@@ -33,13 +33,20 @@ func (controller *MenuController) Index(w http.ResponseWriter, r *http.Request) 
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
+	nameFilter := r.URL.Query().Get("filter['name']")
+	priceFilter := r.URL.Query().Get("filter['price']")
+
+	preloadRelations := []string{"Restaurant", "Command"}
+
 	database := services.GetConnection()
 
-	var menu []*models.Menu
+	results := services.Filter(database, &models.Menu{}, map[string]interface{}{
+		"restaurant_id": restaurant.ID,
+		"name":          nameFilter,
+		"price":         priceFilter,
+	}, preloadRelations)
 
-	database.Where("restaurant_id = ?", restaurant.ID).Preload("Restaurant").Preload("Command").Find(&menu)
-
-	responses.OkResponse(w, menu)
+	responses.OkResponse(w, results)
 }
 
 func (controller *MenuController) Store(w http.ResponseWriter, r *http.Request) {

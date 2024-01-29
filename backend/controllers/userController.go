@@ -26,13 +26,23 @@ func (controller *UserController) Get(w http.ResponseWriter, r *http.Request) {
 func (controller *UserController) Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
+	firstNameFilter := r.URL.Query().Get("filter['firstName']")
+	lastNameFilter := r.URL.Query().Get("filter['lastName']")
+	roleFilter := r.URL.Query().Get("filter['role']")
+	userNameFilter := r.URL.Query().Get("filter['username']")
+
+	preloadRelations := []string{""}
+
 	database := services.GetConnection()
 
-	var users []*models.User
+	results := services.Filter(database, &models.User{}, map[string]interface{}{
+		"first_name": firstNameFilter,
+		"last_name":  lastNameFilter,
+		"role":       roleFilter,
+		"username":   userNameFilter,
+	}, preloadRelations)
 
-	database.Model(&models.User{}).Find(&users)
-
-	responses.OkResponse(w, users)
+	responses.OkResponse(w, results)
 }
 
 func (controller *UserController) Store(w http.ResponseWriter, r *http.Request) {
