@@ -9,10 +9,10 @@ import (
 	"github.com/bxcodec/faker/v3"
 )
 
-type UserFactory struct {
+type UserSeeder struct {
 }
 
-func (userFactory UserFactory) factory() *models.User {
+func (userSeeder UserSeeder) factory() *models.User {
 	availableRoles := []string{"admin", "customer", "owner"}
 	firstname := faker.FirstName()
 
@@ -29,8 +29,8 @@ func (userFactory UserFactory) factory() *models.User {
 	return &user
 }
 
-func (userFactory UserFactory) Create() *models.User {
-	var user = *userFactory.factory()
+func (userSeeder UserSeeder) Create() *models.User {
+	var user = *userSeeder.factory()
 
 	services.GetConnection().Create(&user)
 
