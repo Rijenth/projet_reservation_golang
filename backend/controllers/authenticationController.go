@@ -21,6 +21,18 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 
 	database := services.GetConnection()
 
+	/*
+		Test des seeders :
+
+		var userFactory seeders.UserSeeder
+
+		test := userFactory.Create()
+
+		var placeFactory seeders.PlaceSeeder
+
+		placeFactory.Create(test)
+	*/
+
 	var body validators.LoginUserDataValidator
 
 	err := json.NewDecoder(r.Body).Decode(&body)
