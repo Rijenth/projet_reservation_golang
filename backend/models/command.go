@@ -9,5 +9,7 @@ type Command struct {
 	RestaurantID         uint        `gorm:"not null" json:"-"`
 	Restaurant           *Restaurant `jsonapi:"relation,restaurant"`
 	Menus                []*Menu     `jsonapi:"relation,menus"`
+	//MenuItem 		   *MenuItem   `jsonapi:"relation,menu_item"`
+
 	Model
 }
