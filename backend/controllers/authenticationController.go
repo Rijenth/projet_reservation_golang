@@ -21,7 +21,7 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 
 	database := services.GetConnection()
 
-	/* Test des seeders :
+	/*  Test des seeders :
 
 	var userFactory seeders.UserSeeder
 
@@ -42,7 +42,11 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 	menuFactory.Create(restaurant, map[string]string{
 		"name":  "mon menu",
 		"price": "9",
-	}) */
+	})
+
+	var commandFactory seeders.CommandSeeder
+
+	commandFactory.Create(restaurant, map[string]string{}) */
 
 	var body validators.LoginUserDataValidator
 
