@@ -21,19 +21,21 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 
 	database := services.GetConnection()
 
-	/* Test des seeders :
+	//Test des seeders :
 
-	var userFactory seeders.UserSeeder
+	/* var userFactory seeders.UserSeeder
 
-	test := userFactory.Create()
+	test := userFactory.Create(map[string]string{
+		"role": "admin",
+	})
 
 	var placeFactory seeders.PlaceSeeder
 
-	test2 := placeFactory.Create(test)
+	test2 := placeFactory.Create(test, map[string]string{})
 
 	var restaurantFactory seeders.RestaurantSeeder
 
-	restaurantFactory.Create(test2) */
+	restaurantFactory.Create(test2, map[string]string{}) */
 
 	var body validators.LoginUserDataValidator
 
