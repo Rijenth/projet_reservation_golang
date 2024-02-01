@@ -44,14 +44,29 @@ func (placeSeeder PlaceSeeder) factory(user *models.User) *models.Place {
 	return &place
 }
 
-func (placeSeeder PlaceSeeder) Create(user *models.User) *models.Place {
+func (placeSeeder PlaceSeeder) Create(user *models.User, attributes map[string]string) *models.Place {
 	if user.Role != "admin" {
 		return nil
 	}
 
 	var place = *placeSeeder.factory(user)
 
+	if len(attributes) > 0 {
+		for key, value := range attributes {
+			switch key {
+			case "name":
+				place.Name = value
+			case "address":
+				place.Adress = value
+			}
+		}
+	}
+
 	services.GetConnection().Create(&place)
+
+	if place.ID == 0 {
+		return nil
+	}
 
 	return &place
 }

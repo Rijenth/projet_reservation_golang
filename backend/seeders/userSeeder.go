@@ -3,7 +3,6 @@ package seeders
 import (
 	"backend/models"
 	"backend/services"
-	"log"
 	"math/rand"
 
 	"github.com/bxcodec/faker/v3"
@@ -29,13 +28,30 @@ func (userSeeder UserSeeder) factory() *models.User {
 	return &user
 }
 
-func (userSeeder UserSeeder) Create() *models.User {
+func (userSeeder UserSeeder) Create(attributes map[string]string) *models.User {
 	var user = *userSeeder.factory()
+
+	if len(attributes) > 0 {
+		for key, value := range attributes {
+			switch key {
+			case "firstname":
+				user.FirstName = value
+			case "lastname":
+				user.LastName = value
+			case "username":
+				user.Username = value
+			case "password":
+				user.Password = value
+			case "role":
+				user.Role = value
+			}
+		}
+	}
 
 	services.GetConnection().Create(&user)
 
 	if user.ID == 0 {
-		log.Panic("An error occurred while creating a user")
+		return nil
 	}
 
 	return &user
