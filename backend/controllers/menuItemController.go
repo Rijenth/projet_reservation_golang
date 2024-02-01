@@ -23,8 +23,6 @@ func (controller *MenuItemController) Get(w http.ResponseWriter, r *http.Request
 
 	database := services.GetConnection()
 
-	database.Model(&menuItem).Association("Menu").Find(&menuItem.Menu)
-
 	responses.OkResponse(w, &menuItem)
 }
 
@@ -77,7 +75,6 @@ func (controller *MenuItemController) Store(w http.ResponseWriter, r *http.Reque
 		Name:  body.Data.Attributes.Name,
 		Type:  body.Data.Attributes.Type,
 		Price: body.Data.Attributes.Price,
-		Menu:  &menu,
 	}
 	result := database.Create(&menuItem)
 
