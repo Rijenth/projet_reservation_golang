@@ -25,7 +25,7 @@ func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant) *mode
 		"Commande festive avec un menu complet comprenant des entrées, des plats principaux et des desserts",
 	}
 
-	status := []string{"not_started", "started", "canceled", "ready"}
+	status := []string{"not_started", "started", "ready"}
 
 	descriptionIndex := rand.Intn(len(descriptions))
 	statusIndex := rand.Intn(len(status))
