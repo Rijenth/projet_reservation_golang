@@ -9,3 +9,18 @@ type Place struct {
 	Restaurants []*Restaurant `gorm:"foreignKey:PlaceID" jsonapi:"relation,restaurants"`
 	Model
 }
+
+func (place *Place) Fill(data map[string]string) {
+	if data["name"] != "" && data["name"] != place.Name {
+		place.Name = data["name"]
+	}
+
+	if data["adress"] != "" && data["adress"] != place.Adress {
+		place.Adress = data["adress"]
+	}
+}
+
+func (place *Place) SetUser(user *User) {
+	place.UserID = user.ID
+	place.User = user
+}

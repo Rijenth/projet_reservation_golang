@@ -74,11 +74,14 @@ func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	place := models.Place{
-		Name:   body.Data.Attributes.Name,
-		Adress: body.Data.Attributes.Adress,
-		User:   &user,
-	}
+	place := models.Place{}
+
+	place.Fill(map[string]string{
+		"name":   body.Data.Attributes.Name,
+		"adress": body.Data.Attributes.Adress,
+	})
+
+	place.SetUser(&user)
 
 	result := database.Create(&place)
 

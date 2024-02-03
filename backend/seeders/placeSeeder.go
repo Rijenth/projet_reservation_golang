@@ -35,11 +35,14 @@ func (placeSeeder PlaceSeeder) factory(user *models.User) *models.Place {
 
 	address := number + " " + streetNames[streetIndex] + " " + postalCodes[postalCodeIndex]
 
-	var place = models.Place{
-		Name:   faker.Name(),
-		Adress: address,
-		UserID: user.ID,
-	}
+	var place = models.Place{}
+
+	place.Fill(map[string]string{
+		"name":    faker.Word(),
+		"address": address,
+	})
+
+	place.SetUser(user)
 
 	return &place
 }
@@ -52,14 +55,7 @@ func (placeSeeder PlaceSeeder) Create(user *models.User, attributes map[string]s
 	var place = *placeSeeder.factory(user)
 
 	if len(attributes) > 0 {
-		for key, value := range attributes {
-			switch key {
-			case "name":
-				place.Name = value
-			case "address":
-				place.Adress = value
-			}
-		}
+		place.Fill(attributes)
 	}
 
 	services.GetConnection().Create(&place)
