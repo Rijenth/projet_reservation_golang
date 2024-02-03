@@ -22,7 +22,9 @@ func (menuSeeder MenuSeeder) factory(restaurant *models.Restaurant) *models.Menu
 		"price": strconv.Itoa(price),
 	})
 
-	menu.SetRestaurant(restaurant)
+	if restaurant != nil {
+		menu.SetRestaurant(restaurant)
+	}
 
 	return &menu
 }

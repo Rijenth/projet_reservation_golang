@@ -22,35 +22,35 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 	database := services.GetConnection()
 
 	//Test des seeders :
-	/*
-		var userFactory seeders.UserSeeder
 
-		userTest := userFactory.Create(map[string]string{
-			"role": "admin",
-		})
+	/* 	var userFactory seeders.UserSeeder
 
-		var placeFactory seeders.PlaceSeeder
+	   	userTest := userFactory.Create(map[string]string{
+	   		"role": "admin",
+	   	})
 
-		place := placeFactory.Create(userTest, map[string]string{})
+	   	var placeFactory seeders.PlaceSeeder
 
-		var restaurantFactory seeders.RestaurantSeeder
+	   	place := placeFactory.Create(userTest, map[string]string{})
 
-		restaurant := restaurantFactory.Create(place, map[string]string{})
+	   	var restaurantFactory seeders.RestaurantSeeder
 
-		var menuFactory seeders.MenuSeeder
+	   	restaurant := restaurantFactory.Create(place, map[string]string{})
 
-		menuFactory.Create(restaurant, map[string]string{
-			"name":  "mon menu",
-			"price": "9",
-		})
+	   	var menuFactory seeders.MenuSeeder
 
-		var commandFactory seeders.CommandSeeder
+	   	menuFactory.Create(restaurant, map[string]string{
+	   		"name":  "mon menu",
+	   		"price": "9",
+	   	})
 
-		commandFactory.Create(restaurant, map[string]string{})
+	   	var commandFactory seeders.CommandSeeder
 
-		var menuItemFactory seeders.MenuItemSeeder
+	   	commandFactory.Create(restaurant, map[string]string{})
 
-		menuItemFactory.Create(restaurant, map[string]string{}) */
+	   	var menuItemFactory seeders.MenuItemSeeder
+
+	   	menuItemFactory.Create(restaurant, map[string]string{}) */
 
 	var body validators.LoginUserDataValidator
 

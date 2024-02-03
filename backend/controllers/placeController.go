@@ -35,7 +35,7 @@ func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request)
 	results := services.Filter(database, &models.Place{}, map[string]interface{}{
 		"user_id": user.ID,
 		"name":    r.URL.Query().Get("filter['name']"),
-		"adress":  r.URL.Query().Get("filter['adress']"),
+		"Address": r.URL.Query().Get("filter['Address']"),
 	}, preloadRelations)
 
 	responses.OkResponse(w, results)
@@ -77,8 +77,8 @@ func (controller *PlaceController) Store(w http.ResponseWriter, r *http.Request)
 	place := models.Place{}
 
 	place.Fill(map[string]string{
-		"name":   body.Data.Attributes.Name,
-		"adress": body.Data.Attributes.Adress,
+		"name":    body.Data.Attributes.Name,
+		"Address": body.Data.Attributes.Address,
 	})
 
 	place.SetUser(&user)

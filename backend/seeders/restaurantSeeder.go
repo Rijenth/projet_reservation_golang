@@ -14,7 +14,7 @@ func (restaurantSeeder RestaurantSeeder) factory(place *models.Place) *models.Re
 	var restaurant = models.Restaurant{}
 
 	restaurant.Fill(map[string]string{
-		"name": faker.Word(),
+		"name": faker.Name() + " restaurant",
 	})
 
 	restaurant.SetPlace(place)

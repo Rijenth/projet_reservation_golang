@@ -3,7 +3,7 @@ package models
 type Place struct {
 	ID          uint          `gorm:"primaryKey" jsonapi:"primary,places"`
 	Name        string        `jsonapi:"attr,name"`
-	Adress      string        `jsonapi:"attr,adress"`
+	Address     string        `jsonapi:"attr,Address"`
 	UserID      uint          `gorm:"not null" json:"-"`
 	User        *User         `jsonapi:"relation,user"`
 	Restaurants []*Restaurant `gorm:"foreignKey:PlaceID" jsonapi:"relation,restaurants"`
@@ -15,8 +15,8 @@ func (place *Place) Fill(data map[string]string) {
 		place.Name = data["name"]
 	}
 
-	if data["adress"] != "" && data["adress"] != place.Adress {
-		place.Adress = data["adress"]
+	if data["address"] != "" && data["address"] != place.Address {
+		place.Address = data["address"]
 	}
 }
 

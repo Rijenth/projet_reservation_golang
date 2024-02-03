@@ -5,8 +5,6 @@ import (
 	"backend/services"
 	"math/rand"
 	"strconv"
-
-	"github.com/bxcodec/faker/v3"
 )
 
 type MenuItemSeeder struct {
@@ -14,11 +12,12 @@ type MenuItemSeeder struct {
 
 func (menuItemSeeder MenuItemSeeder) factory(restaurant *models.Restaurant) *models.MenuItem {
 	menuItemType := []string{"started", "main", "dessert", "drink"}
+	menuItemName := []string{"Coca-Cola", "Fanta", "Sprite", "Salade", "Pâtes", "Pizza", "Tiramisu", "Glace"}
 
 	var MenuItem = models.MenuItem{}
 
 	MenuItem.Fill(map[string]string{
-		"name":  faker.Name(),
+		"name":  menuItemName[rand.Intn(len(menuItemName))],
 		"type":  menuItemType[rand.Intn(len(menuItemType))],
 		"price": strconv.FormatFloat(rand.Float64()*100, 'f', 2, 64),
 	})

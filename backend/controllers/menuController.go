@@ -94,8 +94,6 @@ func (controller *MenuController) Store(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	fmt.Println(body.Data.Attributes.Price)
-
 	if body.Data.Attributes.Price != 0 {
 		totalAmount = body.Data.Attributes.Price
 	}

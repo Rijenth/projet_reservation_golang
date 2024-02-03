@@ -69,6 +69,7 @@ func (controller *UserController) Store(w http.ResponseWriter, r *http.Request) 
 		"first_name": body.Data.Attributes.FirstName,
 		"last_name":  body.Data.Attributes.LastName,
 		"username":   body.Data.Attributes.Username,
+		"password":   body.Data.Attributes.Password,
 		"role":       body.Data.Attributes.Role,
 	}
 

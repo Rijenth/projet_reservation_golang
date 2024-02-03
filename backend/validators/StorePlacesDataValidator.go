@@ -8,6 +8,6 @@ type StorePlaceDataValidator struct {
 }
 
 type StorePlaceAttributes struct {
-	Name   string `validate:"required"`
-	Adress string `validate:"required"`
+	Name    string `validate:"required"`
+	Address string `validate:"required"`
 }
