@@ -17,17 +17,17 @@ services:
     #volumes:
     #  - ./database:/docker-entrypoint-initdb.d/:ro
 
-#  react:
-#    build: 
-#      context: ./frontend
-#      dockerfile: Dockerfile
-#    container_name: react
-#    ports:
-#      - "3000:3000"
-#    volumes:
-#      - ./frontend:/app
-#      - /app/node_modules
-#    restart: always
+  react:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: react
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: always
 
   api:
     build: 
