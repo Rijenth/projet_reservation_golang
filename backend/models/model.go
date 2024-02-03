@@ -12,7 +12,7 @@ type Model struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
-func GetModels() []interface{} {
+func DeclareModels() []interface{} {
 	return []interface{}{
 		&User{},
 		&Place{},

@@ -7,6 +7,7 @@ import (
 	"backend/validators"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/jsonapi"
@@ -80,14 +81,18 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 
 	identificationNumber, _ := uuid.NewRandom()
 
-	command := models.Command{
-		IdentificationNumber: identificationNumber.String(),
-		Description:          body.Data.Attributes.Description,
-		Status:               "not_started",
-		Amount:               totalAmount,
-		Restaurant:           &restaurant,
-		Menus:                menusFromDatabase,
-	}
+	command := models.Command{}
+
+	command.Fill(map[string]string{
+		"identificationNumber": identificationNumber.String(),
+		"description":          body.Data.Attributes.Description,
+		"status":               "not_started",
+		"amount":               strconv.FormatFloat(totalAmount, 'f', -1, 64),
+	})
+
+	command.SetRestaurant(&restaurant)
+
+	command.SetMenus(menusFromDatabase)
 
 	result := database.Create(&command)
 
@@ -127,19 +132,10 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 
 	command := r.Context().Value("command").(models.Command)
 
-	// TODO: calculate the total price of the command if amount is changed then update the amount
-
-	//TODO: update the date of the command if the date is changed
-
-	if body.Data.Attributes.Description != "" {
-		command.Description = body.Data.Attributes.Description
-	}
-
-	if body.Data.Attributes.Status != "" {
-		command.Status = body.Data.Attributes.Status
-	}
-
-	// TODO: see if we change an other field
+	command.Fill(map[string]string{
+		"description": body.Data.Attributes.Description,
+		"status":      body.Data.Attributes.Status,
+	})
 
 	result := database.Save(&command)
 

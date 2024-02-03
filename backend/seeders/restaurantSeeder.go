@@ -11,10 +11,13 @@ type RestaurantSeeder struct {
 }
 
 func (restaurantSeeder RestaurantSeeder) factory(place *models.Place) *models.Restaurant {
-	var restaurant = models.Restaurant{
-		Name:    faker.Name(),
-		PlaceID: place.ID,
-	}
+	var restaurant = models.Restaurant{}
+
+	restaurant.Fill(map[string]string{
+		"name": faker.Name() + " restaurant",
+	})
+
+	restaurant.SetPlace(place)
 
 	return &restaurant
 }
@@ -23,12 +26,7 @@ func (restaurantSeeder RestaurantSeeder) Create(place *models.Place, attributes 
 	var restaurant = *restaurantSeeder.factory(place)
 
 	if len(attributes) > 0 {
-		for key, value := range attributes {
-			switch key {
-			case "name":
-				restaurant.Name = value
-			}
-		}
+		restaurant.Fill(attributes)
 	}
 
 	services.GetConnection().Create(&restaurant)

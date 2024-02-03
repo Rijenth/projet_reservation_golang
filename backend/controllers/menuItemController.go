@@ -7,6 +7,7 @@ import (
 	"backend/validators"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/jsonapi"
@@ -74,12 +75,16 @@ func (controller *MenuItemController) Store(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	menuItem := models.MenuItem{
-		Name:         body.Data.Attributes.Name,
-		Type:         body.Data.Attributes.Type,
-		Price:        body.Data.Attributes.Price,
-		RestaurantID: restaurant.ID,
-	}
+	menuItem := models.MenuItem{}
+
+	menuItem.Fill(map[string]string{
+		"name":  body.Data.Attributes.Name,
+		"type":  body.Data.Attributes.Type,
+		"price": strconv.FormatFloat(body.Data.Attributes.Price, 'f', -1, 64),
+	})
+
+	menuItem.SetRestaurant(&restaurant)
+
 	result := database.Create(&menuItem)
 
 	if result.Error != nil {
@@ -109,17 +114,11 @@ func (controller *MenuItemController) Update(w http.ResponseWriter, r *http.Requ
 
 	menuItem := r.Context().Value("menu-item").(models.MenuItem)
 
-	if body.Data.Attributes.Name != "" {
-		menuItem.Name = body.Data.Attributes.Name
-	}
-
-	if body.Data.Attributes.Type != "" {
-		menuItem.Type = body.Data.Attributes.Type
-	}
-
-	if body.Data.Attributes.Price != menuItem.Price {
-		menuItem.Price = body.Data.Attributes.Price
-	}
+	menuItem.Fill(map[string]string{
+		"name":  body.Data.Attributes.Name,
+		"type":  body.Data.Attributes.Type,
+		"price": strconv.FormatFloat(body.Data.Attributes.Price, 'f', -1, 64),
+	})
 
 	result := database.Save(&menuItem)
 

@@ -10,3 +10,14 @@ type Restaurant struct {
 	Commands  []*Command  `gorm:"foreignKey:RestaurantID" jsonapi:"relation,commands"`
 	Model
 }
+
+func (restaurant *Restaurant) Fill(data map[string]string) {
+	if data["name"] != "" && data["name"] != restaurant.Name {
+		restaurant.Name = data["name"]
+	}
+}
+
+func (restaurant *Restaurant) SetPlace(place *Place) {
+	restaurant.PlaceID = place.ID
+	restaurant.Place = place
+}

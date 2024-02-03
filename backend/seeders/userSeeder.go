@@ -15,13 +15,17 @@ func (userSeeder UserSeeder) factory() *models.User {
 	availableRoles := []string{"admin", "customer", "owner"}
 	firstname := faker.FirstName()
 
-	var user = models.User{
-		FirstName: firstname,
-		LastName:  faker.LastName(),
-		Username:  firstname + faker.Word(),
-		Password:  faker.Password(),
-		Role:      availableRoles[rand.Intn(len(availableRoles))],
+	data := map[string]string{
+		"first_name": firstname,
+		"last_name":  faker.LastName(),
+		"username":   firstname + faker.Word(),
+		"password":   faker.Password(),
+		"role":       availableRoles[rand.Intn(len(availableRoles))],
 	}
+
+	var user = models.User{}
+
+	user.Fill(data)
 
 	user.Password, _ = user.HashPassword()
 
@@ -32,19 +36,12 @@ func (userSeeder UserSeeder) Create(attributes map[string]string) *models.User {
 	var user = *userSeeder.factory()
 
 	if len(attributes) > 0 {
-		for key, value := range attributes {
-			switch key {
-			case "firstname":
-				user.FirstName = value
-			case "lastname":
-				user.LastName = value
-			case "username":
-				user.Username = value
-			case "password":
-				user.Password = value
-			case "role":
-				user.Role = value
-			}
+		previousPassword := user.Password
+
+		user.Fill(attributes)
+
+		if previousPassword != user.Password {
+			user.Password, _ = user.HashPassword()
 		}
 	}
 
