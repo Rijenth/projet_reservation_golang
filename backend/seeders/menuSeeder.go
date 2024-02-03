@@ -13,35 +13,25 @@ type MenuSeeder struct {
 }
 
 func (menuSeeder MenuSeeder) factory(restaurant *models.Restaurant) *models.Menu {
-	Price := rand.Intn(33) + 8
+	price := rand.Intn(33) + 8
 
-	var Menu = models.Menu{
-		Name:         faker.Name(),
-		Price:        float64(Price),
-		RestaurantID: restaurant.ID,
-	}
-	return &Menu
+	var menu = models.Menu{}
+
+	menu.Fill(map[string]string{
+		"name":  faker.Name(),
+		"price": strconv.Itoa(price),
+	})
+
+	menu.SetRestaurant(restaurant)
+
+	return &menu
 }
 
 func (menuSeeder MenuSeeder) Create(restaurant *models.Restaurant, attributes map[string]string) *models.Menu {
 	var menu = *menuSeeder.factory(restaurant)
 
 	if len(attributes) > 0 {
-		for key, value := range attributes {
-			switch key {
-			case "name":
-				menu.Name = value
-			case "price":
-				float, err := strconv.ParseFloat(value, 64)
-
-				if err != nil {
-					return nil
-				}
-
-				menu.Price = float64(float)
-
-			}
-		}
+		menu.Fill(attributes)
 	}
 
 	services.GetConnection().Create(&menu)

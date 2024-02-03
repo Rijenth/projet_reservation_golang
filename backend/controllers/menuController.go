@@ -100,12 +100,16 @@ func (controller *MenuController) Store(w http.ResponseWriter, r *http.Request) 
 		totalAmount = body.Data.Attributes.Price
 	}
 
-	menu := models.Menu{
-		Name:       body.Data.Attributes.Name,
-		Price:      totalAmount,
-		Restaurant: &restaurant,
-		MenuItems:  menuItems,
-	}
+	menu := models.Menu{}
+
+	menu.Fill(map[string]string{
+		"name":  body.Data.Attributes.Name,
+		"price": fmt.Sprintf("%f", totalAmount),
+	})
+
+	menu.SetRestaurant(&restaurant)
+
+	menu.SetMenuItems(menuItems)
 
 	result := database.Create(&menu)
 
@@ -145,13 +149,10 @@ func (controller *MenuController) Update(w http.ResponseWriter, r *http.Request)
 
 	menu := r.Context().Value("menu").(models.Menu)
 
-	if body.Data.Attributes.Name != "" {
-		menu.Name = body.Data.Attributes.Name
-	}
-
-	if body.Data.Attributes.Price != 0 {
-		menu.Price = body.Data.Attributes.Price
-	}
+	menu.Fill(map[string]string{
+		"name":  body.Data.Attributes.Name,
+		"price": fmt.Sprintf("%f", body.Data.Attributes.Price),
+	})
 
 	result := database.Save(&menu)
 
