@@ -7,5 +7,6 @@ type MenuItem struct {
 	Price        float64     `gorm:"not null" jsonapi:"attr,price"`
 	RestaurantID uint        `gorm:"not null" json:"-"`
 	Restaurant   *Restaurant `jsonapi:"relation,restaurant"`
+	Menus        []*Menu     `gorm:"many2many:menu_items_menus;" jsonapi:"relation,menus"`
 	Model
 }

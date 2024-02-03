@@ -20,7 +20,7 @@ func MenuItemContext(next http.Handler) http.Handler {
 
 		database := services.GetConnection()
 
-		database.Preload("Restaurant").First(&menuItem, menuItemID)
+		database.Preload("Restaurant").Preload("Menus").First(&menuItem, menuItemID)
 
 		if menuItem.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)

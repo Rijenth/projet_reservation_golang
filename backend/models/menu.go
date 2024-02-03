@@ -8,7 +8,6 @@ type Menu struct {
 	Restaurant   *Restaurant `jsonapi:"relation,restaurant"`
 	CommandID    *uint       `json:"-"`
 	Command      *Command    `jsonapi:"relation,command"`
-	//MenuItems    []*MenuItem `jsonapi:"relation,menu_items"`
-	//MenuItems []MenuItem `gorm:"many2many:menu_items_menus;" jsonapi:"relation,menu_items"`
+	MenuItems    []*MenuItem `gorm:"many2many:menu_items_menus;" jsonapi:"relation,menu_items"`
 	Model
 }
