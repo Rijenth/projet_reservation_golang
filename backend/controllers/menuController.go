@@ -24,13 +24,28 @@ func (controller *MenuController) Get(w http.ResponseWriter, r *http.Request) {
 	responses.OkResponse(w, &menu)
 }
 
+func (controller *MenuController) IndexFromCommand(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
+	command := r.Context().Value("command").(models.Command)
+
+	preloadRelations := []string{"Command", "MenuItems", "Restaurant"}
+
+	database := services.GetConnection()
+
+	results := services.Filter(database, &models.Menu{}, map[string]interface{}{
+		"command_id": command.ID,
+		"name":       r.URL.Query().Get("filter['name']"),
+		"price":      r.URL.Query().Get("filter['price']"),
+	}, preloadRelations)
+
+	responses.OkResponse(w, results)
+}
+
 func (controller *MenuController) Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
-
-	nameFilter := r.URL.Query().Get("filter['name']")
-	priceFilter := r.URL.Query().Get("filter['price']")
 
 	preloadRelations := []string{"Restaurant", "Command", "MenuItems"}
 
@@ -38,8 +53,8 @@ func (controller *MenuController) Index(w http.ResponseWriter, r *http.Request) 
 
 	results := services.Filter(database, &models.Menu{}, map[string]interface{}{
 		"restaurant_id": restaurant.ID,
-		"name":          nameFilter,
-		"price":         priceFilter,
+		"name":          r.URL.Query().Get("filter['name']"),
+		"price":         r.URL.Query().Get("filter['price']"),
 	}, preloadRelations)
 
 	responses.OkResponse(w, results)
