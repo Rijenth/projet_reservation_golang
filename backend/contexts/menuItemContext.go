@@ -11,26 +11,26 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func MenuContext(next http.Handler) http.Handler {
+func MenuItemContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		menuID := chi.URLParam(r, "menuId")
+		menuItemID := chi.URLParam(r, "menuItemId")
 
-		var menu models.Menu
+		var menuItem models.MenuItem
 
 		database := services.GetConnection()
 
-		database.Preload("Restaurant").Preload("Command").Preload("MenuItems").First(&menu, menuID)
+		database.Preload("Restaurant").Preload("Menus").First(&menuItem, menuItemID)
 
-		if menu.ID == 0 {
+		if menuItem.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)
 
-			responses.NotFoundResponse(w, "Menu not found")
+			responses.NotFoundResponse(w, "Menu item not found")
 
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "menu", menu)
+		ctx := context.WithValue(r.Context(), "menu-item", menuItem)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

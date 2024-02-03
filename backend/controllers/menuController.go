@@ -21,10 +21,6 @@ func (controller *MenuController) Get(w http.ResponseWriter, r *http.Request) {
 
 	menu := r.Context().Value("menu").(models.Menu)
 
-	database := services.GetConnection()
-
-	database.Model(&menu).Association("Restaurant").Find(&menu.Restaurant)
-
 	responses.OkResponse(w, &menu)
 }
 
@@ -36,7 +32,7 @@ func (controller *MenuController) Index(w http.ResponseWriter, r *http.Request) 
 	nameFilter := r.URL.Query().Get("filter['name']")
 	priceFilter := r.URL.Query().Get("filter['price']")
 
-	preloadRelations := []string{"Restaurant", "Command"}
+	preloadRelations := []string{"Restaurant", "Command", "MenuItems"}
 
 	database := services.GetConnection()
 
@@ -58,34 +54,45 @@ func (controller *MenuController) Store(w http.ResponseWriter, r *http.Request) 
 
 	var body validators.StoreMenusDataValidator
 
-	err := json.NewDecoder(r.Body).Decode(&body)
-
-	if err != nil {
-		responses.UnprocessableEntityResponse(w, []error{err})
-
+	if err := body.Validate(&r.Body, &w); err != nil {
 		return
 	}
 
-	validate := validator.New()
+	var menuItemIDs []string
 
-	err = validate.Struct(body.Data)
+	for _, menuItem := range body.Data.Relationships.MenuItems {
+		menuItemIDs = append(menuItemIDs, menuItem.ID)
+	}
 
-	if err != nil {
-		responses.FailedValidationResponse(w, []error{err})
+	var menuItems []*models.MenuItem
+	var totalAmount float64 = 0.0
 
-		return
+	if len(menuItemIDs) > 0 {
+		result := database.Where(menuItemIDs).Find(&menuItems)
+
+		if result.Error != nil {
+			responses.InternalServerErrorResponse(w, result.Error.Error())
+		}
+
+		for _, menuItem := range menuItems {
+			totalAmount += menuItem.Price
+		}
+	}
+
+	fmt.Println(body.Data.Attributes.Price)
+
+	if body.Data.Attributes.Price != 0 {
+		totalAmount = body.Data.Attributes.Price
 	}
 
 	menu := models.Menu{
 		Name:       body.Data.Attributes.Name,
-		Price:      body.Data.Attributes.Price,
+		Price:      totalAmount,
 		Restaurant: &restaurant,
-		//MenuItems: []models.MenuItem{
+		MenuItems:  menuItems,
 	}
 
 	result := database.Create(&menu)
-
-	fmt.Println("result", result)
 
 	if result.Error != nil {
 		responses.InternalServerErrorResponse(w, result.Error.Error())
