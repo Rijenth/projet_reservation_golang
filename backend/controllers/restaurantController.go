@@ -28,7 +28,7 @@ func (controller *RestaurantController) Index(w http.ResponseWriter, r *http.Req
 
 	place := r.Context().Value("place").(models.Place)
 
-	preloadRelations := []string{"Place", "Menus", "MenuItems"}
+	preloadRelations := []string{"Place", "Menus", "MenuItems", "Commands"}
 
 	database := services.GetConnection()
 
