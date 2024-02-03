@@ -65,13 +65,16 @@ func (controller *UserController) Store(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	user := models.User{
-		FirstName: body.Data.Attributes.FirstName,
-		LastName:  body.Data.Attributes.LastName,
-		Username:  body.Data.Attributes.Username,
-		Password:  body.Data.Attributes.Password,
-		Role:      body.Data.Attributes.Role,
+	data := map[string]string{
+		"first_name": body.Data.Attributes.FirstName,
+		"last_name":  body.Data.Attributes.LastName,
+		"username":   body.Data.Attributes.Username,
+		"role":       body.Data.Attributes.Role,
 	}
+
+	user := models.User{}
+
+	user.Fill(data)
 
 	user.Password, err = user.HashPassword()
 
@@ -119,21 +122,14 @@ func (controller *UserController) Update(w http.ResponseWriter, r *http.Request)
 
 	user := r.Context().Value("user").(models.User)
 
-	if body.Data.Attributes.FirstName != "" {
-		user.FirstName = body.Data.Attributes.FirstName
-	} else {
-		user.FirstName = ""
+	data := map[string]string{
+		"first_name": body.Data.Attributes.FirstName,
+		"last_name":  body.Data.Attributes.LastName,
+		"username":   body.Data.Attributes.Username,
+		"password":   body.Data.Attributes.Password,
 	}
 
-	if body.Data.Attributes.LastName != "" {
-		user.LastName = body.Data.Attributes.LastName
-	} else {
-		user.LastName = ""
-	}
-
-	if body.Data.Attributes.Username != "" {
-		user.Username = body.Data.Attributes.Username
-	}
+	user.Fill(data)
 
 	if body.Data.Attributes.Password != "" {
 		user.Password = body.Data.Attributes.Password

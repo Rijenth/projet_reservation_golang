@@ -25,3 +25,25 @@ func (user *User) ComparePassword(password string) bool {
 
 	return err == nil
 }
+
+func (user *User) Fill(data map[string]string) {
+	if data["first_name"] != "" && data["first_name"] != user.FirstName {
+		user.FirstName = data["first_name"]
+	}
+
+	if data["last_name"] != "" && data["last_name"] != user.LastName {
+		user.LastName = data["last_name"]
+	}
+
+	if data["username"] != "" && data["username"] != user.Username {
+		user.Username = data["username"]
+	}
+
+	if data["password"] != "" && data["password"] != user.Password {
+		user.Password = data["password"]
+	}
+
+	if data["role"] != "" && data["role"] != user.Role {
+		user.Role = data["role"]
+	}
+}
