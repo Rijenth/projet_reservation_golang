@@ -28,15 +28,13 @@ func (controller *RestaurantController) Index(w http.ResponseWriter, r *http.Req
 
 	place := r.Context().Value("place").(models.Place)
 
-	nameFilter := r.URL.Query().Get("filter['name']")
-
 	preloadRelations := []string{"Place", "Menus", "MenuItems"}
 
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Restaurant{}, map[string]interface{}{
 		"place_id": place.ID,
-		"name":     nameFilter,
+		"name":     r.URL.Query().Get("filter['name']"),
 	}, preloadRelations)
 
 	responses.OkResponse(w, results)
