@@ -41,40 +41,27 @@ func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant) *mode
 		totalAmount += menu.Price
 	}
 
-	var Command = models.Command{
-		IdentificationNumber: identificationNumber.String(),
-		Description:          descriptions[descriptionIndex],
-		Status:               status[statusIndex],
-		Amount:               totalAmount,
-		RestaurantID:         restaurant.ID,
-		Menus:                menus,
-	}
+	var command = models.Command{}
 
-	return &Command
+	command.Fill(map[string]string{
+		"identificationNumber": identificationNumber.String(),
+		"description":          descriptions[descriptionIndex],
+		"status":               status[statusIndex],
+		"amount":               strconv.FormatFloat(totalAmount, 'f', -1, 64),
+	})
+
+	command.SetRestaurant(restaurant)
+
+	command.SetMenus(menus)
+
+	return &command
 }
 
 func (commandSeeder *CommandSeeder) Create(restaurant *models.Restaurant, attributes map[string]string) *models.Command {
 	var command = *commandSeeder.factory(restaurant)
 
 	if len(attributes) > 0 {
-		for key, value := range attributes {
-			switch key {
-			case "identificationNumber":
-				command.IdentificationNumber = value
-			case "description":
-				command.Description = value
-			case "status":
-				command.Status = value
-			case "amount":
-				float, err := strconv.ParseFloat(value, 64)
-
-				if err != nil {
-					return nil
-				}
-
-				command.Amount = float
-			}
-		}
+		command.Fill(attributes)
 	}
 
 	services.GetConnection().Create(&command)
