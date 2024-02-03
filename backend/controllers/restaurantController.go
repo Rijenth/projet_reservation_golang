@@ -67,13 +67,13 @@ func (controller *RestaurantController) Store(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	restaurant := models.Restaurant{
-		Name:    body.Data.Attributes.Name,
-		PlaceID: place.ID,
-		Place:   &place,
-		// Menus:  	body.Data.Attributes.Menus,
-		// Commands:  	body.Data.Attributes.Commands,
-	}
+	restaurant := models.Restaurant{}
+
+	restaurant.Fill(map[string]string{
+		"name": body.Data.Attributes.Name,
+	})
+
+	restaurant.SetPlace(&place)
 
 	result := database.Create(&restaurant)
 
@@ -113,9 +113,9 @@ func (controller *RestaurantController) Update(w http.ResponseWriter, r *http.Re
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	if body.Data.Attributes.Name != "" {
-		restaurant.Name = body.Data.Attributes.Name
-	}
+	restaurant.Fill(map[string]string{
+		"name": body.Data.Attributes.Name,
+	})
 
 	result := database.Save(&restaurant)
 
