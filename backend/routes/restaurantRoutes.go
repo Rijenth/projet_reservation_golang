@@ -13,6 +13,7 @@ func RestaurantRoutes() chi.Router {
 	restaurantController := controllers.RestaurantController{}
 	menuController := controllers.MenuController{}
 	commandController := controllers.CommandController{}
+	menuItemController := controllers.MenuItemController{}
 
 	r.With(contexts.RestaurantContext).Group(func(r chi.Router) {
 		r.Get("/{restaurantId}", restaurantController.Get)
@@ -24,6 +25,9 @@ func RestaurantRoutes() chi.Router {
 
 		r.Get("/{restaurantId}/commands", commandController.Index)
 		r.Post("/{restaurantId}/commands", commandController.Store)
+
+		r.Get("/{restaurantId}/menu-items", menuItemController.IndexFromRestaurant)
+		r.Post("/{restaurantId}/menu-items", menuItemController.Store)
 	})
 
 	return r

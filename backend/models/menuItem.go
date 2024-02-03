@@ -2,9 +2,10 @@ package models
 
 type MenuItem struct {
 	ID           uint        `gorm:"primaryKey" jsonapi:"primary,menu_items"`
-	Name		 string      `jsonapi:"attr,name"`
-	Type		 string      `jsonapi:"attr,type"`
-	Price        float64     `jsonapi:"attr,price"`
+	Name         string      `gorm:"not null" jsonapi:"attr,name"`
+	Type         string      `gorm:"not null" jsonapi:"attr,type"`
+	Price        float64     `gorm:"not null" jsonapi:"attr,price"`
+	RestaurantID uint        `gorm:"not null" json:"-"`
+	Restaurant   *Restaurant `jsonapi:"relation,restaurant"`
 	Model
 }
-

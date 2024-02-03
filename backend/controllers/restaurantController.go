@@ -30,7 +30,7 @@ func (controller *RestaurantController) Index(w http.ResponseWriter, r *http.Req
 
 	nameFilter := r.URL.Query().Get("filter['name']")
 
-	preloadRelations := []string{"Place", "Menus"}
+	preloadRelations := []string{"Place", "Menus", "MenuItems"}
 
 	database := services.GetConnection()
 
