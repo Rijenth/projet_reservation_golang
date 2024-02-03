@@ -69,7 +69,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 	}
 
 	var menusFromDatabase []*models.Menu
-	var commandAmount float64 = 0.0
+	var totalAmount float64 = 0.0
 
 	if (len(menuIds)) != 0 {
 		result := database.Find(&menusFromDatabase, menuIds)
@@ -79,7 +79,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		}
 
 		for _, menu := range menusFromDatabase {
-			commandAmount += menu.Price
+			totalAmount += menu.Price
 		}
 	}
 
@@ -89,7 +89,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		IdentificationNumber: identificationNumber.String(),
 		Description:          body.Data.Attributes.Description,
 		Status:               "not_started",
-		Amount:               commandAmount,
+		Amount:               totalAmount,
 		Restaurant:           &restaurant,
 		Menus:                menusFromDatabase,
 	}

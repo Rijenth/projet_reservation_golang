@@ -11,7 +11,7 @@ func MenuRoutes() chi.Router {
 	r := chi.NewRouter()
 
 	menuController := controllers.MenuController{}
-	//menuItemController := controllers.MenuItemController{}
+	menuItemController := controllers.MenuItemController{}
 
 	r.With(contexts.MenuContext).Group(func(r chi.Router) {
 		r.Get("/", menuController.Index)
@@ -20,7 +20,7 @@ func MenuRoutes() chi.Router {
 		r.Patch("/{menuId}", menuController.Update)
 		r.Delete("/{menuId}", menuController.Delete)
 
-		//r.Get("/{menuId}/menu-items", menuItemController.IndexFromMenu)
+		r.Get("/{menuId}/menu-items", menuItemController.IndexFromMenu)
 	})
 
 	return r

@@ -23,7 +23,7 @@ func (controller *MenuItemController) IndexFromRestaurant(w http.ResponseWriter,
 	nameFilter := r.URL.Query().Get("filter['name']")
 	priceFilter := r.URL.Query().Get("filter['price']")
 
-	preloadRelations := []string{"Restaurant"}
+	preloadRelations := []string{"Restaurant", "Menus"}
 
 	database := services.GetConnection()
 
@@ -36,26 +36,21 @@ func (controller *MenuItemController) IndexFromRestaurant(w http.ResponseWriter,
 	responses.OkResponse(w, results)
 }
 
-/* func (controller *MenuItemController) IndexFromMenu(w http.ResponseWriter, r *http.Request) {
+func (controller *MenuItemController) IndexFromMenu(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
 	menu := r.Context().Value("menu").(models.Menu)
 
-	nameFilter := r.URL.Query().Get("filter['name']")
-	priceFilter := r.URL.Query().Get("filter['price']")
-
-	preloadRelations := []string{"Restaurant"}
-
 	database := services.GetConnection()
 
-	results := services.Filter(database, &models.MenuItem{}, map[string]interface{}{
-		"restaurant_id": menu.ID,
-		"name":          nameFilter,
-		"price":         priceFilter,
-	}, preloadRelations)
+	menuItems := menu.MenuItems
 
-	responses.OkResponse(w, results)
-} */
+	for i := range menuItems {
+		database.Preload("Restaurant").Preload("Menus").First(&menuItems[i], menuItems[i].ID)
+	}
+
+	responses.OkResponse(w, menuItems)
+}
 
 func (controller *MenuItemController) Store(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
