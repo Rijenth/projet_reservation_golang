@@ -26,7 +26,7 @@ func init() {
 		log.Fatal("An error occurred with the database connection: ", err)
 	}
 
-	database.AutoMigrate(models.GetModels()...)
+	database.AutoMigrate(models.DeclareModels()...)
 
 	fmt.Println("Database connection established")
 
