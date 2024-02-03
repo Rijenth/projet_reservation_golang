@@ -29,21 +29,16 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	identificationNumberFilter := r.URL.Query().Get("filter['identificationNumber']")
-	descriptionFilter := r.URL.Query().Get("filter['description']")
-	statusFilter := r.URL.Query().Get("filter['status']")
-	amountFilter := r.URL.Query().Get("filter['amount']")
-
 	preloadRelations := []string{"Restaurant", "Menus"}
 
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Command{}, map[string]interface{}{
 		"restaurant_id":         restaurant.ID,
-		"identification_number": identificationNumberFilter,
-		"description":           descriptionFilter,
-		"status":                statusFilter,
-		"amount":                amountFilter,
+		"identification_number": r.URL.Query().Get("filter['identificationNumber']"),
+		"description":           r.URL.Query().Get("filter['description']"),
+		"status":                r.URL.Query().Get("filter['status']"),
+		"amount":                r.URL.Query().Get("filter['amount']"),
 	}, preloadRelations)
 
 	responses.OkResponse(w, results)

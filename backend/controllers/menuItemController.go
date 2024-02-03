@@ -20,17 +20,14 @@ func (controller *MenuItemController) IndexFromRestaurant(w http.ResponseWriter,
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	nameFilter := r.URL.Query().Get("filter['name']")
-	priceFilter := r.URL.Query().Get("filter['price']")
-
 	preloadRelations := []string{"Restaurant", "Menus"}
 
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.MenuItem{}, map[string]interface{}{
 		"restaurant_id": restaurant.ID,
-		"name":          nameFilter,
-		"price":         priceFilter,
+		"name":          r.URL.Query().Get("filter['name']"),
+		"price":         r.URL.Query().Get("filter['price']"),
 	}, preloadRelations)
 
 	responses.OkResponse(w, results)

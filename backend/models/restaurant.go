@@ -7,6 +7,6 @@ type Restaurant struct {
 	Place     *Place      `gorm:"foreignKey:PlaceID" jsonapi:"relation,place"`
 	Menus     []*Menu     `gorm:"foreignKey:RestaurantID" jsonapi:"relation,menus"`
 	MenuItems []*MenuItem `gorm:"foreignKey:RestaurantID" jsonapi:"relation,menu_items"`
-	// Commands		[]Command	`gorm:"foreignKey:RestaurantID" jsonapi:"attr,commands"`
+	Commands  []*Command  `gorm:"foreignKey:RestaurantID" jsonapi:"relation,commands"`
 	Model
 }
