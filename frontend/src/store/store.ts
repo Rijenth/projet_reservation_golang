@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
+import { PERSIST, persistReducer, persistStore } from 'redux-persist';
 import authenticationReducer from '../state/authentication';
 
 const persistConfig = {
@@ -15,7 +15,13 @@ const reducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
-    reducer: persistedReducer
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [PERSIST],
+            },
+        }),
 });
 
 export const persistor = persistStore(store);
