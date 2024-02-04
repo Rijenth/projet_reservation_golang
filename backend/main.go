@@ -12,6 +12,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 )
 
 var connection *sql.DB
@@ -38,9 +39,18 @@ func main() {
 
 	router = chi.NewRouter()
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	})
+
 	router.Use(middleware.Recoverer)
 
-	// routes unauthenticated
+	router.Use(c.Handler)
+
 	router.Group(func(r chi.Router) {
 		r.Mount("/", routes.AuthenticationRoutes())
 	})
