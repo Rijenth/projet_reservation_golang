@@ -6,6 +6,7 @@ import (
 	"backend/services"
 	"backend/validators"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -28,14 +29,12 @@ func (controller *RestaurantController) Index(w http.ResponseWriter, r *http.Req
 
 	place := r.Context().Value("place").(models.Place)
 
-	preloadRelations := []string{"Place", "Menus", "MenuItems", "Commands"}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Restaurant{}, map[string]interface{}{
 		"place_id": place.ID,
 		"name":     r.URL.Query().Get("filter['name']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }
@@ -49,20 +48,16 @@ func (controller *RestaurantController) Store(w http.ResponseWriter, r *http.Req
 
 	var body validators.StoreRestaurantDataValidator
 
-	err := json.NewDecoder(r.Body).Decode(&body)
-
-	if err != nil {
-		responses.UnprocessableEntityResponse(w, []error{err})
-
+	if err := body.Validate(&r.Body, &w); err != nil {
 		return
 	}
 
-	validate := validator.New()
+	var user models.User
 
-	err = validate.Struct(body.Data)
+	result := database.First(&user, body.Data.Relationships.User.ID)
 
-	if err != nil {
-		responses.FailedValidationResponse(w, []error{err})
+	if user.Role != "owner" {
+		responses.UnprocessableEntityResponse(w, []error{fmt.Errorf("Cannot create a restaurant for a user that is not an owner")})
 
 		return
 	}
@@ -75,7 +70,9 @@ func (controller *RestaurantController) Store(w http.ResponseWriter, r *http.Req
 
 	restaurant.SetPlace(&place)
 
-	result := database.Create(&restaurant)
+	restaurant.SetUser(&user)
+
+	result = database.Create(&restaurant)
 
 	if result.Error != nil {
 		responses.InternalServerErrorResponse(w, result.Error.Error())

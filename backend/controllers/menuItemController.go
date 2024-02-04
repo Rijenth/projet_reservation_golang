@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/jsonapi"
+	"gorm.io/gorm/clause"
 )
 
 type MenuItemController struct {
@@ -21,15 +22,13 @@ func (controller *MenuItemController) IndexFromRestaurant(w http.ResponseWriter,
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	preloadRelations := []string{"Restaurant", "Menus"}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.MenuItem{}, map[string]interface{}{
 		"restaurant_id": restaurant.ID,
 		"name":          r.URL.Query().Get("filter['name']"),
 		"price":         r.URL.Query().Get("filter['price']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }
@@ -44,7 +43,7 @@ func (controller *MenuItemController) IndexFromMenu(w http.ResponseWriter, r *ht
 	menuItems := menu.MenuItems
 
 	for i := range menuItems {
-		database.Preload("Restaurant").Preload("Menus").First(&menuItems[i], menuItems[i].ID)
+		database.Preload(clause.Associations).First(&menuItems[i], menuItems[i].ID)
 	}
 
 	responses.OkResponse(w, menuItems)
@@ -93,7 +92,7 @@ func (controller *MenuItemController) Store(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	database.Preload("Restaurant").First(&menuItem, menuItem.ID)
+	database.Preload(clause.Associations).First(&menuItem, menuItem.ID)
 
 	responses.CreatedResponse(w, &menuItem)
 }

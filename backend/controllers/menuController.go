@@ -29,15 +29,13 @@ func (controller *MenuController) IndexFromCommand(w http.ResponseWriter, r *htt
 
 	command := r.Context().Value("command").(models.Command)
 
-	preloadRelations := []string{"Command", "MenuItems", "Restaurant"}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Menu{}, map[string]interface{}{
 		"command_id": command.ID,
 		"name":       r.URL.Query().Get("filter['name']"),
 		"price":      r.URL.Query().Get("filter['price']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }
@@ -47,15 +45,13 @@ func (controller *MenuController) Index(w http.ResponseWriter, r *http.Request) 
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	preloadRelations := []string{"Restaurant", "Command", "MenuItems"}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Menu{}, map[string]interface{}{
 		"restaurant_id": restaurant.ID,
 		"name":          r.URL.Query().Get("filter['name']"),
 		"price":         r.URL.Query().Get("filter['price']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }

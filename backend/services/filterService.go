@@ -5,9 +5,10 @@ import (
 	"reflect"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
-func Filter(database *gorm.DB, model interface{}, filters map[string]interface{}, preloadRelations []string) interface{} {
+func Filter(database *gorm.DB, model interface{}, filters map[string]interface{}) interface{} {
 	results := reflect.New(reflect.SliceOf(reflect.TypeOf(model))).Elem().Interface()
 
 	query := database
@@ -18,9 +19,7 @@ func Filter(database *gorm.DB, model interface{}, filters map[string]interface{}
 		}
 	}
 
-	for _, relation := range preloadRelations {
-		query = query.Preload(relation)
-	}
+	query = query.Preload(clause.Associations)
 
 	query.Find(&results)
 

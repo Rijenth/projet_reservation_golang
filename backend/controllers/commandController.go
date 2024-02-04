@@ -30,8 +30,6 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	preloadRelations := []string{"Restaurant", "Menus"}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Command{}, map[string]interface{}{
@@ -40,7 +38,7 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 		"description":           r.URL.Query().Get("filter['description']"),
 		"status":                r.URL.Query().Get("filter['status']"),
 		"amount":                r.URL.Query().Get("filter['amount']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }

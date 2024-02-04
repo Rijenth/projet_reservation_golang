@@ -28,15 +28,13 @@ func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request)
 
 	user := r.Context().Value("user").(models.User)
 
-	preloadRelations := []string{"User", "Restaurants"}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Place{}, map[string]interface{}{
 		"user_id": user.ID,
 		"name":    r.URL.Query().Get("filter['name']"),
 		"Address": r.URL.Query().Get("filter['Address']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }
