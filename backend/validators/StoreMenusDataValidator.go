@@ -58,7 +58,7 @@ func (storeMenusDataValidator *StoreMenusDataValidator) Validate(body *io.ReadCl
 		result := database.First(&menuItemFromDatabase, menu.ID)
 
 		if result.Error != nil {
-			relationshipErrors = append(relationshipErrors, fmt.Errorf("Field id of the menu item at index %d doesn't exist", index))
+			relationshipErrors = append(relationshipErrors, fmt.Errorf("Field id of the menu item at index %d is invalid", index))
 		}
 	}
 
