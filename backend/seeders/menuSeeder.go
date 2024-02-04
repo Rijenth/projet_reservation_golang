@@ -32,12 +32,14 @@ func (menuSeeder MenuSeeder) factory(restaurant *models.Restaurant) *models.Menu
 	return &menu
 }
 
-func (menuSeeder MenuSeeder) Create(restaurant *models.Restaurant, attributes map[string]string) *models.Menu {
+func (menuSeeder MenuSeeder) Create(restaurant *models.Restaurant, menuItems []*models.MenuItem, attributes map[string]string) *models.Menu {
 	var menu = *menuSeeder.factory(restaurant)
 
 	if len(attributes) > 0 {
 		menu.Fill(attributes)
 	}
+
+	menu.SetMenuItems(menuItems)
 
 	services.GetConnection().Create(&menu)
 

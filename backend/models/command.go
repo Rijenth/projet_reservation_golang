@@ -8,6 +8,8 @@ type Command struct {
 	Description          string      `jsonapi:"attr,description"`
 	Status               string      `jsonapi:"attr,status"`
 	Amount               float64     `jsonapi:"attr,amount"`
+	UserID               *uint       `gorm:"not null" json:"-"`
+	User                 *User       `jsonapi:"relation,user"`
 	RestaurantID         uint        `gorm:"not null" json:"-"`
 	Restaurant           *Restaurant `jsonapi:"relation,restaurant"`
 	Menus                []*Menu     `jsonapi:"relation,menus"`
@@ -43,4 +45,9 @@ func (command *Command) SetRestaurant(restaurant *Restaurant) {
 
 func (command *Command) SetMenus(menus []*Menu) {
 	command.Menus = menus
+}
+
+func (command *Command) SetUser(user *User) {
+	command.UserID = &user.ID
+	command.User = user
 }

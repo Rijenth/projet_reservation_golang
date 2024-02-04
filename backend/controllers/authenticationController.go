@@ -21,37 +21,6 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 
 	database := services.GetConnection()
 
-	//Test des seeders :
-
-	/* 	var userFactory seeders.UserSeeder
-
-	   	userTest := userFactory.Create(map[string]string{
-	   		"role": "admin",
-	   	})
-
-	   	var placeFactory seeders.PlaceSeeder
-
-	   	place := placeFactory.Create(userTest, map[string]string{})
-
-	   	var restaurantFactory seeders.RestaurantSeeder
-
-	   	restaurant := restaurantFactory.Create(place, map[string]string{})
-
-	   	var menuFactory seeders.MenuSeeder
-
-	   	menuFactory.Create(restaurant, map[string]string{
-	   		"name":  "mon menu",
-	   		"price": "9",
-	   	})
-
-	   	var commandFactory seeders.CommandSeeder
-
-	   	commandFactory.Create(restaurant, map[string]string{})
-
-	   	var menuItemFactory seeders.MenuItemSeeder
-
-	   	menuItemFactory.Create(restaurant, map[string]string{}) */
-
 	var body validators.LoginUserDataValidator
 
 	err := json.NewDecoder(r.Body).Decode(&body)

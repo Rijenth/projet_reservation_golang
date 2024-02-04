@@ -1,5 +1,7 @@
-export default function AuthenticationTest() {
-    const Register = async () => {
+import AsyncRequestButton from '../components/AsyncRequestButton';
+
+export default function AuthenticationTest(): JSX.Element {
+    const Register = async (): Promise<void> => {
         console.log('[Test] Register');
 
         const data = {
@@ -23,12 +25,12 @@ export default function AuthenticationTest() {
             body: JSON.stringify(data),
         })
             .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
+            .then((json) => {
+                console.log(json);
             });
     };
 
-    const login = async () => {
+    const login = async (): Promise<void> => {
         console.log('[Test] login');
 
         await fetch('http://localhost:8000/login', {
@@ -50,7 +52,7 @@ export default function AuthenticationTest() {
             });
     };
 
-    const getCurrentUser = async () => {
+    const getCurrentUser = async (): Promise<void> => {
         console.log('[Test] getCurrentUser');
 
         await fetch('http://localhost:8000/me', {
@@ -70,25 +72,33 @@ export default function AuthenticationTest() {
         <div>
             <h1>Test</h1>
             <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-gray-500 text-white font-bold py-2 px-4 rounded"
                 onClick={Register}
             >
                 Register test
             </button>
 
             <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+                className="bg-gray-500 text-white font-bold py-2 px-4 rounded ml-2"
                 onClick={login}
             >
                 Login
             </button>
 
             <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+                className="bg-gray-500 text-white font-bold py-2 px-4 rounded ml-2"
                 onClick={getCurrentUser}
             >
                 Me
             </button>
+
+            <AsyncRequestButton
+                requestParams={{
+                    url: 'http://localhost:8000/seed',
+                    method: 'GET',
+                }}
+                buttonMessage="Seed Application"
+            />
         </div>
     );
 }

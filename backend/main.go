@@ -53,9 +53,9 @@ func main() {
 
 	router.Group(func(r chi.Router) {
 		r.Mount("/", routes.AuthenticationRoutes())
+		r.Mount("/seed", routes.SeederRoutes())
 	})
 
-	// routes necessitant une authentification
 	router.Group(func(r chi.Router) {
 		r.Use(contexts.AuthContext)
 

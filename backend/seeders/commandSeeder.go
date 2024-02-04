@@ -14,10 +14,8 @@ type CommandSeeder struct {
 	MenuSeeder MenuSeeder
 }
 
-func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant) *models.Command {
+func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant, menus []*models.Menu, user *models.User) *models.Command {
 	identificationNumber, _ := uuid.NewRandom()
-
-	numMenus := rand.Intn(4) + 1
 
 	descriptions := []string{
 		"Commande express de deux menus à emporter, comprenant des sandwichs et des boissons",
@@ -26,18 +24,10 @@ func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant) *mode
 		"Commande festive avec un menu complet comprenant des entrées, des plats principaux et des desserts",
 	}
 
-	status := []string{"not_started", "started", "ready"}
-
 	descriptionIndex := rand.Intn(len(descriptions))
-	statusIndex := rand.Intn(len(status))
 
-	menus := make([]*models.Menu, numMenus)
+	var totalAmount float64 = 0
 
-	for i := range menus {
-		menus[i] = commandSeeder.MenuSeeder.factory(restaurant)
-	}
-
-	var totalAmount float64
 	for _, menu := range menus {
 		totalAmount += menu.Price
 	}
@@ -47,7 +37,7 @@ func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant) *mode
 	command.Fill(map[string]string{
 		"identificationNumber": identificationNumber.String(),
 		"description":          descriptions[descriptionIndex],
-		"status":               status[statusIndex],
+		"status":               "delivered",
 		"amount":               strconv.FormatFloat(totalAmount, 'f', -1, 64),
 	})
 
@@ -55,11 +45,13 @@ func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant) *mode
 
 	command.SetMenus(menus)
 
+	command.SetUser(user)
+
 	return &command
 }
 
-func (commandSeeder *CommandSeeder) Create(restaurant *models.Restaurant, attributes map[string]string) *models.Command {
-	var command = *commandSeeder.factory(restaurant)
+func (commandSeeder *CommandSeeder) Create(restaurant *models.Restaurant, menus []*models.Menu, user *models.User, attributes map[string]string) *models.Command {
+	var command = *commandSeeder.factory(restaurant, menus, user)
 
 	if len(attributes) > 0 {
 		command.Fill(attributes)
