@@ -13,16 +13,12 @@ func FailedValidationResponse(w http.ResponseWriter, errs []error) {
 
 	for _, err := range errs {
 		if validationErr, ok := err.(validator.ValidationErrors); ok {
-			for index, e := range validationErr {
-				message := fmt.Errorf("Field %s is invalid at index %x", e.Field(), index)
-
+			for _, e := range validationErr {
 				errorMessage := e.Error()
 
 				errorMessageIndex := strings.Index(errorMessage, "Error:")
 
-				if errorMessageIndex != -1 {
-					message = fmt.Errorf("%s because %s", message, strings.ToLower(errorMessage[errorMessageIndex+len("Error:"):]))
-				}
+				message := fmt.Errorf(strings.ToLower(errorMessage[errorMessageIndex+len("Error:"):]))
 
 				fieldError := fmt.Errorf("%s", message)
 
