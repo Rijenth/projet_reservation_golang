@@ -3,6 +3,8 @@ package models
 type Restaurant struct {
 	ID        uint        `gorm:"primaryKey" jsonapi:"primary,restaurants"`
 	Name      string      `gorm:"unique" jsonapi:"attr,name"`
+	UserID    *uint       `gorm:"not null" json:"-"`
+	User      *User       `gorm:"foreignKey:UserID" jsonapi:"relation,user"`
 	PlaceID   uint        `gorm:"not null" json:"-"`
 	Place     *Place      `gorm:"foreignKey:PlaceID" jsonapi:"relation,place"`
 	Menus     []*Menu     `gorm:"foreignKey:RestaurantID" jsonapi:"relation,menus"`
@@ -20,4 +22,9 @@ func (restaurant *Restaurant) Fill(data map[string]string) {
 func (restaurant *Restaurant) SetPlace(place *Place) {
 	restaurant.PlaceID = place.ID
 	restaurant.Place = place
+}
+
+func (restaurant *Restaurant) SetUser(user *User) {
+	restaurant.UserID = &user.ID
+	restaurant.User = user
 }

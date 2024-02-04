@@ -12,6 +12,7 @@ func UserRoutes() chi.Router {
 
 	userController := controllers.UserController{}
 	placeController := controllers.PlaceController{}
+	restaurantController := controllers.RestaurantController{}
 
 	r.Get("/", userController.Index)
 
@@ -22,6 +23,8 @@ func UserRoutes() chi.Router {
 
 		r.Get("/{userId}/places", placeController.Index)
 		r.Post("/{userId}/places", placeController.Store)
+
+		r.Get("/{userId}/restaurants", restaurantController.IndexFromUser)
 	})
 
 	return r

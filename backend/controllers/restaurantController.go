@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/jsonapi"
+	"gorm.io/gorm/clause"
 )
 
 type RestaurantController struct {
@@ -37,6 +38,26 @@ func (controller *RestaurantController) Index(w http.ResponseWriter, r *http.Req
 	})
 
 	responses.OkResponse(w, results)
+}
+
+func (controller *RestaurantController) IndexFromUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
+	user := r.Context().Value("user").(models.User)
+
+	if user.Role != "owner" {
+		responses.UnprocessableEntityResponse(w, []error{fmt.Errorf("Cannot get restaurants for a user that is not an owner")})
+
+		return
+	}
+
+	database := services.GetConnection()
+
+	var restaurants []*models.Restaurant
+
+	database.Where("user_id = ?", user.ID).Preload(clause.Associations).Find(&restaurants)
+
+	responses.OkResponse(w, restaurants)
 }
 
 func (controller *RestaurantController) Store(w http.ResponseWriter, r *http.Request) {
