@@ -21,7 +21,7 @@ func UserRoutes() chi.Router {
 		r.Patch("/{userId}", userController.Update)
 		r.Delete("/{userId}", userController.Delete)
 
-		r.Get("/{userId}/places", placeController.Index)
+		r.Get("/{userId}/places", placeController.IndexFromUser)
 		r.Post("/{userId}/places", placeController.Store)
 
 		r.Get("/{userId}/restaurants", restaurantController.IndexFromUser)

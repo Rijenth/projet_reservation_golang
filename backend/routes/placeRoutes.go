@@ -14,6 +14,7 @@ func PlaceRoutes() chi.Router {
 	restaurantController := controllers.RestaurantController{}
 
 	r.With(contexts.PlaceContext).Group(func(r chi.Router) {
+		r.Get("/", placeController.Index)
 		r.Get("/{placeId}", placeController.Get)
 
 		r.Get("/{placeId}/restaurants", restaurantController.Index)
