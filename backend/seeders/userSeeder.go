@@ -3,6 +3,7 @@ package seeders
 import (
 	"backend/models"
 	"backend/services"
+	"fmt"
 	"math/rand"
 
 	"github.com/bxcodec/faker/v3"
@@ -48,6 +49,8 @@ func (userSeeder UserSeeder) Create(attributes map[string]string) *models.User {
 	services.GetConnection().Create(&user)
 
 	if user.ID == 0 {
+		fmt.Println("Factory error: Cannot create user")
+
 		return nil
 	}
 

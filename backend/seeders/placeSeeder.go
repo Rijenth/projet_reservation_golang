@@ -49,6 +49,8 @@ func (placeSeeder PlaceSeeder) factory(user *models.User) *models.Place {
 
 func (placeSeeder PlaceSeeder) Create(user *models.User, attributes map[string]string) *models.Place {
 	if user.Role != "admin" {
+		fmt.Println("Factory error: Cannot create a place for a user that is not an admin")
+
 		return nil
 	}
 
@@ -61,6 +63,8 @@ func (placeSeeder PlaceSeeder) Create(user *models.User, attributes map[string]s
 	services.GetConnection().Create(&place)
 
 	if place.ID == 0 {
+		fmt.Println("Factory error: Cannot create place")
+
 		return nil
 	}
 
