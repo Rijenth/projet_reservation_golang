@@ -1,5 +1,6 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import MainLayout from './pages/MainLayout';
+import AuthenticationTest from './pages/AuthenticationTest';
 
 const AuthenticatedRoutes: React.FC = () => {
     const isLoggedIn = false; // changer cette valeur pour tester les routes authenticated
@@ -17,6 +18,7 @@ function App(): JSX.Element {
     return (
         <MainLayout>
             <Routes>
+                <Route path="/" element={<AuthenticationTest />} />
                 <Route path="/login" element={<div>Login</div>} />
 
                 <Route element={<AuthenticatedRoutes />}>
