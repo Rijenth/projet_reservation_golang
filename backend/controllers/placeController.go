@@ -26,9 +26,26 @@ func (controller *PlaceController) Get(w http.ResponseWriter, r *http.Request) {
 func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
+	database := services.GetConnection()
+
+	results := services.Filter(database, &models.Place{}, map[string]interface{}{
+		"name":    r.URL.Query().Get("filter['name']"),
+		"Address": r.URL.Query().Get("filter['Address']"),
+	})
+
+	responses.OkResponse(w, results)
+}
+
+func (controller *PlaceController) IndexFromUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
 	user := r.Context().Value("user").(models.User)
 
-	preloadRelations := []string{"User", "Restaurants"}
+	if user.Role != "admin" {
+		responses.UnauthorizedResponse(w, "Only admin can get places")
+
+		return
+	}
 
 	database := services.GetConnection()
 
@@ -36,7 +53,7 @@ func (controller *PlaceController) Index(w http.ResponseWriter, r *http.Request)
 		"user_id": user.ID,
 		"name":    r.URL.Query().Get("filter['name']"),
 		"Address": r.URL.Query().Get("filter['Address']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }

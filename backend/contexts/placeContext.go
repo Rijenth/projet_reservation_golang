@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/jsonapi"
+	"gorm.io/gorm/clause"
 )
 
 func PlaceContext(next http.Handler) http.Handler {
@@ -20,7 +21,7 @@ func PlaceContext(next http.Handler) http.Handler {
 
 		database := services.GetConnection()
 
-		database.Preload("Restaurants").Preload("User").First(&place, placeID)
+		database.Preload(clause.Associations).First(&place, placeID)
 
 		if place.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)

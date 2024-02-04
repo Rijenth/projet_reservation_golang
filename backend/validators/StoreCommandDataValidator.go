@@ -20,6 +20,10 @@ type StoreCommandDataValidator struct {
 				Type string `validate:"required,eq=menus"`
 				ID   string `validate:"required"`
 			} `validate:"required"`
+			User struct {
+				Type string `validate:"required,eq=users"`
+				ID   string `validate:"required"`
+			} `validate:"required"`
 		} `json:"relationships"`
 	} `json:"data"`
 }
@@ -57,8 +61,20 @@ func (storeCommandDataValidator *StoreCommandDataValidator) Validate(body *io.Re
 		result := database.First(&menuFromDatabase, menu.ID)
 
 		if result.Error != nil {
-			relationshipErrors = append(relationshipErrors, fmt.Errorf("Field id of the menu at index %d doesn't exist", index))
+			relationshipErrors = append(relationshipErrors, fmt.Errorf("Field id of the menu at index %d is invalid", index))
 		}
+	}
+
+	if storeCommandDataValidator.Data.Relationships.User.Type != "users" {
+		relationshipErrors = append(relationshipErrors, fmt.Errorf("Field type of the user is invalid"))
+	}
+
+	var userFromDatabase models.User
+
+	result := database.First(&userFromDatabase, storeCommandDataValidator.Data.Relationships.User.ID)
+
+	if result.Error != nil {
+		relationshipErrors = append(relationshipErrors, fmt.Errorf("Field id of the user is invalid"))
 	}
 
 	if len(relationshipErrors) > 0 {

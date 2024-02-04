@@ -3,6 +3,7 @@ package seeders
 import (
 	"backend/models"
 	"backend/services"
+	"fmt"
 	"math/rand"
 	"strconv"
 
@@ -24,21 +25,27 @@ func (menuSeeder MenuSeeder) factory(restaurant *models.Restaurant) *models.Menu
 
 	if restaurant != nil {
 		menu.SetRestaurant(restaurant)
+	} else {
+		fmt.Println("Factory error: Cannot create a menu without a restaurant")
 	}
 
 	return &menu
 }
 
-func (menuSeeder MenuSeeder) Create(restaurant *models.Restaurant, attributes map[string]string) *models.Menu {
+func (menuSeeder MenuSeeder) Create(restaurant *models.Restaurant, menuItems []*models.MenuItem, attributes map[string]string) *models.Menu {
 	var menu = *menuSeeder.factory(restaurant)
 
 	if len(attributes) > 0 {
 		menu.Fill(attributes)
 	}
 
+	menu.SetMenuItems(menuItems)
+
 	services.GetConnection().Create(&menu)
 
 	if menu.ID == 0 {
+		fmt.Println("Factory error: Cannot create menu")
+
 		return nil
 	}
 

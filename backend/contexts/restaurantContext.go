@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/jsonapi"
+	"gorm.io/gorm/clause"
 )
 
 func RestaurantContext(next http.Handler) http.Handler {
@@ -20,7 +21,7 @@ func RestaurantContext(next http.Handler) http.Handler {
 
 		database := services.GetConnection()
 
-		database.Preload("Place").Preload("Menus").Preload("MenuItems").Preload("Commands").First(&restaurant, restaurantID)
+		database.Preload(clause.Associations).First(&restaurant, restaurantID)
 
 		if restaurant.ID == 0 {
 			w.Header().Set("Content-Type", jsonapi.MediaType)

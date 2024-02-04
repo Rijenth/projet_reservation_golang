@@ -3,6 +3,7 @@ package seeders
 import (
 	"backend/models"
 	"backend/services"
+	"fmt"
 
 	"github.com/bxcodec/faker/v3"
 )
@@ -10,7 +11,7 @@ import (
 type RestaurantSeeder struct {
 }
 
-func (restaurantSeeder RestaurantSeeder) factory(place *models.Place) *models.Restaurant {
+func (restaurantSeeder RestaurantSeeder) factory(place *models.Place, user *models.User) *models.Restaurant {
 	var restaurant = models.Restaurant{}
 
 	restaurant.Fill(map[string]string{
@@ -19,11 +20,19 @@ func (restaurantSeeder RestaurantSeeder) factory(place *models.Place) *models.Re
 
 	restaurant.SetPlace(place)
 
+	restaurant.SetUser(user)
+
 	return &restaurant
 }
 
-func (restaurantSeeder RestaurantSeeder) Create(place *models.Place, attributes map[string]string) *models.Restaurant {
-	var restaurant = *restaurantSeeder.factory(place)
+func (restaurantSeeder RestaurantSeeder) Create(place *models.Place, user *models.User, attributes map[string]string) *models.Restaurant {
+	if user.Role != "owner" {
+		fmt.Println("Factory error: Cannot create a restaurant for a user that is not an owner")
+
+		return nil
+	}
+
+	var restaurant = *restaurantSeeder.factory(place, user)
 
 	if len(attributes) > 0 {
 		restaurant.Fill(attributes)
@@ -32,6 +41,8 @@ func (restaurantSeeder RestaurantSeeder) Create(place *models.Place, attributes 
 	services.GetConnection().Create(&restaurant)
 
 	if restaurant.ID == 0 {
+		fmt.Println("Factory error: Cannot create restaurant")
+
 		return nil
 	}
 

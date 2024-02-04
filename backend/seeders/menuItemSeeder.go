@@ -3,6 +3,7 @@ package seeders
 import (
 	"backend/models"
 	"backend/services"
+	"fmt"
 	"math/rand"
 	"strconv"
 )
@@ -37,6 +38,8 @@ func (menuItemSeeder MenuItemSeeder) Create(restaurant *models.Restaurant, attri
 	services.GetConnection().Create(&menuItem)
 
 	if menuItem.ID == 0 {
+		fmt.Println("Factory error: Cannot create menu item")
+
 		return nil
 	}
 

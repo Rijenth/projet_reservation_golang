@@ -6,6 +6,7 @@ import (
 	"backend/services"
 	"backend/validators"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -30,8 +31,6 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 
 	restaurant := r.Context().Value("restaurant").(models.Restaurant)
 
-	preloadRelations := []string{"Restaurant", "Menus"}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.Command{}, map[string]interface{}{
@@ -40,7 +39,29 @@ func (controller *CommandController) Index(w http.ResponseWriter, r *http.Reques
 		"description":           r.URL.Query().Get("filter['description']"),
 		"status":                r.URL.Query().Get("filter['status']"),
 		"amount":                r.URL.Query().Get("filter['amount']"),
-	}, preloadRelations)
+	})
+
+	responses.OkResponse(w, results)
+}
+
+func (controller *CommandController) IndexFromUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+
+	user := r.Context().Value("user").(models.User)
+
+	if user.Role != "customer" {
+		responses.UnprocessableEntityResponse(w, []error{fmt.Errorf("Cannot get commands for a user that is not an customer")})
+
+		return
+	}
+
+	database := services.GetConnection()
+
+	results := services.Filter(database, &models.Command{}, map[string]interface{}{
+		"user_id": user.ID,
+		"name":    r.URL.Query().Get("filter['name']"),
+		"price":   r.URL.Query().Get("filter['price']"),
+	})
 
 	responses.OkResponse(w, results)
 }
@@ -55,6 +76,16 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 	var body validators.StoreCommandDataValidator
 
 	if err := body.Validate(&r.Body, &w); err != nil {
+		return
+	}
+
+	var user models.User
+
+	database.First(&user, body.Data.Relationships.User.ID)
+
+	if user.Role != "customer" {
+		responses.UnprocessableEntityResponse(w, []error{fmt.Errorf("Cannot create a command for a user that is not an customer")})
+
 		return
 	}
 
@@ -93,6 +124,8 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 	command.SetRestaurant(&restaurant)
 
 	command.SetMenus(menusFromDatabase)
+
+	command.SetUser(&user)
 
 	result := database.Create(&command)
 

@@ -26,8 +26,6 @@ func (controller *UserController) Get(w http.ResponseWriter, r *http.Request) {
 func (controller *UserController) Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 
-	preloadRelations := []string{""}
-
 	database := services.GetConnection()
 
 	results := services.Filter(database, &models.User{}, map[string]interface{}{
@@ -35,7 +33,7 @@ func (controller *UserController) Index(w http.ResponseWriter, r *http.Request) 
 		"last_name":  r.URL.Query().Get("filter['lastName']"),
 		"role":       r.URL.Query().Get("filter['role']"),
 		"username":   r.URL.Query().Get("filter['username']"),
-	}, preloadRelations)
+	})
 
 	responses.OkResponse(w, results)
 }
