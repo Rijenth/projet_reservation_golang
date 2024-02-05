@@ -61,9 +61,12 @@ func (controller *AuthenticationController) Login(w http.ResponseWriter, r *http
 
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(map[string]string{
+	response := map[string]interface{}{
+		"user":  user,
 		"token": token,
-	})
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
 
 func (controller *AuthenticationController) CurrentUser(w http.ResponseWriter, r *http.Request) {

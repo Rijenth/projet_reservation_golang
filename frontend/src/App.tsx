@@ -2,14 +2,22 @@ import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import MainLayout from './pages/MainLayout';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import { useSelector } from 'react-redux';
+import { RootState } from './store/store';
+import CustomerDashboard from './pages/CustomerDashboard';
+import Logout from './pages/Logout';
+import AdminDashboard from './pages/AdminDashboard';
+import OwnerDashboard from './pages/OwnerDashboard';
 
 const AuthenticatedRoutes: React.FC = () => {
-    const isLoggedIn = false; // changer cette valeur pour tester les routes authenticated
+    const isLoggedIn = useSelector(
+        (state: RootState) => state.authentication.authenticated
+    );
 
     const location = useLocation();
 
     if (!isLoggedIn) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/" state={{ from: location }} replace />;
     }
 
     return <Outlet />;
@@ -23,8 +31,23 @@ function App(): JSX.Element {
                 <Route path="/register" element={<Register />} />
 
                 <Route element={<AuthenticatedRoutes />}>
-                    {/* Routes qui necessite une authentification */}
+                    <Route
+                        path="/dashboard/customer"
+                        element={<CustomerDashboard />}
+                    />
+                    <Route
+                        path="/dashboard/owner"
+                        element={<AdminDashboard />}
+                    />
+                    <Route
+                        path="/dashboard/admin"
+                        element={<OwnerDashboard />}
+                    />
                 </Route>
+
+                <Route path="/logout" element={<Logout />} />
+
+                <Route path="*" element={<h1>Not Found</h1>} />
             </Routes>
         </MainLayout>
     );

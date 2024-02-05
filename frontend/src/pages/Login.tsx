@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import ChangePageButton from '../components/ChangePageButton';
 import Title from '../components/Title';
 import Response from '../components/Response';
 import { Res } from '../types/Types';
+import AsyncRequestButton from '../components/AsyncRequestButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -16,11 +19,29 @@ const Login: React.FC = () => {
         [] | Res[],
         (response: [] | Res[]) => void,
     ] = useState<[] | Res[]>([]);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     const navigate: NavigateFunction = useNavigate();
 
+    const dispatch = useDispatch();
+
+    const authentication = useSelector(
+        (state: RootState) => state.authentication
+    );
+
+    //Camrynconsequatur
+
+    useEffect(() => {
+        if (authentication.authenticated && authentication.user) {
+            navigate(`/dashboard/${authentication.user.role}`);
+
+            return;
+        }
+    }, [authentication, navigate]);
+
     const login: (e: React.FormEvent) => void = (e: React.FormEvent): void => {
         e.preventDefault();
+        setErrorMessage('');
 
         fetch(`${apiUrl}/login`, {
             method: 'POST',
@@ -32,22 +53,30 @@ const Login: React.FC = () => {
                 Password,
             }),
         })
-            .then((response: Response) => {
-                if (!response.ok) {
-                    return response.json().then((err: Error) => {
+            .then((res: Response) => {
+                if (!res.ok) {
+                    return res.json().then((err: Error) => {
                         throw err;
                     });
                 }
-                return response.json();
+                return res.json();
             })
             .then((data) => {
-                console.log(data);
-                // navigate('/home');
+                dispatch({
+                    type: 'authentication/setAuthenticated',
+                    payload: {
+                        authenticated: true,
+                        token: data.token,
+                        user: data.user,
+                    },
+                });
             })
             .catch((error) => {
-                console.error('Error:', error);
-
-                setResponse(error.errors);
+                if (error.errors) {
+                    setResponse(error.errors);
+                } else if (error.message) {
+                    setErrorMessage(error.message);
+                }
             });
     };
 
@@ -103,6 +132,12 @@ const Login: React.FC = () => {
                             </div>
                         </div>
 
+                        {errorMessage && (
+                            <p className="bg-red-200 py-3 rounded-lg my-4 text-center text-red-800 text-base leading-8">
+                                {errorMessage}
+                            </p>
+                        )}
+
                         <div>
                             <input
                                 type="submit"
@@ -111,12 +146,23 @@ const Login: React.FC = () => {
                             ></input>
                         </div>
                     </form>
+
                     <div className="flex justify-center">
                         <ChangePageButton
                             buttonFunction={register}
                             page="Register"
                         ></ChangePageButton>
                     </div>
+
+                    <AsyncRequestButton
+                        requestParams={{
+                            url: 'http://localhost:8000/seed',
+                            method: 'GET',
+                        }}
+                        customClass="bg-gray-500 text-white font-bold py-2 px-4 rounded w-full"
+                        buttonMessage="Seed Application"
+                    />
+
                     <Response response={response}></Response>
                 </div>
             </div>

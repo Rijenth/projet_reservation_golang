@@ -11,12 +11,14 @@ interface RequestParams {
 
 interface AsyncRequestButton {
     requestParams: RequestParams;
+    customClass?: string;
     buttonMessage?: string;
     buttonColor?: string;
 }
 
 const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
     requestParams,
+    customClass,
     buttonMessage = 'Appuyez ici',
     buttonColor = 'bg-gray-600 hover:bg-gray-800',
 }: AsyncRequestButton) => {
@@ -26,7 +28,11 @@ const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
     const buttonColorRef = useRef(buttonColor);
     const buttonColorError = 'bg-red-600 hover:bg-red-800';
     const buttonColorSuccess = 'bg-green-600 hover:bg-green-800';
-    const className = `relative text-white rounded p-2 mr-4 min-w-20 min-h-10 ${buttonColorRef.current}`;
+    let className = `relative text-white rounded p-2 mr-4 min-w-20 ${buttonColorRef.current}`;
+
+    if (customClass) {
+        className = `${customClass} ${buttonColorRef.current}`;
+    }
 
     const handleClick = async (): Promise<void> => {
         setLoading(true);
@@ -69,51 +75,45 @@ const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
             disabled={loading || error}
             onClick={handleClick}
         >
-            {loading && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="loading loading-dots loading-xs"></div>
-                </div>
-            )}
+            {loading && <div className="loading loading-dots loading-xs"></div>}
 
             {error && (
-                <>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-white mx-auto"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
-                </>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 text-white mx-auto"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                    />
+                </svg>
             )}
 
             {success && (
-                <>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-white mx-auto"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 13l4 4L19 7"
-                        />
-                    </svg>
-                </>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 text-white mx-auto"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                    />
+                </svg>
             )}
 
-            {!loading && !error && !success && <span>{buttonMessage}</span>}
+            {!loading && !error && !success && (
+                <span className="text-sm">{buttonMessage}</span>
+            )}
         </button>
     );
 };

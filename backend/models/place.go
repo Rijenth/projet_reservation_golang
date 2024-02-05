@@ -3,7 +3,7 @@ package models
 type Place struct {
 	ID          uint          `gorm:"primaryKey" jsonapi:"primary,places"`
 	Name        string        `jsonapi:"attr,name"`
-	Address     string        `jsonapi:"attr,Address"`
+	Address     string        `jsonapi:"attr,address"`
 	UserID      uint          `gorm:"not null" json:"-"`
 	User        *User         `jsonapi:"relation,user"`
 	Restaurants []*Restaurant `gorm:"foreignKey:PlaceID" jsonapi:"relation,restaurants"`

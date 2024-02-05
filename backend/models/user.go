@@ -5,12 +5,12 @@ import (
 )
 
 type User struct {
-	ID        uint   `gorm:"primaryKey" jsonapi:"primary,users"`
-	FirstName string `jsonapi:"attr,first_name"`
-	LastName  string `jsonapi:"attr,last_name"`
-	Username  string `gorm:"unique" jsonapi:"attr,username"`
-	Password  string
-	Role      string `jsonapi:"attr,role"`
+	ID        uint   `gorm:"primaryKey" jsonapi:"primary,users" json:"id"`
+	FirstName string `jsonapi:"attr,first_name" json:"firstName"`
+	LastName  string `jsonapi:"attr,last_name" json:"lastName"`
+	Username  string `gorm:"unique" jsonapi:"attr,username" json:"username"`
+	Password  string `json:"-"`
+	Role      string `jsonapi:"attr,role" json:"role"`
 	Model
 }
 
