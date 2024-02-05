@@ -43,13 +43,13 @@ const Register: React.FC = () => {
                 },
             }),
         })
-            .then((response: Response) => {
-                if (!response.ok) {
-                    return response.json().then((err: Error) => {
+            .then((res: Response) => {
+                if (!res.ok) {
+                    return res.json().then((err: Error) => {
                         throw err;
                     });
                 }
-                return response.json();
+                return res.json();
             })
             .then((data) => {
                 if (data && data.data) {
