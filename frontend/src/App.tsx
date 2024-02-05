@@ -1,6 +1,7 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import MainLayout from './pages/MainLayout';
-import AuthenticationTest from './pages/AuthenticationTest';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 const AuthenticatedRoutes: React.FC = () => {
     const isLoggedIn = false; // changer cette valeur pour tester les routes authenticated
@@ -18,8 +19,8 @@ function App(): JSX.Element {
     return (
         <MainLayout>
             <Routes>
-                <Route path="/" element={<AuthenticationTest />} />
-                <Route path="/login" element={<div>Login</div>} />
+                <Route path="/" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
                 <Route element={<AuthenticatedRoutes />}>
                     {/* Routes qui necessite une authentification */}
