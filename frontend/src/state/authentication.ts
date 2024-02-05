@@ -5,7 +5,7 @@ export interface User {
     firstName: string;
     lastName: string;
     username: string;
-    role: 'admin' | 'customer' | 'employee' | '';
+    role: 'admin' | 'customer' | 'owner' | '';
 }
 
 export interface AuthenticationState {
