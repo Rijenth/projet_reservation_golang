@@ -5,6 +5,9 @@ import Login from './pages/Login';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import CustomerDashboard from './pages/CustomerDashboard';
+import Logout from './pages/Logout';
+import AdminDashboard from './pages/AdminDashboard';
+import OwnerDashboard from './pages/OwnerDashboard';
 
 const AuthenticatedRoutes: React.FC = () => {
     const isLoggedIn = useSelector(
@@ -32,9 +35,17 @@ function App(): JSX.Element {
                         path="/dashboard/customer"
                         element={<CustomerDashboard />}
                     />
-                    {/* <Route path="/dashboard/owner" element={<AdminDashboard />} />
-                    <Route path="/dashboard/admin" element={<OwnerDashboard />} /> */}
+                    <Route
+                        path="/dashboard/owner"
+                        element={<AdminDashboard />}
+                    />
+                    <Route
+                        path="/dashboard/admin"
+                        element={<OwnerDashboard />}
+                    />
                 </Route>
+
+                <Route path="/logout" element={<Logout />} />
 
                 <Route path="*" element={<h1>Not Found</h1>} />
             </Routes>
