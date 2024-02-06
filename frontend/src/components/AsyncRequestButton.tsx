@@ -14,6 +14,7 @@ interface AsyncRequestButton {
     customClass?: string;
     buttonMessage?: string;
     buttonColor?: string;
+    handleDataCallback?: (data: unknown) => void;
 }
 
 const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
@@ -21,6 +22,7 @@ const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
     customClass,
     buttonMessage = 'Appuyez ici',
     buttonColor = 'bg-gray-600 hover:bg-gray-800',
+    handleDataCallback,
 }: AsyncRequestButton) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
@@ -59,6 +61,12 @@ const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
                     setSuccess(false);
                     buttonColorRef.current = buttonColor;
                 }, 2000);
+
+                if (handleDataCallback) {
+                    const data = await response.json();
+
+                    handleDataCallback(data);
+                }
             }
         } catch (e) {
             setError(true);

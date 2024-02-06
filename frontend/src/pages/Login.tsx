@@ -4,9 +4,9 @@ import ChangePageButton from '../components/ChangePageButton';
 import Title from '../components/Title';
 import Response from '../components/Response';
 import { Res } from '../types/Types';
-import AsyncRequestButton from '../components/AsyncRequestButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import UserSeeder from '../components/UserSeeder';
 
 const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
@@ -154,16 +154,9 @@ const Login: React.FC = () => {
                         ></ChangePageButton>
                     </div>
 
-                    <AsyncRequestButton
-                        requestParams={{
-                            url: 'http://localhost:8000/seed',
-                            method: 'GET',
-                        }}
-                        customClass="bg-gray-500 text-white font-bold py-2 px-4 rounded w-full"
-                        buttonMessage="Seed Application"
-                    />
-
                     <Response response={response}></Response>
+
+                    <UserSeeder />
                 </div>
             </div>
         </div>
