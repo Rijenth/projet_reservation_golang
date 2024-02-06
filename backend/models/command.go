@@ -4,7 +4,7 @@ import "strconv"
 
 type Command struct {
 	ID                   uint        `gorm:"primaryKey" jsonapi:"primary,commands"`
-	IdentificationNumber string      `gorm:"unique" jsonapi:"attr,identificationNumber"`
+	IdentificationNumber *string     `gorm:"unique" jsonapi:"attr,identificationNumber"`
 	Description          string      `jsonapi:"attr,description"`
 	Status               string      `jsonapi:"attr,status"`
 	Amount               float64     `jsonapi:"attr,amount"`
@@ -17,8 +17,8 @@ type Command struct {
 }
 
 func (command *Command) Fill(data map[string]string) {
-	if data["identificationNumber"] != "" && data["identificationNumber"] != command.IdentificationNumber {
-		command.IdentificationNumber = data["identificationNumber"]
+	if data["identificationNumber"] != "" && data["identificationNumber"] != *command.IdentificationNumber {
+		*command.IdentificationNumber = data["identificationNumber"]
 	}
 
 	if data["description"] != "" && data["description"] != command.Description {

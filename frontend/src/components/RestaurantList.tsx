@@ -6,7 +6,7 @@ import OverflowContainer from './OverflowContainer';
 
 interface RestaurantListProps {
     placeId: number;
-    restaurantIdHandler?: (id: number) => void;
+    restaurantIdHandler?: (id: number, name: string) => void;
 }
 
 export function RestaurantList({
@@ -36,15 +36,12 @@ export function RestaurantList({
             return;
         }
 
-        const controller = new AbortController();
-
         fetch(`${apiUrl}/places/${placeId}/restaurants`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            signal: controller.signal,
         })
             .then((response) => {
                 if (!response.ok) {
@@ -69,10 +66,6 @@ export function RestaurantList({
 
                 setErrorMessage('Une erreur inconnue est survenue');
             });
-
-        return () => {
-            controller.abort();
-        };
     }, [apiUrl, token, navigate, placeId]);
 
     return (
@@ -80,12 +73,15 @@ export function RestaurantList({
             errorMessage={errorMessage}
             underlineTitle="Liste des restaurants"
         >
-            <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg">
+            <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
                 {restaurants.map((restaurant) => (
                     <button
                         onClick={() => {
                             if (restaurantIdHandler) {
-                                restaurantIdHandler(parseInt(restaurant.id));
+                                restaurantIdHandler(
+                                    parseInt(restaurant.id),
+                                    restaurant.attributes.name
+                                );
                             }
                         }}
                         key={restaurant.id}

@@ -13,7 +13,7 @@ export default function OverflowContainer({
 }: OverflowContainerProps): JSX.Element {
     return (
         <div
-            className="flex flex-col items-center justify-center border-2 border-gray-400 p-8 rounded-lg shadow-md w-1/2 max-w-[500px] bg-gray-800"
+            className="flex flex-col items-center justify-center border-2 border-gray-400 p-8 rounded-lg shadow-md w-1/2 min-w-[460px] max-w-[500px]  bg-gray-800"
             style={{ height: '80vh' }}
         >
             {errorMessage && (

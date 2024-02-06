@@ -70,7 +70,7 @@ export default function PlacesList({
             errorMessage={errorMessage}
             underlineTitle="Liste des lieux"
         >
-            <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg">
+            <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
                 {places.map((place) => (
                     <button
                         onClick={() => placeIdHandler(parseInt(place.id))}

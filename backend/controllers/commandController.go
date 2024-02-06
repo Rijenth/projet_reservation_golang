@@ -106,6 +106,12 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		}
 
 		for _, menu := range menusFromDatabase {
+			if menu.RestaurantID != restaurant.ID {
+				responses.UnprocessableEntityResponse(w, []error{fmt.Errorf("Cannot create a command with menus from different restaurants")})
+
+				return
+			}
+
 			totalAmount += menu.Price
 		}
 	}
@@ -123,6 +129,8 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 	command.SetMenus(menusFromDatabase)
 
 	command.SetUser(&user)
+
+	fmt.Println(command)
 
 	result := database.Create(&command)
 
