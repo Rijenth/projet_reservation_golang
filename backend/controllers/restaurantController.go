@@ -83,6 +83,16 @@ func (controller *RestaurantController) Store(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	existingRestaurant := models.Restaurant{}
+
+	result = database.Where("user_id = ?", user.ID).First(&existingRestaurant)
+
+	if existingRestaurant.ID != 0 {
+		responses.UnprocessableEntityResponse(w, []error{fmt.Errorf("A user owner can have only one restaurant!")})
+
+		return
+	}
+
 	restaurant := models.Restaurant{}
 
 	restaurant.Fill(map[string]string{
