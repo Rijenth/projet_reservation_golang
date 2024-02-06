@@ -16,16 +16,14 @@ type SeederController struct {
 func (controller *SeederController) SeedApplication(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	seedAdmin(w, r)
+	response := seedAdmin(w, r)
 
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(map[string]string{
-		"message": "Application has been seeded",
-	})
+	json.NewEncoder(w).Encode(response)
 }
 
-func seedAdmin(w http.ResponseWriter, r *http.Request) *models.User {
+func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
 	w.Header().Set("Content-Type", "application/json")
 
 	var userFactory seeders.UserSeeder
@@ -35,12 +33,21 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *models.User {
 	var menuItemFactory seeders.MenuItemSeeder
 	var commandFactory seeders.CommandSeeder
 
+	response := map[string]string{
+		"message":          "Application has been seeded",
+		"ownerUsername":    "",
+		"adminUsername":    "",
+		"customerUsername": "",
+	}
+
 	var wg sync.WaitGroup
 
 	adminUser := userFactory.Create(map[string]string{
 		"role":     "admin",
 		"password": "password",
 	})
+
+	response["adminUsername"] = adminUser.Username
 
 	for i := 0; i < 3; i++ {
 		place := placeFactory.Create(adminUser, map[string]string{
@@ -59,6 +66,10 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *models.User {
 					"password": "password",
 				})
 
+				if response["ownerUsername"] == "" {
+					response["ownerUsername"] = owner.Username
+				}
+
 				restaurant := restaurantFactory.Create(place, owner, map[string]string{
 					"name": "Restaurant de " + owner.FirstName + " " + strconv.Itoa(j),
 				})
@@ -70,6 +81,10 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *models.User {
 						"role":     "customer",
 						"password": "password",
 					}))
+
+					if response["customerUsername"] == "" {
+						response["customerUsername"] = restaurantCustomers[k].Username
+					}
 				}
 
 				var menuItems = []models.MenuItem{}
@@ -120,5 +135,5 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *models.User {
 
 	wg.Wait()
 
-	return adminUser
+	return &response
 }
