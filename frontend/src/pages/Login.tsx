@@ -87,7 +87,7 @@ const Login: React.FC = () => {
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <Title title="Please log in !"></Title>
+                <Title title="Merci de vous connecter !"></Title>
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <div className="space-y-6">
@@ -97,7 +97,7 @@ const Login: React.FC = () => {
                                 htmlFor="username"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                Username
+                                Nom d'utilisateur
                             </label>
                             <div className="mt-2">
                                 <input
@@ -117,7 +117,7 @@ const Login: React.FC = () => {
                                     htmlFor="password"
                                     className="block text-sm font-medium leading-6 text-gray-900"
                                 >
-                                    Password
+                                    Mot de passe
                                 </label>
                             </div>
                             <div className="mt-2">
@@ -142,7 +142,7 @@ const Login: React.FC = () => {
                             <input
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                value="Login"
+                                value="Se connecter"
                             ></input>
                         </div>
                     </form>
@@ -150,7 +150,7 @@ const Login: React.FC = () => {
                     <div className="flex justify-center">
                         <ChangePageButton
                             buttonFunction={register}
-                            page="Register"
+                            page="S'inscrire"
                         ></ChangePageButton>
                     </div>
 
