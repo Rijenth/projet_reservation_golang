@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react';
 import { RootState } from '../store/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import OverflowContainer from './OverflowContainer';
 
 interface RestaurantListProps {
     placeId: number;
+    restaurantIdHandler?: (id: number) => void;
 }
 
-export function RestaurantList({ placeId }: RestaurantListProps): JSX.Element {
+export function RestaurantList({
+    placeId,
+    restaurantIdHandler,
+}: RestaurantListProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     interface Restaurant {
         id: string;
@@ -71,35 +76,27 @@ export function RestaurantList({ placeId }: RestaurantListProps): JSX.Element {
     }, [apiUrl, token, navigate, placeId]);
 
     return (
-        <div
-            className="flex flex-col items-center justify-center border-2 border-gray-400 p-8 rounded-lg shadow-md w-1/2 max-w-[500px] bg-gray-800"
-            style={{ height: '80vh' }}
+        <OverflowContainer
+            errorMessage={errorMessage}
+            underlineTitle="Liste des restaurants"
         >
-            {errorMessage && (
-                <div className="w-full text-center bg-red-400 rounded-lg p-4">
-                    <p className="text-red-800 text-sm mb-4">{errorMessage}</p>
-                </div>
-            )}
-
-            {errorMessage === '' && (
-                <>
-                    <h1 className="text-white text-xl font-bold mb-4 underline">
-                        Liste des lieux
-                    </h1>
-                    <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg">
-                        {restaurants.map((restaurant) => (
-                            <button
-                                key={restaurant.id}
-                                className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white transition-all"
-                            >
-                                <h2 className="text-sm font-bold">
-                                    {restaurant.attributes.name}
-                                </h2>
-                            </button>
-                        ))}
-                    </div>
-                </>
-            )}
-        </div>
+            <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg">
+                {restaurants.map((restaurant) => (
+                    <button
+                        onClick={() => {
+                            if (restaurantIdHandler) {
+                                restaurantIdHandler(parseInt(restaurant.id));
+                            }
+                        }}
+                        key={restaurant.id}
+                        className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white transition-all"
+                    >
+                        <h2 className="text-sm font-bold">
+                            {restaurant.attributes.name}
+                        </h2>
+                    </button>
+                ))}
+            </div>
+        </OverflowContainer>
     );
 }
