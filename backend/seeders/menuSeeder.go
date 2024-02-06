@@ -18,8 +18,23 @@ func (menuSeeder MenuSeeder) factory(restaurant *models.Restaurant) *models.Menu
 
 	var menu = models.Menu{}
 
+	var menuSpecs = []string{
+		"épicé",
+		"salé",
+		"sucré",
+		"amer",
+		"acide",
+		"gras",
+		"lourd",
+		"léger",
+		"piquant",
+		"fade",
+		"parfumé",
+		"aromatisé",
+	}
+
 	menu.Fill(map[string]string{
-		"name":  faker.Name(),
+		"name":  faker.Name() + " " + menuSpecs[rand.Intn(len(menuSpecs))],
 		"price": strconv.Itoa(price),
 	})
 

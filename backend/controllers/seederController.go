@@ -112,7 +112,6 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
 					}
 
 					menus = append(menus, *menuFactory.Create(restaurant, randomMenuItems, map[string]string{
-						"name":  "Menu " + restaurant.Name + " " + strconv.Itoa(l),
 						"price": strconv.FormatFloat(totalAmount, 'f', 2, 64),
 					}))
 				}

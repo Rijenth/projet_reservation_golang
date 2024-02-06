@@ -15,7 +15,7 @@ export default function CustomerNavbar(): JSX.Element {
                 </a>
 
                 <div className="space-x-4">
-                    <a href="#" className="text-white">
+                    <a href="/dashboard/customer" className="text-white">
                         Voir tout les lieux
                     </a>
                     <a href="#" className="text-white">
