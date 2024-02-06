@@ -70,16 +70,16 @@ const Register: React.FC = () => {
 
     return (
         <div>
-            <Title title="Create an Account !"></Title>
+            <Title title="Bienvenue ! Veuillez vous inscrire."></Title>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <div className="space-y-6">
                     <form className="space-y-5" onSubmit={register}>
                         <div>
                             <label
-                                htmlFor="email"
+                                htmlFor="last_name"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                LastName
+                                Nom
                             </label>
                             <div className="mt-2">
                                 <input
@@ -94,10 +94,10 @@ const Register: React.FC = () => {
                         </div>
                         <div>
                             <label
-                                htmlFor="email"
+                                htmlFor="first_name"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                FirstName
+                                Prénom
                             </label>
                             <div className="mt-2">
                                 <input
@@ -112,10 +112,10 @@ const Register: React.FC = () => {
                         </div>
                         <div>
                             <label
-                                htmlFor="email"
+                                htmlFor="username"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                Username
+                                Nom d'utilisateur
                             </label>
                             <div className="mt-2">
                                 <input
@@ -134,7 +134,7 @@ const Register: React.FC = () => {
                                 htmlFor="role"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                Role
+                                Rôle
                             </label>
                             <div className="mt-2">
                                 <select
@@ -145,19 +145,19 @@ const Register: React.FC = () => {
                                         e: React.ChangeEvent<HTMLSelectElement>
                                     ): void => setRole(e.target.value)}
                                 >
-                                    <option value="">Select a role</option>
-                                    <option value="owner">Owner</option>
-                                    <option value="customer">Customer</option>
-                                    <option value="admin">Admin</option>
+                                    <option value="">Sélectionner un rôle</option>
+                                    <option value="owner">Propriétaire</option>
+                                    <option value="customer">Client(e)</option>
+                                    <option value="admin">Administrateur(rice)</option>
                                 </select>
                             </div>
                         </div>
                         <div>
                             <label
-                                htmlFor="email"
+                                htmlFor="password"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                Password
+                                Mot de passe
                             </label>
                             <div className="mt-2">
                                 <input
@@ -175,13 +175,13 @@ const Register: React.FC = () => {
                             <input
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                value="Register"
+                                value="S'inscrire"
                             ></input>
                         </div>
                     </form>
                     <ChangePageButton
                         buttonFunction={connexion}
-                        page="Login"
+                        page="Se connecter"
                     ></ChangePageButton>
                     <Response response={response}></Response>
                 </div>
