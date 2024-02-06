@@ -110,15 +110,12 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 		}
 	}
 
-	identificationNumber, _ := uuid.NewRandom()
-
 	command := models.Command{}
 
 	command.Fill(map[string]string{
-		"identificationNumber": identificationNumber.String(),
-		"description":          body.Data.Attributes.Description,
-		"status":               "not_started",
-		"amount":               strconv.FormatFloat(totalAmount, 'f', -1, 64),
+		"description": body.Data.Attributes.Description,
+		"status":      "not_started",
+		"amount":      strconv.FormatFloat(totalAmount, 'f', -1, 64),
 	})
 
 	command.SetRestaurant(&restaurant)
@@ -165,10 +162,18 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 
 	command := r.Context().Value("command").(models.Command)
 
+	identificationNumber, _ := uuid.NewRandom()
+
 	command.Fill(map[string]string{
 		"description": body.Data.Attributes.Description,
 		"status":      body.Data.Attributes.Status,
 	})
+
+	if command.Status == "ready" {
+		command.Fill(map[string]string{
+			"identificationNumber": identificationNumber.String(),
+		})
+	}
 
 	result := database.Save(&command)
 
