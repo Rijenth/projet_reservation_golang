@@ -3,6 +3,7 @@ import { RootState } from '../store/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import OverflowContainer from './OverflowContainer';
+import { IRestaurant } from '../interfaces/IRestaurant';
 
 interface RestaurantListProps {
     placeId: number;
@@ -14,14 +15,8 @@ export function RestaurantList({
     restaurantIdHandler,
 }: RestaurantListProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
-    interface Restaurant {
-        id: string;
-        attributes: {
-            name: string;
-        };
-    }
 
-    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
     const token = useSelector((state: RootState) => state.authentication.token);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -36,42 +31,46 @@ export function RestaurantList({
             return;
         }
 
-        fetch(`${apiUrl}/places/${placeId}/restaurants`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        navigate('/logout');
+        const fetchRestaurants = async (): Promise<void> => {
+            fetch(`${apiUrl}/places/${placeId}/restaurants`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            navigate('/logout');
+                            return;
+                        }
+
+                        throw new Error('Une erreur api est survenue');
+                    }
+
+                    return response.json();
+                })
+                .then((data) => {
+                    setRestaurants(data.data);
+                })
+                .catch((error) => {
+                    if (error?.message) {
+                        setErrorMessage(error.message);
                         return;
                     }
 
-                    throw new Error('Une erreur api est survenue');
-                }
+                    setErrorMessage('Une erreur inconnue est survenue');
+                });
+        };
 
-                return response.json();
-            })
-            .then((data) => {
-                setRestaurants(data.data);
-            })
-            .catch((error) => {
-                if (error?.message) {
-                    setErrorMessage(error.message);
-                    return;
-                }
-
-                setErrorMessage('Une erreur inconnue est survenue');
-            });
+        fetchRestaurants();
     }, [apiUrl, token, navigate, placeId]);
 
     return (
         <OverflowContainer
             errorMessage={errorMessage}
-            underlineTitle="Liste des restaurants"
+            underlinedTitle="Liste des restaurants"
         >
             <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
                 {restaurants.map((restaurant) => (
@@ -85,7 +84,7 @@ export function RestaurantList({
                             }
                         }}
                         key={restaurant.id}
-                        className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white transition-all"
+                        className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white hover:border-2 hover:border-white"
                     >
                         <h2 className="text-sm font-bold">
                             {restaurant.attributes.name}

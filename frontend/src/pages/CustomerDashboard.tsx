@@ -2,8 +2,8 @@ import { useState } from 'react';
 import CustomerNavbar from '../components/navbar/CustomerNavbar';
 import PlacesList from '../components/PlacesList';
 import { RestaurantList } from '../components/RestaurantList';
-import CustomerMenuList from './CustomerMenuList';
 import CustomerCommandeHandler from '../components/CustomerCommandHandler';
+import CustomerMenuList from '../components/CustomerMenuList';
 
 interface IMenu {
     id: string;
@@ -62,6 +62,7 @@ export default function CustomerDashboard(): JSX.Element {
 
                         <CustomerCommandeHandler
                             restaurantId={restaurantId}
+                            restaurantName={restaurantName}
                             menus={selectedMenus}
                             resetSelectedMenus={cancelSelectedMenusHandler}
                         />

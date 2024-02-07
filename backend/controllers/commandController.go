@@ -120,7 +120,7 @@ func (controller *CommandController) Store(w http.ResponseWriter, r *http.Reques
 
 	command.Fill(map[string]string{
 		"description": body.Data.Attributes.Description,
-		"status":      "not_started",
+		"status":      "ongoing",
 		"amount":      strconv.FormatFloat(totalAmount, 'f', -1, 64),
 	})
 

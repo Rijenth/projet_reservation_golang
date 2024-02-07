@@ -12,7 +12,7 @@ type MenuItemSeeder struct {
 }
 
 func (menuItemSeeder MenuItemSeeder) factory(restaurant *models.Restaurant) *models.MenuItem {
-	menuItemType := []string{"started", "main", "dessert", "drink"}
+	menuItemType := []string{"starter", "main", "dessert", "drink"}
 	menuItemName := []string{"Coca-Cola", "Fanta", "Sprite", "Salade", "Pâtes", "Pizza", "Tiramisu", "Glace"}
 
 	var MenuItem = models.MenuItem{}

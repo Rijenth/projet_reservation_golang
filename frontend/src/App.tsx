@@ -10,6 +10,7 @@ import AuthenticatedRoutes from './middlewares/AuthenticatedRoutes';
 import CustomerRoutes from './middlewares/CustomerRoutes';
 import OwnerRoutes from './middlewares/OwnerRoutes';
 import AdminRoutes from './middlewares/AdminRoutes';
+import CustomerCommands from './pages/CustomerCommands';
 
 function App(): JSX.Element {
     return (
@@ -23,6 +24,10 @@ function App(): JSX.Element {
                         <Route
                             path="/dashboard/customer"
                             element={<CustomerDashboard />}
+                        />
+                        <Route
+                            path="/dashboard/customer/commands"
+                            element={<CustomerCommands />}
                         />
                     </Route>
 

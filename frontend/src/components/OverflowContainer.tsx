@@ -2,13 +2,13 @@ import React from 'react';
 
 interface OverflowContainerProps {
     children: React.ReactNode;
-    underlineTitle: string;
+    underlinedTitle: string;
     errorMessage: string;
 }
 
 export default function OverflowContainer({
     children,
-    underlineTitle,
+    underlinedTitle,
     errorMessage,
 }: OverflowContainerProps): JSX.Element {
     return (
@@ -25,7 +25,7 @@ export default function OverflowContainer({
             {errorMessage === '' && (
                 <>
                     <h1 className="text-white text-xl font-bold mb-4 underline">
-                        {underlineTitle}
+                        {underlinedTitle}
                     </h1>
 
                     {children}

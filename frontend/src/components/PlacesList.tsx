@@ -28,37 +28,41 @@ export default function PlacesList({
         console.log('page places list');
         setErrorMessage('');
 
-        fetch(`${apiUrl}/places`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        navigate('/logout');
+        const fetchPlaces = async (): Promise<void> => {
+            fetch(`${apiUrl}/places`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            navigate('/logout');
 
+                            return;
+                        }
+
+                        throw new Error('Une erreur api est survenue');
+                    }
+
+                    return response.json();
+                })
+                .then((data) => {
+                    setPlaces(data.data);
+                })
+                .catch((error) => {
+                    if (error?.message) {
+                        setErrorMessage(error.message);
                         return;
                     }
 
-                    throw new Error('Une erreur api est survenue');
-                }
+                    setErrorMessage('Une erreur inconnue est survenue');
+                });
+        };
 
-                return response.json();
-            })
-            .then((data) => {
-                setPlaces(data.data);
-            })
-            .catch((error) => {
-                if (error?.message) {
-                    setErrorMessage(error.message);
-                    return;
-                }
-
-                setErrorMessage('Une erreur inconnue est survenue');
-            });
+        fetchPlaces();
 
         return () => {
             setPlaces([]);
@@ -68,14 +72,14 @@ export default function PlacesList({
     return (
         <OverflowContainer
             errorMessage={errorMessage}
-            underlineTitle="Liste des lieux"
+            underlinedTitle="Liste des lieux"
         >
             <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
                 {places.map((place) => (
                     <button
                         onClick={() => placeIdHandler(parseInt(place.id))}
                         key={place.id}
-                        className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white transition-all"
+                        className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white hover:border-2 hover:border-white"
                     >
                         <h2 className="text-sm font-bold">
                             {place.attributes.name}
