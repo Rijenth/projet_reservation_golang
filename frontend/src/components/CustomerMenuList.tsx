@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store/store';
 import { useSelector } from 'react-redux';
-import OverflowContainer from '../components/OverflowContainer';
+import OverflowContainer from './OverflowContainer';
 import { IMenu } from '../interfaces/IMenu';
-import SelectedMenuMenuItems from '../components/SelectedMenuMenuItems';
+import SelectedMenuMenuItems from './SelectedMenuMenuItems';
 
 interface CustomerDashboardMenuProps {
     restaurantId: number;
