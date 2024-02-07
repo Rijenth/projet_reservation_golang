@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import LogoutButton from '../LogoutButton';
+import { Link } from 'react-router-dom';
 
 export default function CustomerNavbar(): JSX.Element {
     const username = useSelector(
@@ -10,17 +11,17 @@ export default function CustomerNavbar(): JSX.Element {
     return (
         <nav className="bg-gray-800 p-4 rounded flex">
             <div className="container mx-auto flex items-center justify-between">
-                <a href="/" className="text-white">
+                <Link to="/" className="text-white">
                     FoodCourt - Espace client de {username}
-                </a>
+                </Link>
 
                 <div className="space-x-4">
-                    <a href="/dashboard/customer" className="text-white">
+                    <Link to="/dashboard/customer" className="text-white">
                         Voir tout les lieux
-                    </a>
-                    <a href="#" className="text-white">
+                    </Link>
+                    <Link to="/dashboard/customer/commands" className="text-white">
                         Voir mes commandes
-                    </a>
+                    </Link>
 
                     <LogoutButton />
                 </div>
