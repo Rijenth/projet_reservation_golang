@@ -34,38 +34,42 @@ export default function CustomerMenuList({
             return;
         }
 
-        fetch(`${apiUrl}/restaurants/${restaurantId}/menus`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        navigate('/logout');
+        const fetchMenus = async (): Promise<void> => {
+            await fetch(`${apiUrl}/restaurants/${restaurantId}/menus`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            navigate('/logout');
+                            return;
+                        }
+
+                        throw new Error('Une erreur api est survenue');
+                    }
+
+                    return response.json();
+                })
+                .then((data) => {
+                    setMenus(data.data);
+                })
+                .catch((error) => {
+                    if (error?.message) {
+                        setErrorMessage(error.message);
                         return;
                     }
 
-                    throw new Error('Une erreur api est survenue');
-                }
+                    setErrorMessage(
+                        'Une erreur inconnue est survenue lors de la récupération des menus'
+                    );
+                });
+        };
 
-                return response.json();
-            })
-            .then((data) => {
-                setMenus(data.data);
-            })
-            .catch((error) => {
-                if (error?.message) {
-                    setErrorMessage(error.message);
-                    return;
-                }
-
-                setErrorMessage(
-                    'Une erreur inconnue est survenue lors de la récupération des menus'
-                );
-            });
+        fetchMenus();
     }, [apiUrl, token, navigate, restaurantId]);
 
     const [selectedMenuId, setSelectedMenuId] = useState<number>(0);

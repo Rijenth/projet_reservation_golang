@@ -36,36 +36,40 @@ export function RestaurantList({
             return;
         }
 
-        fetch(`${apiUrl}/places/${placeId}/restaurants`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        navigate('/logout');
+        const fetchRestaurants = async (): Promise<void> => {
+            fetch(`${apiUrl}/places/${placeId}/restaurants`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            navigate('/logout');
+                            return;
+                        }
+
+                        throw new Error('Une erreur api est survenue');
+                    }
+
+                    return response.json();
+                })
+                .then((data) => {
+                    setRestaurants(data.data);
+                })
+                .catch((error) => {
+                    if (error?.message) {
+                        setErrorMessage(error.message);
                         return;
                     }
 
-                    throw new Error('Une erreur api est survenue');
-                }
+                    setErrorMessage('Une erreur inconnue est survenue');
+                });
+        };
 
-                return response.json();
-            })
-            .then((data) => {
-                setRestaurants(data.data);
-            })
-            .catch((error) => {
-                if (error?.message) {
-                    setErrorMessage(error.message);
-                    return;
-                }
-
-                setErrorMessage('Une erreur inconnue est survenue');
-            });
+        fetchRestaurants();
     }, [apiUrl, token, navigate, placeId]);
 
     return (

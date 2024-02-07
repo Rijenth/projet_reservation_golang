@@ -28,37 +28,41 @@ export default function PlacesList({
         console.log('page places list');
         setErrorMessage('');
 
-        fetch(`${apiUrl}/places`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        navigate('/logout');
+        const fetchPlaces = async (): Promise<void> => {
+            fetch(`${apiUrl}/places`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            navigate('/logout');
 
+                            return;
+                        }
+
+                        throw new Error('Une erreur api est survenue');
+                    }
+
+                    return response.json();
+                })
+                .then((data) => {
+                    setPlaces(data.data);
+                })
+                .catch((error) => {
+                    if (error?.message) {
+                        setErrorMessage(error.message);
                         return;
                     }
 
-                    throw new Error('Une erreur api est survenue');
-                }
+                    setErrorMessage('Une erreur inconnue est survenue');
+                });
+        };
 
-                return response.json();
-            })
-            .then((data) => {
-                setPlaces(data.data);
-            })
-            .catch((error) => {
-                if (error?.message) {
-                    setErrorMessage(error.message);
-                    return;
-                }
-
-                setErrorMessage('Une erreur inconnue est survenue');
-            });
+        fetchPlaces();
 
         return () => {
             setPlaces([]);
