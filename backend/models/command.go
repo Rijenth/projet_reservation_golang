@@ -17,7 +17,7 @@ type Command struct {
 }
 
 func (command *Command) Fill(data map[string]string) {
-	if data["identificationNumber"] != "" && data["identificationNumber"] != *command.IdentificationNumber {
+	if command.IdentificationNumber != nil && data["identificationNumber"] != "" && data["identificationNumber"] != *command.IdentificationNumber {
 		*command.IdentificationNumber = data["identificationNumber"]
 	}
 
