@@ -72,7 +72,7 @@ export default function PlacesList({
     return (
         <OverflowContainer
             errorMessage={errorMessage}
-            underlineTitle="Liste des lieux"
+            underlinedTitle="Liste des lieux"
         >
             <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
                 {places.map((place) => (

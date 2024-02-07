@@ -78,7 +78,7 @@ export default function CustomerMenuList({
         <>
             <OverflowContainer
                 errorMessage={errorMessage}
-                underlineTitle={`Les menus de "${restaurantName}"`}
+                underlinedTitle={`Les menus de "${restaurantName}"`}
             >
                 <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
                     {menus.map((menu) => (

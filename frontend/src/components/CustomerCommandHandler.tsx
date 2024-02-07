@@ -4,15 +4,18 @@ import { IPostCommand } from '../interfaces/IPostCommand';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { IMenu } from '../interfaces/IMenu';
+import { roundFloatNumber } from '../helpers/roundFloatNumber';
 
 interface CustomerCommandeHandlerProps {
     restaurantId: number;
+    restaurantName: string;
     menus: IMenu[];
     resetSelectedMenus: () => void;
 }
 
 export default function CustomerCommandeHandler({
     restaurantId,
+    restaurantName,
     menus,
     resetSelectedMenus,
 }: CustomerCommandeHandlerProps): JSX.Element {
@@ -46,7 +49,7 @@ export default function CustomerCommandeHandler({
             0
         );
 
-        return parseFloat(totalAmount.toFixed(2));
+        return roundFloatNumber(totalAmount);
     };
 
     const handleCreateCommand = async (): Promise<void> => {
@@ -59,7 +62,7 @@ export default function CustomerCommandeHandler({
             return;
         }
 
-        command.data.attributes.description = `Commande pour ${authentication.user?.username}`;
+        command.data.attributes.description = `Commande ${restaurantName}`;
 
         command.data.relationships.menus = menus.map((menu) => {
             return {

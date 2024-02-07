@@ -3,6 +3,7 @@ import { RootState } from '../store/store';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import OverflowContainer from './OverflowContainer';
+import { IRestaurant } from '../interfaces/IRestaurant';
 
 interface RestaurantListProps {
     placeId: number;
@@ -14,14 +15,8 @@ export function RestaurantList({
     restaurantIdHandler,
 }: RestaurantListProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
-    interface Restaurant {
-        id: string;
-        attributes: {
-            name: string;
-        };
-    }
 
-    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const [restaurants, setRestaurants] = useState<IRestaurant[]>([]);
     const token = useSelector((state: RootState) => state.authentication.token);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
@@ -75,7 +70,7 @@ export function RestaurantList({
     return (
         <OverflowContainer
             errorMessage={errorMessage}
-            underlineTitle="Liste des restaurants"
+            underlinedTitle="Liste des restaurants"
         >
             <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
                 {restaurants.map((restaurant) => (

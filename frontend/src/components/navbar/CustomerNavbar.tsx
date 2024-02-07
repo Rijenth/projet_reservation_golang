@@ -19,7 +19,10 @@ export default function CustomerNavbar(): JSX.Element {
                     <Link to="/dashboard/customer" className="text-white">
                         Voir tout les lieux
                     </Link>
-                    <Link to="/dashboard/customer/commands" className="text-white">
+                    <Link
+                        to="/dashboard/customer/commands"
+                        className="text-white"
+                    >
                         Voir mes commandes
                     </Link>
 

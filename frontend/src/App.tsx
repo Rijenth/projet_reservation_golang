@@ -25,7 +25,10 @@ function App(): JSX.Element {
                             path="/dashboard/customer"
                             element={<CustomerDashboard />}
                         />
-                        <Route path="/dashboard/customer/commands" element={<CustomerCommands />} />
+                        <Route
+                            path="/dashboard/customer/commands"
+                            element={<CustomerCommands />}
+                        />
                     </Route>
 
                     <Route element={<OwnerRoutes />}>
