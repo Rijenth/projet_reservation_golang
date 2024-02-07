@@ -7,10 +7,13 @@ import { Res } from '../types/Types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import UserSeeder from '../components/UserSeeder';
+import LoadingButton from '../components/LoadingButton';
 
 const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
 const Login: React.FC = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [hasError, setHasError] = useState<boolean>(false);
     const [Username, setUsername]: [string, (Username: string) => void] =
         useState('');
     const [Password, setPassword]: [string, (Password: string) => void] =
@@ -39,9 +42,10 @@ const Login: React.FC = () => {
         }
     }, [authentication, navigate]);
 
-    const login: (e: React.FormEvent) => void = (e: React.FormEvent): void => {
-        e.preventDefault();
+    const login: () => void = (): void => {
         setErrorMessage('');
+
+        setIsLoading(true);
 
         fetch(`${apiUrl}/login`, {
             method: 'POST',
@@ -70,6 +74,8 @@ const Login: React.FC = () => {
                         user: data.user,
                     },
                 });
+
+                setIsLoading(false);
             })
             .catch((error) => {
                 if (error.errors) {
@@ -77,6 +83,12 @@ const Login: React.FC = () => {
                 } else if (error.message) {
                     setErrorMessage(error.message);
                 }
+
+                setHasError(true);
+
+                setTimeout(() => {
+                    setHasError(false);
+                }, 1000);
             });
     };
 
@@ -97,7 +109,7 @@ const Login: React.FC = () => {
                                 htmlFor="username"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                Nom d'utilisateur
+                                Nom d&#39;utilisateur
                             </label>
                             <div className="mt-2">
                                 <input
@@ -139,11 +151,13 @@ const Login: React.FC = () => {
                         )}
 
                         <div>
-                            <input
-                                type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                value="Se connecter"
-                            ></input>
+                            <LoadingButton
+                                buttonClass="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                title="Se connecter"
+                                isLoading={isLoading}
+                                hasError={hasError}
+                                onClickCallback={login}
+                            />
                         </div>
                     </form>
 

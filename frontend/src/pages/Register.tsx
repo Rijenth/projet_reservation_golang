@@ -115,7 +115,7 @@ const Register: React.FC = () => {
                                 htmlFor="username"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                             >
-                                Nom d'utilisateur
+                                Nom d&#39;utilisateur
                             </label>
                             <div className="mt-2">
                                 <input
@@ -145,10 +145,14 @@ const Register: React.FC = () => {
                                         e: React.ChangeEvent<HTMLSelectElement>
                                     ): void => setRole(e.target.value)}
                                 >
-                                    <option value="">Sélectionner un rôle</option>
+                                    <option value="">
+                                        Sélectionner un rôle
+                                    </option>
                                     <option value="owner">Propriétaire</option>
                                     <option value="customer">Client(e)</option>
-                                    <option value="admin">Administrateur(rice)</option>
+                                    <option value="admin">
+                                        Administrateur(rice)
+                                    </option>
                                 </select>
                             </div>
                         </div>
