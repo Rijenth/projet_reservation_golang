@@ -75,7 +75,7 @@ export default function PlacesList({
                     <button
                         onClick={() => placeIdHandler(parseInt(place.id))}
                         key={place.id}
-                        className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white transition-all"
+                        className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white hover:border-2 hover:border-white"
                     >
                         <h2 className="text-sm font-bold">
                             {place.attributes.name}

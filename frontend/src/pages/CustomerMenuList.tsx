@@ -3,19 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store/store';
 import { useSelector } from 'react-redux';
 import OverflowContainer from '../components/OverflowContainer';
+import { IMenu } from '../interfaces/IMenu';
+import SelectedMenuMenuItems from '../components/SelectedMenuMenuItems';
 
 interface CustomerDashboardMenuProps {
     restaurantId: number;
     restaurantName: string;
-    selectedMenusHandler: (menu: Menu) => void;
-}
-
-export interface Menu {
-    id: string;
-    attributes: {
-        name: string;
-        price: number;
-    };
+    selectedMenusHandler: (menu: IMenu) => void;
 }
 
 export default function CustomerMenuList({
@@ -24,9 +18,9 @@ export default function CustomerMenuList({
     selectedMenusHandler,
 }: CustomerDashboardMenuProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
-
-    const [menus, setMenus] = useState<Menu[]>([]);
     const token = useSelector((state: RootState) => state.authentication.token);
+
+    const [menus, setMenus] = useState<IMenu[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     const navigate = useNavigate();
@@ -68,9 +62,13 @@ export default function CustomerMenuList({
                     return;
                 }
 
-                setErrorMessage('Une erreur inconnue est survenue');
+                setErrorMessage(
+                    'Une erreur inconnue est survenue lors de la récupération des menus'
+                );
             });
     }, [apiUrl, token, navigate, restaurantId]);
+
+    const [selectedMenuId, setSelectedMenuId] = useState<number>(0);
 
     return (
         <>
@@ -82,10 +80,10 @@ export default function CustomerMenuList({
                     {menus.map((menu) => (
                         <div
                             onClick={() => {
-                                selectedMenusHandler(menu);
+                                setSelectedMenuId(Number(menu.id));
                             }}
                             key={menu.id}
-                            className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white transition-all"
+                            className="flex flex-col items-center justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white hover:border-2 hover:border-white"
                         >
                             <h2 className="text-sm font-bold">
                                 {menu.attributes.name}
@@ -93,6 +91,13 @@ export default function CustomerMenuList({
                             <p className="text-sm font-bold">
                                 {menu.attributes.price} €
                             </p>
+
+                            {selectedMenuId === Number(menu.id) && (
+                                <SelectedMenuMenuItems
+                                    menu={menu}
+                                    onClickCallback={selectedMenusHandler}
+                                />
+                            )}
                         </div>
                     ))}
                 </div>

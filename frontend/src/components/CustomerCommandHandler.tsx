@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Menu } from '../pages/CustomerMenuList';
 import LoadingButton from './LoadingButton';
 import { IPostCommand } from '../interfaces/IPostCommand';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { IMenu } from '../interfaces/IMenu';
 
 interface CustomerCommandeHandlerProps {
     restaurantId: number;
-    menus: Menu[];
+    menus: IMenu[];
     resetSelectedMenus: () => void;
 }
 
