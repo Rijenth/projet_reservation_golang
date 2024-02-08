@@ -15,14 +15,22 @@ export default function OwnerNavbar(): JSX.Element {
                     FoodCourt - Espace restaurateur de {username}
                 </Link>
 
-                <Link
-                    to="/dashboard/owner/create-restaurant"
-                    className="text-white"
-                >
-                    Créer un restaurant
-                </Link>
-
                 <div className="space-x-4">
+                    <Link to="/dashboard/owner" className="text-white">
+                        Accueil
+                    </Link>
+
+                    <Link to="/dashboard/owner/commands" className="text-white">
+                        Mes commandes
+                    </Link>
+
+                    <Link
+                        to="/dashboard/owner/menu-items"
+                        className="text-white"
+                    >
+                        Mes ingrédients
+                    </Link>
+
                     <LogoutButton />
                 </div>
             </div>
