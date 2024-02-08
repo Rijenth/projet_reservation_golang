@@ -11,6 +11,7 @@ import CustomerRoutes from './middlewares/CustomerRoutes';
 import OwnerRoutes from './middlewares/OwnerRoutes';
 import AdminRoutes from './middlewares/AdminRoutes';
 import CustomerCommands from './pages/CustomerCommands';
+import OwnerCreateRestaurant from './pages/OwnerCreateRestaurant';
 
 function App(): JSX.Element {
     return (
@@ -42,6 +43,10 @@ function App(): JSX.Element {
                         <Route
                             path="/dashboard/owner"
                             element={<OwnerDashboard />}
+                        />
+                        <Route
+                            path="/dashboard/owner/create-restaurant"
+                            element={<OwnerCreateRestaurant />}
                         />
                     </Route>
                 </Route>

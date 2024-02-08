@@ -148,7 +148,7 @@ const Register: React.FC = () => {
                                     <option value="">
                                         Sélectionner un rôle
                                     </option>
-                                    <option value="owner">Propriétaire</option>
+                                    <option value="owner">Restaurateur</option>
                                     <option value="customer">Client(e)</option>
                                     <option value="admin">
                                         Administrateur(rice)
