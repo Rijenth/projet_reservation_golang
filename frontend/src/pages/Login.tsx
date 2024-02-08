@@ -32,8 +32,6 @@ const Login: React.FC = () => {
         (state: RootState) => state.authentication
     );
 
-    //Camrynconsequatur
-
     useEffect(() => {
         if (authentication.authenticated && authentication.user) {
             navigate(`/dashboard/${authentication.user.role}`);
@@ -84,6 +82,7 @@ const Login: React.FC = () => {
                     setErrorMessage(error.message);
                 }
 
+                setIsLoading(false);
                 setHasError(true);
 
                 setTimeout(() => {

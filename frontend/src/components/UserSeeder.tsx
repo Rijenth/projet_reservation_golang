@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import AsyncRequestButton from './AsyncRequestButton';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 export default function UserSeeder(): JSX.Element {
-    const [seedAdminUsername, setSeedAdminUsername] = useState<string>('');
-    const [seedOwnerUsername, setSeedOwnerUsername] = useState<string>('');
-    const [seedCustomerUsername, setSeedCustomerUsername] =
-        useState<string>('');
+    const seeder = useSelector((state: RootState) => state.seeder);
+    const dispatch = useDispatch();
 
     const setSeedUsernames = (data: unknown): void => {
         if (data === null || typeof data !== 'object') {
@@ -18,9 +17,14 @@ export default function UserSeeder(): JSX.Element {
             customerUsername?: string;
         };
 
-        setSeedAdminUsername(adminUsername ?? '');
-        setSeedOwnerUsername(ownerUsername ?? '');
-        setSeedCustomerUsername(customerUsername ?? '');
+        dispatch({
+            type: 'seeder/setSeeder',
+            payload: {
+                adminUsername: adminUsername ?? '',
+                ownerUsername: ownerUsername ?? '',
+                customerUsername: customerUsername ?? '',
+            },
+        });
     };
 
     return (
@@ -40,7 +44,12 @@ export default function UserSeeder(): JSX.Element {
                 <br />
                 Vous pouvez utiliser le bouton &quot;Seed Application&quot; pour
                 ajouter des utilisateurs et vous connecter avec les informations
-                suivantes :
+                suivantes.
+            </p>
+
+            <p>
+                Ces identifiants sont valables tant que le serveur n&apos;a pas
+                été redémarré.
             </p>
 
             <table className="table-auto">
@@ -54,24 +63,24 @@ export default function UserSeeder(): JSX.Element {
                 <tbody>
                     <tr>
                         <td className="border px-4 py-2">
-                            {seedAdminUsername}
+                            {seeder.adminUsername}
                         </td>
                         <td className="border px-4 py-2">
-                            {seedOwnerUsername}
+                            {seeder.ownerUsername}
                         </td>
                         <td className="border px-4 py-2">
-                            {seedCustomerUsername}
+                            {seeder.customerUsername}
                         </td>
                     </tr>
                     <tr>
                         <td className="border px-4 py-2">
-                            {seedAdminUsername !== '' ? 'password' : ''}
+                            {seeder.adminUsername !== '' ? 'password' : ''}
                         </td>
                         <td className="border px-4 py-2">
-                            {seedOwnerUsername !== '' ? 'password' : ''}
+                            {seeder.ownerUsername !== '' ? 'password' : ''}
                         </td>
                         <td className="border px-4 py-2">
-                            {seedCustomerUsername !== '' ? 'password' : ''}
+                            {seeder.customerUsername !== '' ? 'password' : ''}
                         </td>
                     </tr>
                 </tbody>
