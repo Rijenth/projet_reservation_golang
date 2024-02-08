@@ -31,17 +31,17 @@ function App(): JSX.Element {
                         />
                     </Route>
 
-                    <Route element={<OwnerRoutes />}>
+                    <Route element={<AdminRoutes />}>
                         <Route
                             path="/dashboard/admin"
-                            element={<OwnerDashboard />}
+                            element={<AdminDashboard />}
                         />
                     </Route>
 
-                    <Route element={<AdminRoutes />}>
+                    <Route element={<OwnerRoutes />}>
                         <Route
                             path="/dashboard/owner"
-                            element={<AdminDashboard />}
+                            element={<OwnerDashboard />}
                         />
                     </Route>
                 </Route>
