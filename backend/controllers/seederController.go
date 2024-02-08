@@ -49,6 +49,13 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
 
 	response["adminUsername"] = adminUser.Username
 
+	customerUser := userFactory.Create(map[string]string{
+		"role":     "customer",
+		"password": "password",
+	})
+
+	response["customerUsername"] = customerUser.Username
+
 	for i := 0; i < 3; i++ {
 		place := placeFactory.Create(adminUser, map[string]string{
 			"name": "Place " + adminUser.FirstName,
@@ -73,19 +80,6 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
 				restaurant := restaurantFactory.Create(place, owner, map[string]string{
 					"name": "Restaurant de " + owner.FirstName + " " + strconv.Itoa(j),
 				})
-
-				restaurantCustomers := []*models.User{}
-
-				for k := 0; k < 3; k++ {
-					restaurantCustomers = append(restaurantCustomers, userFactory.Create(map[string]string{
-						"role":     "customer",
-						"password": "password",
-					}))
-
-					if response["customerUsername"] == "" {
-						response["customerUsername"] = restaurantCustomers[k].Username
-					}
-				}
 
 				var menuItems = []models.MenuItem{}
 
@@ -125,9 +119,7 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
 					selectedMenus = append(selectedMenus, &menus[randomIndex])
 				}
 
-				selectRestaurantCustomer := restaurantCustomers[rand.Intn(len(restaurantCustomers))]
-
-				commandFactory.Create(restaurant, selectedMenus, selectRestaurantCustomer, map[string]string{})
+				commandFactory.Create(restaurant, selectedMenus, customerUser, map[string]string{})
 			}(j)
 		}
 	}
