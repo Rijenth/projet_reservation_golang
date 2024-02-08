@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { PERSIST, persistReducer, persistStore } from 'redux-persist';
 import authenticationReducer from '../state/authentication';
+import seederReducer from '../state/seeder';
 
 const persistConfig = {
     key: 'root',
@@ -10,6 +11,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
     authentication: authenticationReducer,
+    seeder: seederReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
