@@ -40,7 +40,8 @@ const Login: React.FC = () => {
         }
     }, [authentication, navigate]);
 
-    const login: () => void = (): void => {
+    const login = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault();
         setErrorMessage('');
 
         setIsLoading(true);
@@ -155,7 +156,7 @@ const Login: React.FC = () => {
                                 title="Se connecter"
                                 isLoading={isLoading}
                                 hasError={hasError}
-                                onClickCallback={login}
+                                buttonType="submit"
                             />
                         </div>
                     </form>

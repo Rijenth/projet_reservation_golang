@@ -1,6 +1,7 @@
 interface LoadingButtonProps {
     title: string;
     buttonClass: string;
+    buttonType?: 'button' | 'submit';
     isLoading: boolean;
     hasError: boolean;
     onClickCallback?: () => void;
@@ -9,6 +10,7 @@ interface LoadingButtonProps {
 export default function LoadingButton({
     title,
     buttonClass,
+    buttonType = 'button',
     isLoading,
     hasError,
     onClickCallback,
@@ -34,7 +36,11 @@ export default function LoadingButton({
     }
 
     return (
-        <button className={buttonClass} type="button" onClick={onClickCallback}>
+        <button
+            className={buttonClass}
+            type={buttonType}
+            onClick={onClickCallback}
+        >
             {title}
         </button>
     );
