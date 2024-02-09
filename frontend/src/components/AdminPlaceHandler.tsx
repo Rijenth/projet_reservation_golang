@@ -3,12 +3,14 @@ import LoadingButton from "./LoadingButton";
 import { IPostPlace } from "../interfaces/IPostPlace";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { IPlace } from "../interfaces/IPlace";
 
 interface AdminPlaceHandlerProps {
     userId: number | undefined;
+    setNewPlaceHandler: (place: IPlace) => void;
 }
 
-const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId}) => {
+const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId, setNewPlaceHandler}) => {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     const [successMessage, setSuccessMessage] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string[]>([]);
@@ -27,6 +29,14 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId}) => {
                 name: '',
                 address: '',
             }
+        }
+    }
+
+    const newPlace: IPlace ={
+        id: '',
+        attributes: {
+            name: '',
+            address: '',
         }
     }
     
@@ -75,10 +85,19 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId}) => {
 
                 setErrorMessage(['Erreur api lors de la création du lieu']);
             }
+            
+            const data = await response.json();
+            newPlace.id = data.data.id;
+            newPlace.attributes.name = data.data.attributes.name;
+            newPlace.attributes.address= data.data.attributes.address;
+            setNewPlaceHandler(newPlace);
 
             setSuccessMessage(
                 'Lieu créé avec succès'
             );
+
+            setPlaceName('');
+            setPlaceAddress('');
 
         } catch (error) {
             console.error('Erreur inconnue lors de la création du lieu', error);
