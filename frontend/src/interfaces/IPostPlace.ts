@@ -1,9 +1,9 @@
 export interface IPostPlace {
-    data:{
-        type: string,
+    data: {
+        type: string;
         attributes: {
-            name: string,
-            address: string,
-        }
-    }
+            name: string;
+            address: string;
+        };
+    };
 }

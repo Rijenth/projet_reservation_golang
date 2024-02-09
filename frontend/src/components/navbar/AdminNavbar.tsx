@@ -13,14 +13,7 @@ export default function AdminNavbar(): JSX.Element {
                 <a href="/" className="text-white">
                     FoodCourt - Espace administrateur(rice) de {username}
                 </a>
-
-                <div className="space-x-4">
-                    <a href="/dashboard/admin" className="text-white">
-                        Voir tous mes lieux
-                    </a>
-
-                    <LogoutButton />
-                </div>
+                <LogoutButton />
             </div>
         </nav>
     );

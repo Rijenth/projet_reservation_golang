@@ -3,14 +3,18 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useNavigate } from 'react-router-dom';
 import OverflowContainer from './OverflowContainer';
+import { IPlace } from '../interfaces/IPlace';
 
 interface PlacesListForAdminProps {
     placeIdHandler: (id: number) => void;
+    newPlace: IPlace;
     userId: number | undefined;
 }
 
 export default function PlacesListForAdmin({
-    placeIdHandler, userId
+    placeIdHandler,
+    userId,
+    newPlace,
 }: PlacesListForAdminProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     interface Place {
@@ -65,10 +69,18 @@ export default function PlacesListForAdmin({
 
         fetchPlaces();
 
+        if (
+            newPlace &&
+            newPlace.id &&
+            !places.some((place) => place.id === newPlace.id)
+        ) {
+            setPlaces((prevPlaces) => [...prevPlaces, newPlace]);
+        }
+
         return () => {
             setPlaces([]);
         };
-    }, [apiUrl, token, navigate]);
+    }, [apiUrl, token, navigate, userId, newPlace]);
 
     return (
         <OverflowContainer
