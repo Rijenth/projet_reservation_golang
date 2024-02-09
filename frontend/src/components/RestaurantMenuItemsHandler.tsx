@@ -104,7 +104,6 @@ export default function RestaurantMenuItemsHandler({
 
     return (
         <div className="container min-w-[500px] max-w-[500px] w-1/2">
-            {/* Menu creator */}
             <div className="flex flex-col space-y-4 border border-gray-200 p-4 rounded shadow-md h-auto">
                 <h2 className="text-xl font-bold">Nouvel ingrédient</h2>
 
@@ -185,7 +184,7 @@ export default function RestaurantMenuItemsHandler({
                         ))}
 
                     <LoadingButton
-                        title="Créer un menu"
+                        title="Créer un ingrédient"
                         isLoading={isLoading}
                         hasError={hasError}
                         buttonClass="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"

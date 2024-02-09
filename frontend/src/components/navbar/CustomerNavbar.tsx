@@ -17,13 +17,13 @@ export default function CustomerNavbar(): JSX.Element {
 
                 <div className="space-x-4">
                     <Link to="/dashboard/customer" className="text-white">
-                        Voir tout les lieux
+                        Accueil
                     </Link>
                     <Link
                         to="/dashboard/customer/commands"
                         className="text-white"
                     >
-                        Voir mes commandes
+                        Mes commandes
                     </Link>
 
                     <LogoutButton />

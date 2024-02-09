@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import OwnerNavbar from '../components/navbar/OwnerNavbar';
 import CustomerNavbar from '../components/navbar/CustomerNavbar';
+import AdminNavbar from '../components/navbar/AdminNavbar';
 
 interface MainLayoutProps {
     children: React.ReactNode;
@@ -23,6 +24,12 @@ export default function MainLayout({ children }: MainLayoutProps): JSX.Element {
             {authentication.user?.role === 'owner' && (
                 <div className="py-6">
                     <OwnerNavbar />
+                </div>
+            )}
+
+            {authentication.user?.role === 'admin' && (
+                <div className="py-6">
+                    <AdminNavbar />
                 </div>
             )}
 
