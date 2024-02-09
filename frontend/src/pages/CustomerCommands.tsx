@@ -3,7 +3,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { ICommand } from '../interfaces/ICommand';
 import { useNavigate } from 'react-router-dom';
-import CustomerCommandList from '../components/CustomerCommandList';
+import OverflowContainer from '../components/OverflowContainer';
+import CommandList from '../components/CommandList';
+import getCommandStatusTranslation from '../helpers/getCommandStatusTranslation';
 
 export default function CustomerCommands(): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
@@ -76,29 +78,50 @@ export default function CustomerCommands(): JSX.Element {
 
     return (
         <div className="mt-4 flex flex-row gap-4 items-start justify-center">
-            <CustomerCommandList
-                commands={commands.filter(
-                    (command) => command.attributes.status === 'ongoing'
-                )}
-                commandStatus="ongoing"
-                errorMessage={errorMessage}
-            />
+            <OverflowContainer
+                errorMessage={errorMessage || ''}
+                underlinedTitle={`Commandes ${getCommandStatusTranslation('ongoing')} - ( ${
+                    commands.filter(
+                        (command) => command.attributes.status === 'ongoing'
+                    ).length
+                } )`}
+            >
+                <CommandList
+                    commands={commands.filter(
+                        (command) => command.attributes.status === 'ongoing'
+                    )}
+                />
+            </OverflowContainer>
 
-            <CustomerCommandList
-                commands={commands.filter(
-                    (command) => command.attributes.status === 'ready'
-                )}
-                commandStatus="ready"
-                errorMessage={errorMessage}
-            />
+            <OverflowContainer
+                errorMessage={errorMessage || ''}
+                underlinedTitle={`Commandes ${getCommandStatusTranslation('ready')} - ( ${
+                    commands.filter(
+                        (command) => command.attributes.status === 'ready'
+                    ).length
+                } )`}
+            >
+                <CommandList
+                    commands={commands.filter(
+                        (command) => command.attributes.status === 'ready'
+                    )}
+                />
+            </OverflowContainer>
 
-            <CustomerCommandList
-                commands={commands.filter(
-                    (command) => command.attributes.status === 'delivered'
-                )}
-                commandStatus="delivered"
-                errorMessage={errorMessage}
-            />
+            <OverflowContainer
+                errorMessage={errorMessage || ''}
+                underlinedTitle={`Commandes ${getCommandStatusTranslation('delivered')} - ( ${
+                    commands.filter(
+                        (command) => command.attributes.status === 'delivered'
+                    ).length
+                } )`}
+            >
+                <CommandList
+                    commands={commands.filter(
+                        (command) => command.attributes.status === 'delivered'
+                    )}
+                />
+            </OverflowContainer>
         </div>
     );
 }
