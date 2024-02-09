@@ -48,7 +48,7 @@ export default function UserSeeder(): JSX.Element {
             </p>
 
             <p>
-                Ces identifiants sont valables tant que le serveur n&apos;a pas
+                Ces identifiants ne sont valables que si le serveur n&apos;a pas
                 été redémarré.
             </p>
 

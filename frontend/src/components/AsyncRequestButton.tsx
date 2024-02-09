@@ -52,6 +52,11 @@ const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
                 setError(true);
 
                 buttonColorRef.current = buttonColorError;
+
+                setTimeout(() => {
+                    setError(false);
+                    buttonColorRef.current = buttonColor;
+                }, 2000);
             } else {
                 setSuccess(true);
 
@@ -72,6 +77,11 @@ const AsyncRequestButton: React.FC<AsyncRequestButton> = ({
             setError(true);
 
             buttonColorRef.current = buttonColorError;
+
+            setTimeout(() => {
+                setError(false);
+                buttonColorRef.current = buttonColor;
+            }, 2000);
         } finally {
             setLoading(false);
         }
