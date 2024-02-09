@@ -3,5 +3,5 @@ export interface IPlace {
     attributes: {
         name: string;
         address: string;
-    }
+    };
 }

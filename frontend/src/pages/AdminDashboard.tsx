@@ -16,10 +16,12 @@ export default function AdminDashboard(): JSX.Element {
         id: '',
         attributes: {
             name: '',
-            address: ''
-        }
-    })
-    const userId = useSelector((state: RootState) => state.authentication.user?.id)
+            address: '',
+        },
+    });
+    const userId = useSelector(
+        (state: RootState) => state.authentication.user?.id
+    );
 
     const setPlaceIdHandler = (id: number): void => {
         setPlaceId(id);
@@ -40,7 +42,11 @@ export default function AdminDashboard(): JSX.Element {
             <AdminNavbar />
 
             <div className="mt-4 flex flex-row gap-4 items-start justify-center">
-                <PlacesListForAdmin placeIdHandler={setPlaceIdHandler} userId = {userId} newPlace= {newPlace}/>
+                <PlacesListForAdmin
+                    placeIdHandler={setPlaceIdHandler}
+                    userId={userId}
+                    newPlace={newPlace}
+                />
 
                 {restaurantId === 0 && (
                     <RestaurantList
@@ -50,14 +56,16 @@ export default function AdminDashboard(): JSX.Element {
                 )}
 
                 {restaurantId !== 0 && (
-                        <AdminMenusList
-                            restaurantId={restaurantId}
-                            restaurantName={restaurantName}
-                        />
+                    <AdminMenusList
+                        restaurantId={restaurantId}
+                        restaurantName={restaurantName}
+                    />
                 )}
 
-                <AdminPlaceHandler userId ={userId} setNewPlaceHandler={setNewPlaceHandler}/>
-
+                <AdminPlaceHandler
+                    userId={userId}
+                    setNewPlaceHandler={setNewPlaceHandler}
+                />
             </div>
         </div>
     );

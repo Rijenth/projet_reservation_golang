@@ -12,7 +12,9 @@ interface PlacesListForAdminProps {
 }
 
 export default function PlacesListForAdmin({
-    placeIdHandler, userId, newPlace
+    placeIdHandler,
+    userId,
+    newPlace,
 }: PlacesListForAdminProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     interface Place {
@@ -67,8 +69,12 @@ export default function PlacesListForAdmin({
 
         fetchPlaces();
 
-        if (newPlace && newPlace.id && !places.some(place => place.id === newPlace.id)) {
-            setPlaces(prevPlaces => [...prevPlaces, newPlace]);
+        if (
+            newPlace &&
+            newPlace.id &&
+            !places.some((place) => place.id === newPlace.id)
+        ) {
+            setPlaces((prevPlaces) => [...prevPlaces, newPlace]);
         }
 
         return () => {

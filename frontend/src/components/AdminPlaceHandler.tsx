@@ -1,16 +1,19 @@
-import React, { useState } from "react";
-import LoadingButton from "./LoadingButton";
-import { IPostPlace } from "../interfaces/IPostPlace";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { IPlace } from "../interfaces/IPlace";
+import React, { useState } from 'react';
+import LoadingButton from './LoadingButton';
+import { IPostPlace } from '../interfaces/IPostPlace';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import { IPlace } from '../interfaces/IPlace';
 
 interface AdminPlaceHandlerProps {
     userId: number | undefined;
     setNewPlaceHandler: (place: IPlace) => void;
 }
 
-const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId, setNewPlaceHandler}) => {
+const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({
+    userId,
+    setNewPlaceHandler,
+}) => {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     const [successMessage, setSuccessMessage] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string[]>([]);
@@ -23,23 +26,23 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId, setNewPlac
     );
 
     const place: IPostPlace = {
-        data:{
-            type: "places",
+        data: {
+            type: 'places',
             attributes: {
                 name: '',
                 address: '',
-            }
-        }
-    }
+            },
+        },
+    };
 
-    const newPlace: IPlace ={
+    const newPlace: IPlace = {
         id: '',
         attributes: {
             name: '',
             address: '',
-        }
-    }
-    
+        },
+    };
+
     const handleCreatePlace = async () => {
         setErrorMessage([]);
         setSuccessMessage('');
@@ -47,22 +50,19 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId, setNewPlac
 
         place.data.attributes.name = placeName;
 
-        place.data.attributes.address = placeAddress 
+        place.data.attributes.address = placeAddress;
 
         try {
             setIsLoading(true);
 
-            const response = await fetch(
-                `${apiUrl}/users/${userId}/places`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${authentication.token}`,
-                    },
-                    body: JSON.stringify(place),
-                }
-            );
+            const response = await fetch(`${apiUrl}/users/${userId}/places`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${authentication.token}`,
+                },
+                body: JSON.stringify(place),
+            });
 
             if (!response.ok) {
                 const json = await response.json();
@@ -85,20 +85,17 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId, setNewPlac
 
                 setErrorMessage(['Erreur api lors de la création du lieu']);
             }
-            
+
             const data = await response.json();
             newPlace.id = data.data.id;
             newPlace.attributes.name = data.data.attributes.name;
-            newPlace.attributes.address= data.data.attributes.address;
+            newPlace.attributes.address = data.data.attributes.address;
             setNewPlaceHandler(newPlace);
 
-            setSuccessMessage(
-                'Lieu créé avec succès'
-            );
+            setSuccessMessage('Lieu créé avec succès');
 
             setPlaceName('');
             setPlaceAddress('');
-
         } catch (error) {
             console.error('Erreur inconnue lors de la création du lieu', error);
 
@@ -108,25 +105,37 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId, setNewPlac
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
-    return(
+    return (
         <div className="p-4 bg-gray-800 rounded-lg w-80">
             <h2 className="text-white text-lg font-bold underline mb-4">
                 Créer un lieu:
             </h2>
-        
+
             <div className="space-y-3 mx-4 my-6">
                 <div>
                     <label className="text-white">Nom</label>
                     <div>
-                        <input required type="text" className="w-full rounded h-8 pl-2" value={placeName} onChange={e => setPlaceName(e.target.value)}></input>
+                        <input
+                            required
+                            type="text"
+                            className="w-full rounded h-8 pl-2"
+                            value={placeName}
+                            onChange={(e) => setPlaceName(e.target.value)}
+                        ></input>
                     </div>
                 </div>
                 <div>
                     <label className="text-white">Adresse</label>
                     <div>
-                        <input required type="text" className="w-full rounded h-8 pl-2" value={placeAddress} onChange={e => setPlaceAddress(e.target.value)}></input>
+                        <input
+                            required
+                            type="text"
+                            className="w-full rounded h-8 pl-2"
+                            value={placeAddress}
+                            onChange={(e) => setPlaceAddress(e.target.value)}
+                        ></input>
                     </div>
                 </div>
             </div>
@@ -157,7 +166,7 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({userId, setNewPlac
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default AdminPlaceHandler;
