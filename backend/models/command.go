@@ -17,10 +17,6 @@ type Command struct {
 }
 
 func (command *Command) Fill(data map[string]string) {
-	if command.IdentificationNumber != nil && data["identificationNumber"] != "" && data["identificationNumber"] != *command.IdentificationNumber {
-		*command.IdentificationNumber = data["identificationNumber"]
-	}
-
 	if data["description"] != "" && data["description"] != command.Description {
 		command.Description = data["description"]
 	}
@@ -50,4 +46,12 @@ func (command *Command) SetMenus(menus []*Menu) {
 func (command *Command) SetUser(user *User) {
 	command.UserID = &user.ID
 	command.User = user
+}
+
+func (command *Command) SetIdentificationNumber(identificationNumber string) {
+	command.IdentificationNumber = &identificationNumber
+}
+
+func (command *Command) GetMenus() []*Menu {
+	return command.Menus
 }

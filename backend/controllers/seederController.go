@@ -91,35 +91,39 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
 					}))
 				}
 
-				var menus = []models.Menu{}
+				commandStatus := []string{"ongoing", "ready", "delivered"}
 
-				for l := 0; l < 3; l++ {
-					randomMenuItems := []*models.MenuItem{}
-					totalAmount := 0.0
+				for o := 0; o < 6; o++ {
+					var threeMenus = []*models.Menu{}
 
-					for m := 0; m < 3; m++ {
-						randomIndex := rand.Intn(len(menuItems))
+					for l := 0; l < 3; l++ {
+						randomMenuItems := []*models.MenuItem{}
+						totalAmount := 0.0
 
-						randomMenuItems = append(randomMenuItems, &menuItems[randomIndex])
+						for m := 0; m < 3; m++ {
+							randomIndex := rand.Intn(len(menuItems))
 
-						totalAmount += menuItems[randomIndex].Price
+							randomMenuItems = append(randomMenuItems, &menuItems[randomIndex])
+
+							totalAmount += menuItems[randomIndex].Price
+						}
+
+						newMenu := menuFactory.Create(restaurant, randomMenuItems, map[string]string{
+							"price": strconv.FormatFloat(totalAmount, 'f', 2, 64),
+						})
+
+						threeMenus = append(threeMenus, newMenu)
 					}
 
-					menus = append(menus, *menuFactory.Create(restaurant, randomMenuItems, map[string]string{
-						"price": strconv.FormatFloat(totalAmount, 'f', 2, 64),
-					}))
+					randomStatus := commandStatus[rand.Intn(len(commandStatus))]
+
+					data := map[string]string{
+						"status": randomStatus,
+					}
+
+					commandFactory.Create(restaurant, threeMenus, customerUser, data)
+
 				}
-
-				numberOfMenus := rand.Intn(3) + 1
-				selectedMenus := []*models.Menu{}
-
-				for n := 0; n < numberOfMenus; n++ {
-					randomIndex := rand.Intn(len(menus))
-
-					selectedMenus = append(selectedMenus, &menus[randomIndex])
-				}
-
-				commandFactory.Create(restaurant, selectedMenus, customerUser, map[string]string{})
 			}(j)
 		}
 	}

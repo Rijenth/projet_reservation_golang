@@ -15,8 +15,6 @@ type CommandSeeder struct {
 }
 
 func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant, menus []*models.Menu, user *models.User) *models.Command {
-	identificationNumber, _ := uuid.NewRandom()
-
 	descriptions := []string{
 		"Commande express de deux menus à emporter, comprenant des sandwichs et des boissons",
 		"Commande de trois menus déjeuner avec des salades fraîches et des boissons non gazeuses",
@@ -35,10 +33,9 @@ func (commandSeeder *CommandSeeder) factory(restaurant *models.Restaurant, menus
 	var command = models.Command{}
 
 	command.Fill(map[string]string{
-		"identificationNumber": identificationNumber.String(),
-		"description":          descriptions[descriptionIndex],
-		"status":               "delivered",
-		"amount":               strconv.FormatFloat(totalAmount, 'f', -1, 64),
+		"description": descriptions[descriptionIndex],
+		"status":      "delivered",
+		"amount":      strconv.FormatFloat(totalAmount, 'f', -1, 64),
 	})
 
 	command.SetRestaurant(restaurant)
@@ -55,6 +52,12 @@ func (commandSeeder *CommandSeeder) Create(restaurant *models.Restaurant, menus 
 
 	if len(attributes) > 0 {
 		command.Fill(attributes)
+	}
+
+	if command.Status == "ready" || command.Status == "delivered" {
+		identificationNumber := uuid.New()
+
+		command.SetIdentificationNumber(identificationNumber.String())
 	}
 
 	services.GetConnection().Create(&command)

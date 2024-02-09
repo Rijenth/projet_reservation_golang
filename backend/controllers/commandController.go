@@ -177,10 +177,10 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 		"status":      body.Data.Attributes.Status,
 	})
 
-	if command.Status == "ready" {
-		command.Fill(map[string]string{
-			"identificationNumber": identificationNumber.String(),
-		})
+	if command.Status == "ready" || command.Status == "delivered" {
+		command.SetIdentificationNumber(identificationNumber.String())
+	} else {
+		command.SetIdentificationNumber("")
 	}
 
 	result := database.Save(&command)
