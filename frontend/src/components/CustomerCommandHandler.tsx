@@ -177,7 +177,7 @@ export default function CustomerCommandeHandler({
                 </button>
             </div>
 
-            {successMessage.length !== 0 && (
+            {successMessage && (
                 <div className="mt-4 bg-green-400 rounded-lg p-4">
                     <p className="text-green-800 text-sm">{successMessage}</p>
                 </div>

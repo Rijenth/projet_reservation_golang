@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import CustomerNavbar from '../components/navbar/CustomerNavbar';
 import PlacesList from '../components/PlacesList';
 import { RestaurantList } from '../components/RestaurantList';
 import CustomerCommandeHandler from '../components/CustomerCommandHandler';
@@ -39,36 +38,32 @@ export default function CustomerDashboard(): JSX.Element {
     };
 
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <CustomerNavbar />
+        <div className="mt-4 flex flex-row gap-4 items-start justify-center">
+            <PlacesList placeIdHandler={setPlaceIdHandler} />
 
-            <div className="mt-4 flex flex-row gap-4 items-start justify-center">
-                <PlacesList placeIdHandler={setPlaceIdHandler} />
+            {restaurantId === 0 && (
+                <RestaurantList
+                    placeId={placeId}
+                    restaurantIdHandler={setRestaurantIdHandler}
+                />
+            )}
 
-                {restaurantId === 0 && (
-                    <RestaurantList
-                        placeId={placeId}
-                        restaurantIdHandler={setRestaurantIdHandler}
+            {restaurantId !== 0 && (
+                <>
+                    <CustomerMenuList
+                        restaurantId={restaurantId}
+                        restaurantName={restaurantName}
+                        selectedMenusHandler={setSelectedMenusHandler}
                     />
-                )}
 
-                {restaurantId !== 0 && (
-                    <>
-                        <CustomerMenuList
-                            restaurantId={restaurantId}
-                            restaurantName={restaurantName}
-                            selectedMenusHandler={setSelectedMenusHandler}
-                        />
-
-                        <CustomerCommandeHandler
-                            restaurantId={restaurantId}
-                            restaurantName={restaurantName}
-                            menus={selectedMenus}
-                            resetSelectedMenus={cancelSelectedMenusHandler}
-                        />
-                    </>
-                )}
-            </div>
+                    <CustomerCommandeHandler
+                        restaurantId={restaurantId}
+                        restaurantName={restaurantName}
+                        menus={selectedMenus}
+                        resetSelectedMenus={cancelSelectedMenusHandler}
+                    />
+                </>
+            )}
         </div>
     );
 }

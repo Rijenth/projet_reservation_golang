@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import CustomerNavbar from '../components/navbar/CustomerNavbar';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { ICommand } from '../interfaces/ICommand';
@@ -76,34 +75,30 @@ export default function CustomerCommands(): JSX.Element {
     }, [apiUrl, authentication, navigate]);
 
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <CustomerNavbar />
+        <div className="mt-4 flex flex-row gap-4 items-start justify-center">
+            <CustomerCommandList
+                commands={commands.filter(
+                    (command) => command.attributes.status === 'ongoing'
+                )}
+                commandStatus="ongoing"
+                errorMessage={errorMessage}
+            />
 
-            <div className="mt-4 flex flex-row gap-4 items-start justify-center">
-                <CustomerCommandList
-                    commands={commands.filter(
-                        (command) => command.attributes.status === 'ongoing'
-                    )}
-                    commandStatus="ongoing"
-                    errorMessage={errorMessage}
-                />
+            <CustomerCommandList
+                commands={commands.filter(
+                    (command) => command.attributes.status === 'ready'
+                )}
+                commandStatus="ready"
+                errorMessage={errorMessage}
+            />
 
-                <CustomerCommandList
-                    commands={commands.filter(
-                        (command) => command.attributes.status === 'ready'
-                    )}
-                    commandStatus="ready"
-                    errorMessage={errorMessage}
-                />
-
-                <CustomerCommandList
-                    commands={commands.filter(
-                        (command) => command.attributes.status === 'delivered'
-                    )}
-                    commandStatus="delivered"
-                    errorMessage={errorMessage}
-                />
-            </div>
+            <CustomerCommandList
+                commands={commands.filter(
+                    (command) => command.attributes.status === 'delivered'
+                )}
+                commandStatus="delivered"
+                errorMessage={errorMessage}
+            />
         </div>
     );
 }

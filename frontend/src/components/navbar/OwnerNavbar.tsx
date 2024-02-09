@@ -3,7 +3,7 @@ import { RootState } from '../../store/store';
 import LogoutButton from '../LogoutButton';
 import { Link } from 'react-router-dom';
 
-export default function CustomerNavbar(): JSX.Element {
+export default function OwnerNavbar(): JSX.Element {
     const username = useSelector(
         (state: RootState) => state.authentication.user?.username
     );
@@ -12,18 +12,23 @@ export default function CustomerNavbar(): JSX.Element {
         <nav className="bg-gray-800 p-4 rounded flex">
             <div className="container mx-auto flex items-center justify-between">
                 <Link to="/" className="text-white">
-                    FoodCourt - Espace client de {username}
+                    FoodCourt - Espace restaurateur de {username}
                 </Link>
 
                 <div className="space-x-4">
-                    <Link to="/dashboard/customer" className="text-white">
+                    <Link to="/dashboard/owner" className="text-white">
                         Accueil
                     </Link>
+
+                    <Link to="/dashboard/owner/commands" className="text-white">
+                        Mes commandes
+                    </Link>
+
                     <Link
-                        to="/dashboard/customer/commands"
+                        to="/dashboard/owner/menu-items"
                         className="text-white"
                     >
-                        Mes commandes
+                        Mes ingrédients
                     </Link>
 
                     <LogoutButton />

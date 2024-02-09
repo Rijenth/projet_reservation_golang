@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import AdminNavbar from '../components/navbar/AdminNavbar';
 import PlacesListForAdmin from '../components/PlacesListForAdmin';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
@@ -38,35 +37,31 @@ export default function AdminDashboard(): JSX.Element {
     };
 
     return (
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <AdminNavbar />
+        <div className="mt-4 flex flex-row gap-4 items-start justify-center">
+            <PlacesListForAdmin
+                placeIdHandler={setPlaceIdHandler}
+                userId={userId}
+                newPlace={newPlace}
+            />
 
-            <div className="mt-4 flex flex-row gap-4 items-start justify-center">
-                <PlacesListForAdmin
-                    placeIdHandler={setPlaceIdHandler}
-                    userId={userId}
-                    newPlace={newPlace}
+            {restaurantId === 0 && (
+                <RestaurantList
+                    placeId={placeId}
+                    restaurantIdHandler={setRestaurantIdHandler}
                 />
+            )}
 
-                {restaurantId === 0 && (
-                    <RestaurantList
-                        placeId={placeId}
-                        restaurantIdHandler={setRestaurantIdHandler}
-                    />
-                )}
-
-                {restaurantId !== 0 && (
-                    <AdminMenusList
-                        restaurantId={restaurantId}
-                        restaurantName={restaurantName}
-                    />
-                )}
-
-                <AdminPlaceHandler
-                    userId={userId}
-                    setNewPlaceHandler={setNewPlaceHandler}
+            {restaurantId !== 0 && (
+                <AdminMenusList
+                    restaurantId={restaurantId}
+                    restaurantName={restaurantName}
                 />
-            </div>
+            )}
+
+            <AdminPlaceHandler
+                userId={userId}
+                setNewPlaceHandler={setNewPlaceHandler}
+            />
         </div>
     );
 }
