@@ -95,7 +95,7 @@ export default function CustomerCommands(): JSX.Element {
 
             <OverflowContainer
                 errorMessage={errorMessage || ''}
-                underlinedTitle={`Commandes ${getCommandStatusTranslation('ready')} - ( ${
+                underlinedTitle={`Commandes ${getCommandStatusTranslation('ready') + 'es'} - ( ${
                     commands.filter(
                         (command) => command.attributes.status === 'ready'
                     ).length
@@ -110,7 +110,7 @@ export default function CustomerCommands(): JSX.Element {
 
             <OverflowContainer
                 errorMessage={errorMessage || ''}
-                underlinedTitle={`Commandes ${getCommandStatusTranslation('delivered')} - ( ${
+                underlinedTitle={`Commandes ${getCommandStatusTranslation('delivered') + 's'} - ( ${
                     commands.filter(
                         (command) => command.attributes.status === 'delivered'
                     ).length

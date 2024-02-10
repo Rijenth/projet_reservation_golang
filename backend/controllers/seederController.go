@@ -16,14 +16,14 @@ type SeederController struct {
 func (controller *SeederController) SeedApplication(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	response := seedAdmin(w, r)
+	response := seedWithCompleteScenario(w, r)
 
 	w.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(w).Encode(response)
 }
 
-func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
+func seedWithCompleteScenario(w http.ResponseWriter, r *http.Request) *map[string]string {
 	w.Header().Set("Content-Type", "application/json")
 
 	var userFactory seeders.UserSeeder
@@ -93,7 +93,7 @@ func seedAdmin(w http.ResponseWriter, r *http.Request) *map[string]string {
 
 				commandStatus := []string{"ongoing", "ready", "delivered"}
 
-				for o := 0; o < 6; o++ {
+				for o := 0; o < 12; o++ {
 					var threeMenus = []*models.Menu{}
 
 					for l := 0; l < 3; l++ {

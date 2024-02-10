@@ -178,9 +178,11 @@ func (controller *CommandController) Update(w http.ResponseWriter, r *http.Reque
 	})
 
 	if command.Status == "ready" || command.Status == "delivered" {
-		command.SetIdentificationNumber(identificationNumber.String())
+		toString := identificationNumber.String()
+
+		command.SetIdentificationNumber(&toString)
 	} else {
-		command.SetIdentificationNumber("")
+		command.SetIdentificationNumber(nil)
 	}
 
 	result := database.Save(&command)

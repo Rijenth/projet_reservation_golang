@@ -43,7 +43,7 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({
         },
     };
 
-    const handleCreatePlace = async () => {
+    const handleCreatePlace = async (): Promise<void> => {
         setErrorMessage([]);
         setSuccessMessage('');
         setHasError(false);

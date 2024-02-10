@@ -20,6 +20,7 @@ export default function OwnerCommandList({}: OwnerCommandListProps): JSX.Element
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     useEffect(() => {
+        console.log('TEST');
         const fetchCommands = async (restaurantId: number): Promise<void> => {
             setErrorMessage('');
             setOngoingCommands([]);
@@ -104,13 +105,13 @@ export default function OwnerCommandList({}: OwnerCommandListProps): JSX.Element
             </OverflowContainer>
             <OverflowContainer
                 errorMessage={errorMessage || ''}
-                underlinedTitle={`Commandes ${getCommandStatusTranslation('ready')} - ( ${readyCommands.length} )`}
+                underlinedTitle={`Commandes ${getCommandStatusTranslation('ready') + 'es'} - ( ${readyCommands.length} )`}
             >
                 <CommandList commands={readyCommands} />
             </OverflowContainer>
             <OverflowContainer
                 errorMessage={errorMessage || ''}
-                underlinedTitle={`Commandes ${getCommandStatusTranslation('delivered')} - ( ${deliveredCommands.length} )`}
+                underlinedTitle={`Commandes ${getCommandStatusTranslation('delivered') + 's'} - ( ${deliveredCommands.length} )`}
             >
                 <CommandList commands={deliveredCommands} />
             </OverflowContainer>

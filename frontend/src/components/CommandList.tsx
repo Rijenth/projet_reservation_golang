@@ -17,11 +17,8 @@ export default function CommandList({
             {commands.map((command) => (
                 <div
                     onClick={() => {
-                        setSelectedCommandId(
-                            selectedCommandId !== Number(command.id)
-                                ? Number(command.id)
-                                : 0
-                        );
+                        if (selectedCommandId !== Number(command.id))
+                            setSelectedCommandId(Number(command.id));
                     }}
                     key={command.id}
                     className="flex flex-col items-left justify-center bg-white p-4 rounded-lg shadow-md w-96 hover:bg-gray-800 hover:text-white hover:border-2 hover:border-white"
@@ -36,18 +33,32 @@ export default function CommandList({
 
                     {command.attributes.identificationNumber && (
                         <div
-                            className={`${command.attributes.status === 'ready' ? 'bg-green-300' : 'bg-gray-300'} w-full text-center mt-2 text-black p-2 rounded-lg`}
+                            className={`${command.attributes.status === 'ready' ? 'bg-green-500' : 'bg-gray-500'} w-full text-white text-center mt-2 text-black p-2 rounded-lg`}
                         >
-                            <span className="text-sm font-bold">
+                            <span className="text-sm font-bold underline">
                                 {command.attributes.status === 'ready'
-                                    ? `Code de retrait : ${command.attributes.identificationNumber}`
+                                    ? `Code de retrait : `
                                     : 'La commande a été retirée'}
                             </span>
+                            <p className="text-xs">
+                                {command.attributes.status === 'ready'
+                                    ? `${command.attributes.identificationNumber}`
+                                    : ''}
+                            </p>
                         </div>
                     )}
 
                     {selectedCommandId === Number(command.id) && (
-                        <SelectedCommandInfos command={command} />
+                        <>
+                            <SelectedCommandInfos command={command} />
+
+                            <button
+                                className="bg-gray-500 hover:bg-gray-600 px-4 py-2 text-white rounded mt-2"
+                                onClick={() => setSelectedCommandId(0)}
+                            >
+                                Fermer
+                            </button>
+                        </>
                     )}
                 </div>
             ))}

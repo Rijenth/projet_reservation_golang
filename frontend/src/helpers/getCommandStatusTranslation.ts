@@ -3,11 +3,11 @@ import { CommandStatus } from '../interfaces/ICommand';
 const getCommandStatusTranslation = (status: CommandStatus): string => {
     switch (status) {
         case 'delivered':
-            return 'livrées';
+            return 'livrée';
         case 'ongoing':
             return 'en cours';
         case 'ready':
-            return 'prêtes';
+            return 'prêt';
         default:
             return 'Inconnu';
     }

@@ -48,8 +48,8 @@ func (command *Command) SetUser(user *User) {
 	command.User = user
 }
 
-func (command *Command) SetIdentificationNumber(identificationNumber string) {
-	command.IdentificationNumber = &identificationNumber
+func (command *Command) SetIdentificationNumber(identificationNumber *string) {
+	command.IdentificationNumber = identificationNumber
 }
 
 func (command *Command) GetMenus() []*Menu {

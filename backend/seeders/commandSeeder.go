@@ -55,9 +55,11 @@ func (commandSeeder *CommandSeeder) Create(restaurant *models.Restaurant, menus 
 	}
 
 	if command.Status == "ready" || command.Status == "delivered" {
-		identificationNumber := uuid.New()
+		identificationNumber, _ := uuid.NewRandom()
 
-		command.SetIdentificationNumber(identificationNumber.String())
+		toString := identificationNumber.String()
+
+		command.SetIdentificationNumber(&toString)
 	}
 
 	services.GetConnection().Create(&command)

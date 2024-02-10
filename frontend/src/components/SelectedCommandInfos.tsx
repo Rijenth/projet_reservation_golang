@@ -6,6 +6,7 @@ import { RootState } from '../store/store';
 import { useNavigate } from 'react-router-dom';
 import { IMenu } from '../interfaces/IMenu';
 import { roundFloatNumber } from '../helpers/roundFloatNumber';
+import UpdateCommandModal from './UpdateCommandModal';
 
 interface SelectedCommandInfosProps {
     command: ICommand;
@@ -116,6 +117,13 @@ export default function SelectedCommandInfos({
         fetchCommandMenus();
     }, [command, apiUrl, token, navigate]);
 
+    const [updateCommandModalIsOpen, setUpdateCommandModalIsOpen] =
+        useState<boolean>(false);
+
+    const openUpdateCommand = (): void => {
+        setUpdateCommandModalIsOpen(!updateCommandModalIsOpen);
+    };
+
     if (errorMessage) {
         return (
             <div className="text-red-800 text-center border-2 border-red-500 p-4 rounded-lg bg-red-400">
@@ -157,6 +165,22 @@ export default function SelectedCommandInfos({
             </p>
 
             <p className="text-black text-sm">{restaurant?.attributes.name}</p>
+
+            {updateCommandModalIsOpen && (
+                <UpdateCommandModal
+                    command={command}
+                    handleCloseModal={openUpdateCommand}
+                />
+            )}
+
+            {['ongoing', 'ready'].includes(command.attributes.status) && (
+                <button
+                    className="bg-green-500 hover:bg-green-600 px-4 py-2 text-white rounded mt-2"
+                    onClick={openUpdateCommand}
+                >
+                    Mettre à jour la commande
+                </button>
+            )}
         </div>
     );
 }
