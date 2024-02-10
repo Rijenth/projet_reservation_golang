@@ -175,6 +175,7 @@ export default function RestaurantMenuHandler({
 
             setSuccessMessage('Menu créé avec succès');
             setMenuName('');
+            setSelectedMenuItems([]);
         } catch (error) {
             console.error('Erreur inconnue lors de la création du menu', error);
 
