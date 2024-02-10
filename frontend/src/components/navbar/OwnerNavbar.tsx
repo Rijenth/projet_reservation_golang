@@ -20,6 +20,10 @@ export default function OwnerNavbar(): JSX.Element {
                         Accueil
                     </Link>
 
+                    <Link to="/dashboard/owner/menus" className="text-white">
+                        Mes menus
+                    </Link>
+
                     <Link to="/dashboard/owner/commands" className="text-white">
                         Mes commandes
                     </Link>
