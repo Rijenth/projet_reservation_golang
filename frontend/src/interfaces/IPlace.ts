@@ -4,4 +4,12 @@ export interface IPlace {
         name: string;
         address: string;
     };
+    relationships: {
+        restaurants: {
+            data: {
+                id: string;
+                type: string;
+            }[];
+        };
+    };
 }

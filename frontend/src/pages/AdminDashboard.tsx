@@ -1,67 +1,95 @@
-import { useState } from 'react';
-import PlacesListForAdmin from '../components/PlacesListForAdmin';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import AdminPlaceHandler from '../components/AdminPlaceHandler';
-import AdminMenusList from '../components/AdminMenusList';
-import { RestaurantList } from '../components/RestaurantList';
+import { useEffect, useState } from 'react';
 import { IPlace } from '../interfaces/IPlace';
 
 export default function AdminDashboard(): JSX.Element {
-    const [placeId, setPlaceId] = useState<number>(0);
-    const [restaurantId, setRestaurantId] = useState<number>(0);
-    const [restaurantName, setRestaurantName] = useState<string>('');
-    const [newPlace, setNewPlace] = useState<IPlace>({
-        id: '',
-        attributes: {
-            name: '',
-            address: '',
-        },
-    });
-    const userId = useSelector(
-        (state: RootState) => state.authentication.user?.id
+    const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
+    const authentication = useSelector(
+        (state: RootState) => state.authentication
     );
 
-    const setPlaceIdHandler = (id: number): void => {
-        setPlaceId(id);
-        setRestaurantId(0);
-    };
+    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [places, setPlaces] = useState<IPlace[]>([]);
+    const [restaurantCount, setRestaurantCount] = useState<number>(0);
 
-    const setRestaurantIdHandler = (id: number, name: string): void => {
-        setRestaurantId(id);
-        setRestaurantName(name);
-    };
+    useEffect(() => {
+        const fetchPlaces = async (): Promise<void> => {
+            const response = await fetch(
+                `${apiUrl}/users/${authentication.user?.id}/places`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${authentication.token}`,
+                    },
+                }
+            );
 
-    const setNewPlaceHandler = (newPlace: IPlace): void => {
-        setNewPlace(newPlace);
-    };
+            if (!response.ok) {
+                setErrorMessage(
+                    `Une erreur s'est produite: ${response.status} - ${response.statusText}`
+                );
+
+                return;
+            }
+
+            const json = await response.json();
+
+            setPlaces(json.data);
+
+            const restaurantCounts = json.data.reduce(
+                (acc: number, place: IPlace) => {
+                    return acc + place.relationships.restaurants.data.length;
+                },
+                0
+            );
+
+            setRestaurantCount(restaurantCounts);
+        };
+
+        fetchPlaces();
+    }, [apiUrl, authentication]);
 
     return (
-        <div className="mt-4 flex flex-row gap-4 items-start justify-center">
-            <PlacesListForAdmin
-                placeIdHandler={setPlaceIdHandler}
-                userId={userId}
-                newPlace={newPlace}
-            />
-
-            {restaurantId === 0 && (
-                <RestaurantList
-                    placeId={placeId}
-                    restaurantIdHandler={setRestaurantIdHandler}
-                />
+        <>
+            {errorMessage && (
+                <div
+                    className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                    role="alert"
+                >
+                    <strong className="font-bold">Erreur !</strong>
+                    <span className="block sm:inline">{errorMessage}</span>
+                </div>
             )}
 
-            {restaurantId !== 0 && (
-                <AdminMenusList
-                    restaurantId={restaurantId}
-                    restaurantName={restaurantName}
-                />
-            )}
+            <h1 className="text-2xl font-bold my-8 ml-8 underline">
+                Bienvenue sur votre espace administrateur
+            </h1>
 
-            <AdminPlaceHandler
-                userId={userId}
-                setNewPlaceHandler={setNewPlaceHandler}
-            />
-        </div>
+            <div>
+                <div className="container min-w-[500px] max-w-[500px] w-1/2">
+                    <div className="flex flex-col space-y-4 border border-gray-200 p-4 rounded shadow-md">
+                        <h2 className="text-xl font-bold">Informations</h2>
+
+                        <p>
+                            Nom / Prénom: {authentication.user?.firstName}{' '}
+                            {authentication.user?.lastName}
+                        </p>
+
+                        <p>
+                            Votre nom d&#39;utilisateur:{' '}
+                            {authentication.user?.username}
+                        </p>
+
+                        <p>Vous avez {places.length} lieu(x) enregistré(s)</p>
+                        <p>
+                            Vous avez {restaurantCount} restaurant(s)
+                            enregistré(s) dans vos lieux.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 }
