@@ -218,39 +218,63 @@ export default function RestaurantMenuHandler({
                     required
                 />
                 <label htmlFor="">Entrée</label>
-                {starterMenuItems.length > 0 && (
+                {starterMenuItems.length > 0 ? (
                     <ChoicePicker
                         menuItems={starterMenuItems}
                         selectedMenuItems={selectedMenuItems}
                         setSelectedMenuItems={setSelectedMenuItems}
                     ></ChoicePicker>
+                ) : (
+                    <>
+                        <select className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <option value="">Sélectionner</option> 
+                        </select>
+                    </>
                 )}
 
                 <label htmlFor="">Plat</label>
-                {mainMenuItems.length > 0 && (
+                {mainMenuItems.length > 0 ? (
                     <ChoicePicker
                         menuItems={mainMenuItems}
                         selectedMenuItems={selectedMenuItems}
                         setSelectedMenuItems={setSelectedMenuItems}
                     ></ChoicePicker>
+                ) : (
+                    <>
+                        <select className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <option value="">Sélectionner</option> 
+                        </select>
+                    </>
                 )}
 
                 <label htmlFor="">Dessert</label>
-                {dessertMenuItems.length > 0 && (
+                {dessertMenuItems.length > 0 ? (
                     <ChoicePicker
                         menuItems={dessertMenuItems}
                         selectedMenuItems={selectedMenuItems}
                         setSelectedMenuItems={setSelectedMenuItems}
                     ></ChoicePicker>
+                ) : (
+                    <>
+                        <select className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <option value="">Sélectionner</option> 
+                        </select>
+                    </>
                 )}
 
                 <label htmlFor="">Boisson</label>
-                {drinkMenuItems.length > 0 && (
+                {drinkMenuItems.length > 0 ? (
                     <ChoicePicker
                         menuItems={drinkMenuItems}
                         selectedMenuItems={selectedMenuItems}
                         setSelectedMenuItems={setSelectedMenuItems}
                     ></ChoicePicker>
+                ) : (
+                    <>
+                        <select className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <option value="">Sélectionner</option> 
+                        </select>
+                    </>
                 )}
 
                 <LoadingButton
