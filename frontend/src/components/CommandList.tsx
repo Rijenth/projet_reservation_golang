@@ -17,8 +17,12 @@ export default function CommandList({
     return (
         <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
             {commands
-                .sort()
-                .reverse()
+                .sort((a, b) => {
+                    return (
+                        new Date(b.attributes.timestamps.UpdatedAt).getTime() -
+                        new Date(a.attributes.timestamps.UpdatedAt).getTime()
+                    );
+                })
                 .map((command) => (
                     <div
                         onClick={() => {
