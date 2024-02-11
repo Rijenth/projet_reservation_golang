@@ -46,7 +46,7 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({
                 data: [],
             },
         },
-    };    
+    };
 
     const handleCreatePlace = async (): Promise<void> => {
         setErrorMessage([]);
