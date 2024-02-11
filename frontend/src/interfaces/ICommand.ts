@@ -7,6 +7,11 @@ export interface ICommand {
         description: string;
         status: CommandStatus;
         amount: number;
+        timestamps: {
+            CreatedAt: string;
+            UpdatedAt: string;
+            DeletedAt: string | null;
+        };
     };
     relationships: {
         restaurant: {

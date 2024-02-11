@@ -14,7 +14,7 @@ export default function OverflowContainer({
     return (
         <div
             className="flex flex-col items-center justify-center border-2 border-gray-400 p-8 rounded-lg shadow-md w-1/2 min-w-[460px] max-w-[460px]  bg-gray-800"
-            style={{ height: '80vh' }}
+            style={{ height: '70vh' }}
         >
             {errorMessage && (
                 <div className="w-full text-center bg-red-400 rounded-lg p-4">

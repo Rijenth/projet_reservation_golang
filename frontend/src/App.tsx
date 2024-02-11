@@ -14,6 +14,8 @@ import CustomerCommands from './pages/CustomerCommands';
 import OwnerCreateRestaurant from './pages/OwnerCreateRestaurant';
 import OwnerCommandList from './pages/OwnerCommandList';
 import OwnerMenusList from './pages/OwnerMenusList';
+import AdminPlaceList from './pages/AdminPlaceList';
+import CustomerPlaceList from './pages/CustomerPlaceList';
 
 function App(): JSX.Element {
     return (
@@ -28,6 +30,11 @@ function App(): JSX.Element {
                             path="/dashboard/customer"
                             element={<CustomerDashboard />}
                         />
+
+                        <Route
+                            path="/dashboard/customer/places"
+                            element={<CustomerPlaceList />}
+                        />
                         <Route
                             path="/dashboard/customer/commands"
                             element={<CustomerCommands />}
@@ -38,6 +45,11 @@ function App(): JSX.Element {
                         <Route
                             path="/dashboard/admin"
                             element={<AdminDashboard />}
+                        />
+
+                        <Route
+                            path="/dashboard/admin/places"
+                            element={<AdminPlaceList />}
                         />
                     </Route>
 

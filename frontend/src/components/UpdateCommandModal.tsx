@@ -8,11 +8,13 @@ import { RootState } from '../store/store';
 interface UpdateCommandModalProps {
     command: ICommand;
     handleCloseModal: () => void;
+    updateParentCallback?: () => void;
 }
 
 export default function UpdateCommandModal({
     command,
     handleCloseModal,
+    updateParentCallback,
 }: UpdateCommandModalProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     const token = useSelector((state: RootState) => state.authentication.token);
@@ -69,15 +71,21 @@ export default function UpdateCommandModal({
             }
 
             const data = await response.json();
+
             setErrorMessages(
                 data.errors.map((error: { detail: string }) => error.detail)
             );
+
             setIsLoading(false);
+
             return;
         }
 
         setIsLoading(false);
+
         setSuccessMessage('La commande a été mise à jour avec succès');
+
+        if (updateParentCallback) updateParentCallback();
 
         setTimeout(() => {
             handleCloseModal();
@@ -110,11 +118,10 @@ export default function UpdateCommandModal({
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>): void =>
                         setStatus(e.target.value as CommandStatus)
                     }
+                    defaultValue={command.attributes.status}
                 >
-                    {/* default */}
                     <option
                         value={command.attributes.status}
-                        selected
                         className="text-sm"
                         disabled
                     >

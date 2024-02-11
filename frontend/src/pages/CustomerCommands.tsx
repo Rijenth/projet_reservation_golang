@@ -59,8 +59,6 @@ export default function CustomerCommands(): JSX.Element {
                 })
                 .then((data) => {
                     setCommands(data.data);
-
-                    console.log(data.data);
                 })
                 .catch((error) => {
                     if (error?.message) {

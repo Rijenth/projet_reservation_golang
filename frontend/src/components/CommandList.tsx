@@ -5,18 +5,24 @@ import SelectedCommandInfos from './SelectedCommandInfos';
 
 interface CommandListProps {
     commands: ICommand[];
+    updateParentCallback?: () => void;
 }
 
 export default function CommandList({
     commands,
+    updateParentCallback,
 }: CommandListProps): JSX.Element {
     const [selectedCommandId, setSelectedCommandId] = useState<number>(0);
 
     return (
         <div className="flex flex-col space-y-4 overflow-y-auto h-full p-4 rounded-lg no-scrollbar">
             {commands
-                .sort()
-                .reverse()
+                .sort((a, b) => {
+                    return (
+                        new Date(b.attributes.timestamps.UpdatedAt).getTime() -
+                        new Date(a.attributes.timestamps.UpdatedAt).getTime()
+                    );
+                })
                 .map((command) => (
                     <div
                         onClick={() => {
@@ -53,7 +59,10 @@ export default function CommandList({
 
                         {selectedCommandId === Number(command.id) && (
                             <>
-                                <SelectedCommandInfos command={command} />
+                                <SelectedCommandInfos
+                                    command={command}
+                                    updateParentCallback={updateParentCallback}
+                                />
 
                                 <button
                                     className="bg-gray-500 hover:bg-gray-600 px-4 py-2 text-white rounded mt-2"

@@ -18,9 +18,13 @@ export default function OwnerCommandList({}: OwnerCommandListProps): JSX.Element
     const [readyCommands, setReadyCommands] = useState<ICommand[]>([]);
     const [deliveredCommands, setDeliveredCommands] = useState<ICommand[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [updateCommandList, setUpdateCommandList] = useState<boolean>(false);
+
+    const updateParentCallback = (): void => {
+        setUpdateCommandList(!updateCommandList);
+    };
 
     useEffect(() => {
-        console.log('TEST');
         const fetchCommands = async (restaurantId: number): Promise<void> => {
             setErrorMessage('');
             setOngoingCommands([]);
@@ -92,7 +96,7 @@ export default function OwnerCommandList({}: OwnerCommandListProps): JSX.Element
         };
 
         fetchUserRestaurants();
-    }, [apiUrl, authentication]);
+    }, [apiUrl, authentication, updateCommandList]);
 
     return (
         <div className="mt-4 flex flex-row gap-4 items-start justify-center">
@@ -101,19 +105,28 @@ export default function OwnerCommandList({}: OwnerCommandListProps): JSX.Element
                 errorMessage={errorMessage || ''}
                 underlinedTitle={`Commandes ${getCommandStatusTranslation('ongoing')} - ( ${ongoingCommands.length} )`}
             >
-                <CommandList commands={ongoingCommands} />
+                <CommandList
+                    commands={ongoingCommands}
+                    updateParentCallback={() => updateParentCallback()}
+                />
             </OverflowContainer>
             <OverflowContainer
                 errorMessage={errorMessage || ''}
                 underlinedTitle={`Commandes ${getCommandStatusTranslation('ready') + 'es'} - ( ${readyCommands.length} )`}
             >
-                <CommandList commands={readyCommands} />
+                <CommandList
+                    commands={readyCommands}
+                    updateParentCallback={() => updateParentCallback()}
+                />
             </OverflowContainer>
             <OverflowContainer
                 errorMessage={errorMessage || ''}
                 underlinedTitle={`Commandes ${getCommandStatusTranslation('delivered') + 's'} - ( ${deliveredCommands.length} )`}
             >
-                <CommandList commands={deliveredCommands} />
+                <CommandList
+                    commands={deliveredCommands}
+                    updateParentCallback={() => updateParentCallback()}
+                />
             </OverflowContainer>
         </div>
     );

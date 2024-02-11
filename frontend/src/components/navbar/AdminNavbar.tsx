@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import LogoutButton from '../LogoutButton';
+import { Link } from 'react-router-dom';
 
 export default function AdminNavbar(): JSX.Element {
     const username = useSelector(
@@ -13,7 +14,18 @@ export default function AdminNavbar(): JSX.Element {
                 <a href="/" className="text-white">
                     FoodCourt - Espace administrateur(rice) de {username}
                 </a>
-                <LogoutButton />
+
+                <div className="space-x-4">
+                    <Link to="/dashboard/admin" className="text-white">
+                        Accueil
+                    </Link>
+
+                    <Link to="/dashboard/admin/places" className="text-white">
+                        Gérer les lieux
+                    </Link>
+
+                    <LogoutButton />
+                </div>
             </div>
         </nav>
     );

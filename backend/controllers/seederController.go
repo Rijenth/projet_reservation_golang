@@ -93,7 +93,7 @@ func seedWithCompleteScenario(w http.ResponseWriter, r *http.Request) *map[strin
 
 				commandStatus := []string{"ongoing", "ready", "delivered"}
 
-				for o := 0; o < 12; o++ {
+				for o := 0; o < 6; o++ {
 					var threeMenus = []*models.Menu{}
 
 					for l := 0; l < 3; l++ {
