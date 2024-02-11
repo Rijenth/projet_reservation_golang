@@ -139,7 +139,6 @@ export default function OwnerDashboard(): JSX.Element {
             if (json.data.length === 0) {
                 navigate('/dashboard/owner/create-restaurant');
             }
-
             setOwnerRestaurants(json.data);
 
             fetchRestaurantPlaces(json.data[0].relationships.place.data.id);
@@ -162,7 +161,7 @@ export default function OwnerDashboard(): JSX.Element {
                 </div>
             )}
 
-            <h1 className="text-2xl font-bold my-8 underline">
+            <h1 className="text-2xl font-bold my-8 ml-8 underline">
                 Bienvenue sur votre espace restaurateur
             </h1>
 
@@ -190,7 +189,7 @@ export default function OwnerDashboard(): JSX.Element {
                         </div>
                     </div>
                     <div className="container min-w-[500px] max-w-[500px] mt-4 w-1/2">
-                        <div className="flex flex-col space-y-4">
+                        <div className="flex flex-col">
                             {ownerRestaurants.map((restaurant) => (
                                 <div
                                     key={restaurant.id}
@@ -204,19 +203,6 @@ export default function OwnerDashboard(): JSX.Element {
                                         {restaurantPlace?.attributes.name} -{' '}
                                         {restaurantPlace?.attributes.address}
                                     </p>
-
-                                    <p className="text-lg font-bold mt-4">
-                                        Vos Menus
-                                    </p>
-
-                                    <ul>
-                                        {restaurantMenus.map((menu) => (
-                                            <li key={menu.id}>
-                                                {menu.attributes.name} -{' '}
-                                                {menu.attributes.price}€
-                                            </li>
-                                        ))}
-                                    </ul>
                                 </div>
                             ))}
                         </div>
@@ -264,17 +250,23 @@ export default function OwnerDashboard(): JSX.Element {
                 </div>
 
                 <div className="flex flex-col justify-between">
-                    {showCreateMenu && (
-                        <RestaurantMenuHandler
-                            showComponentCallback={handleShowComponent}
-                        />
-                    )}
-
-                    {showCreateMenuItem && (
-                        <RestaurantMenuItemsHandler
-                            restaurantId={ownerRestaurants[0].id}
-                            showComponentCallback={handleShowComponent}
-                        />
+                    {ownerRestaurants.length > 0 && (
+                        <>
+                            {showCreateMenu && (
+                                <RestaurantMenuHandler
+                                    restaurantMenus={restaurantMenus}
+                                    setRestaurantMenus={setRestaurantMenus}
+                                    restaurantId={ownerRestaurants[0].id}
+                                    showComponentCallback={handleShowComponent}
+                                />
+                            )}
+                            {showCreateMenuItem && (
+                                <RestaurantMenuItemsHandler
+                                    restaurantId={ownerRestaurants[0].id}
+                                    showComponentCallback={handleShowComponent}
+                                />
+                            )}
+                        </>
                     )}
                 </div>
 

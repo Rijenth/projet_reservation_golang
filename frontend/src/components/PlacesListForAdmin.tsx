@@ -80,7 +80,7 @@ export default function PlacesListForAdmin({
         return () => {
             setPlaces([]);
         };
-    }, [apiUrl, token, navigate, userId, newPlace]);
+    }, [apiUrl, token, userId, newPlace, navigate, places]);
 
     return (
         <OverflowContainer

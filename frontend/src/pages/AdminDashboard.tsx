@@ -32,8 +32,8 @@ export default function AdminDashboard(): JSX.Element {
         setRestaurantName(name);
     };
 
-    const setNewPlaceHandler = (newPlace: IPlace): void => {
-        setNewPlace(newPlace);
+    const setNewPlaceHandler = (brandNewPlace: IPlace): void => {
+        setNewPlace(brandNewPlace);
     };
 
     return (
