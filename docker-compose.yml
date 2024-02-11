@@ -14,8 +14,6 @@ services:
     ports:
       - "3306:3306"
     restart: always
-    #volumes:
-    #  - ./database:/docker-entrypoint-initdb.d/:ro
 
   react:
     build: 
