@@ -17,14 +17,8 @@ export default function PlacesListForAdmin({
     newPlace,
 }: PlacesListForAdminProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
-    interface Place {
-        id: string;
-        attributes: {
-            name: string;
-            address: string;
-        };
-    }
-    const [places, setPlaces] = useState<Place[]>([]);
+
+    const [places, setPlaces] = useState<IPlace[]>([]);
     const token = useSelector((state: RootState) => state.authentication.token);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const navigate = useNavigate();

@@ -41,7 +41,12 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({
             name: '',
             address: '',
         },
-    };
+        relationships: {
+            restaurants: {
+                data: [],
+            },
+        },
+    };    
 
     const handleCreatePlace = async (): Promise<void> => {
         setErrorMessage([]);

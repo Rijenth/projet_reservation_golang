@@ -17,6 +17,11 @@ export default function AdminPlaceList(): JSX.Element {
             name: '',
             address: '',
         },
+        relationships: {
+            restaurants: {
+                data: [],
+            },
+        },
     });
     const userId = useSelector(
         (state: RootState) => state.authentication.user?.id
