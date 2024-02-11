@@ -174,6 +174,11 @@ export default function RestaurantMenuHandler({
             setRestaurantMenus([...restaurantMenus, data]);
 
             setSuccessMessage('Menu créé avec succès');
+
+            setTimeout(() => {
+                setSuccessMessage('');
+            }, 2000);
+
             setMenuName('');
             setSelectedMenuItems([]);
         } catch (error) {

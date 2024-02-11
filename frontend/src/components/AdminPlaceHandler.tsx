@@ -94,6 +94,10 @@ const AdminPlaceHandler: React.FC<AdminPlaceHandlerProps> = ({
 
             setSuccessMessage('Lieu créé avec succès');
 
+            setTimeout(() => {
+                setSuccessMessage('');
+            }, 2000);
+
             setPlaceName('');
             setPlaceAddress('');
         } catch (error) {
