@@ -17,31 +17,6 @@ const OwnerMenusList: React.FC = () => {
     );
 
     useEffect(() => {
-        const fetchUserRestaurants = async (): Promise<void> => {
-            setErrorMessage('');
-
-            const response = await fetch(
-                `${apiUrl}/users/${authentication.user?.id}/restaurants`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${authentication.token}`,
-                    },
-                }
-            );
-
-            if (!response.ok) {
-                setErrorMessage('Une erreur est survenue');
-                return;
-            }
-
-            const json = await response.json();
-            fetchRestaurantMenus(json.data[0].id);
-        };
-
-        fetchUserRestaurants();
-
         const fetchRestaurantMenus = async (
             restaurantId: number
         ): Promise<void> => {
@@ -68,6 +43,31 @@ const OwnerMenusList: React.FC = () => {
 
             setRestaurantMenus(json.data);
         };
+
+        const fetchUserRestaurants = async (): Promise<void> => {
+            setErrorMessage('');
+
+            const response = await fetch(
+                `${apiUrl}/users/${authentication.user?.id}/restaurants`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${authentication.token}`,
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                setErrorMessage('Une erreur est survenue');
+                return;
+            }
+
+            const json = await response.json();
+            fetchRestaurantMenus(json.data[0].id);
+        };
+
+        fetchUserRestaurants();
     }, [apiUrl, authentication]);
 
     const fetchRestaurantMenuItems = async (menuId: number): Promise<void> => {
@@ -131,7 +131,7 @@ const OwnerMenusList: React.FC = () => {
                 </OverflowContainer>
 
                 <OverflowContainer
-                    underlinedTitle="Les détails du menu selectioné"
+                    underlinedTitle="Les détails du menu selectionné"
                     errorMessage=""
                 >
                     <div className="flex flex-row pt-5">

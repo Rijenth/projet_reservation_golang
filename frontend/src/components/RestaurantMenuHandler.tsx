@@ -117,7 +117,7 @@ export default function RestaurantMenuHandler({
         };
     }, [apiUrl, token, navigate, restaurantId]);
 
-    const handleCreateMenu = async () => {
+    const handleCreateMenu = async (): Promise<void> => {
         setErrorMessage('');
         setSuccessMessage('');
         setHasError(false);
