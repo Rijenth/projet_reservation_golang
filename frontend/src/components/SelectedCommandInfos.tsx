@@ -19,6 +19,9 @@ export default function SelectedCommandInfos({
 }: SelectedCommandInfosProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     const token = useSelector((state: RootState) => state.authentication.token);
+    const isOwner = useSelector(
+        (state: RootState) => state.authentication.user?.role === 'owner'
+    );
     const [restaurant, setRestaurant] = useState<IRestaurant | null>(null);
     const [menus, setMenus] = useState<IMenu[]>([]);
 
@@ -126,6 +129,33 @@ export default function SelectedCommandInfos({
         setUpdateCommandModalIsOpen(!updateCommandModalIsOpen);
     };
 
+    const showUpdateCommandModal = (): JSX.Element => {
+        if (!isOwner) {
+            return <></>;
+        }
+
+        return (
+            <>
+                {updateCommandModalIsOpen && (
+                    <UpdateCommandModal
+                        command={command}
+                        handleCloseModal={openUpdateCommand}
+                        updateParentCallback={updateParentCallback}
+                    />
+                )}
+
+                {['ongoing', 'ready'].includes(command.attributes.status) && (
+                    <button
+                        className="bg-green-500 hover:bg-green-600 px-4 py-2 text-white rounded mt-2"
+                        onClick={openUpdateCommand}
+                    >
+                        Mettre à jour la commande
+                    </button>
+                )}
+            </>
+        );
+    };
+
     if (errorMessage) {
         return (
             <div className="text-red-800 text-center border-2 border-red-500 p-4 rounded-lg bg-red-400">
@@ -168,22 +198,7 @@ export default function SelectedCommandInfos({
 
             <p className="text-black text-sm">{restaurant?.attributes.name}</p>
 
-            {updateCommandModalIsOpen && (
-                <UpdateCommandModal
-                    command={command}
-                    handleCloseModal={openUpdateCommand}
-                    updateParentCallback={updateParentCallback}
-                />
-            )}
-
-            {['ongoing', 'ready'].includes(command.attributes.status) && (
-                <button
-                    className="bg-green-500 hover:bg-green-600 px-4 py-2 text-white rounded mt-2"
-                    onClick={openUpdateCommand}
-                >
-                    Mettre à jour la commande
-                </button>
-            )}
+            {showUpdateCommandModal()}
         </div>
     );
 }
