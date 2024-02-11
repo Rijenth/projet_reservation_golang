@@ -28,13 +28,6 @@ export default function OwnerNavbar(): JSX.Element {
                         Mes commandes
                     </Link>
 
-                    <Link
-                        to="/dashboard/owner/menu-items"
-                        className="text-white"
-                    >
-                        Mes ingrédients
-                    </Link>
-
                     <LogoutButton />
                 </div>
             </div>
