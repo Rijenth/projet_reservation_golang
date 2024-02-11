@@ -10,10 +10,12 @@ import UpdateCommandModal from './UpdateCommandModal';
 
 interface SelectedCommandInfosProps {
     command: ICommand;
+    updateParentCallback?: () => void;
 }
 
 export default function SelectedCommandInfos({
     command,
+    updateParentCallback,
 }: SelectedCommandInfosProps): JSX.Element {
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
     const token = useSelector((state: RootState) => state.authentication.token);
@@ -170,6 +172,7 @@ export default function SelectedCommandInfos({
                 <UpdateCommandModal
                     command={command}
                     handleCloseModal={openUpdateCommand}
+                    updateParentCallback={updateParentCallback}
                 />
             )}
 

@@ -5,10 +5,12 @@ import SelectedCommandInfos from './SelectedCommandInfos';
 
 interface CommandListProps {
     commands: ICommand[];
+    updateParentCallback?: () => void;
 }
 
 export default function CommandList({
     commands,
+    updateParentCallback,
 }: CommandListProps): JSX.Element {
     const [selectedCommandId, setSelectedCommandId] = useState<number>(0);
 
@@ -53,7 +55,10 @@ export default function CommandList({
 
                         {selectedCommandId === Number(command.id) && (
                             <>
-                                <SelectedCommandInfos command={command} />
+                                <SelectedCommandInfos
+                                    command={command}
+                                    updateParentCallback={updateParentCallback}
+                                />
 
                                 <button
                                     className="bg-gray-500 hover:bg-gray-600 px-4 py-2 text-white rounded mt-2"
