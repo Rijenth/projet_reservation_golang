@@ -23,9 +23,12 @@ Objectifs :
 
 2. Dans le repertoire frontend : Renommer le fichier `.env.example` en `.env`
 
-3. Lancer la commande : `docker-compose up -d`
+3. Lancer la commande : `docker-compose up -d --build`
+
 4. Accéder à <a href="http://localhost:3000">l'application</a>
+
 5. Utiliser le bouton de seeding de l'application présent sur la page de connexion
+
 6. Vous obtiendrez des identifiants qui vous permettront de tester les espaces `administrateur`, `restaurateur` et `client`
 
 ## Notes à JF
