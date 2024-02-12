@@ -9,7 +9,9 @@ import (
 )
 
 func Filter(database *gorm.DB, model interface{}, filters map[string]interface{}) interface{} {
-	results := reflect.New(reflect.SliceOf(reflect.TypeOf(model))).Elem().Interface()
+	modelType := reflect.TypeOf(model)
+	sliceType := reflect.SliceOf(modelType)
+	results := reflect.MakeSlice(sliceType, 0, 0).Interface()
 
 	query := database
 
