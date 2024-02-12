@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strconv"
 	"sync"
+
+	"github.com/bxcodec/faker/v3"
 )
 
 type SeederController struct {
@@ -58,7 +60,7 @@ func seedWithCompleteScenario(w http.ResponseWriter, r *http.Request) *map[strin
 
 	for i := 0; i < 3; i++ {
 		place := placeFactory.Create(adminUser, map[string]string{
-			"name": "Place " + adminUser.FirstName,
+			"name": "Place " + faker.Word(),
 		})
 
 		for j := 0; j < 3; j++ {
